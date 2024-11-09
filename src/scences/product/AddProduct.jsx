@@ -45,7 +45,11 @@ const AddProduct = ({ isDarkMode }) => {
     const rect = anchorEl.getBoundingClientRect();
     return { top: rect.top, left: rect.left };
   };
+
+
 const userId = state.user._id;
+
+
   useEffect(() => {
     if (!state.user.isAdmin) navigate("/");
   }, []);
@@ -56,12 +60,15 @@ const userId = state.user._id;
       file: e.target.files[0], // Use e.target instead of e.currentTarget
     });
   };
+
+
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
       setData({
         ...data,
         [e.target.name]: e.target.checked,
       });
+      
     } else {
       setData({
         ...data,
@@ -69,6 +76,9 @@ const userId = state.user._id;
       });
     }
   };
+
+
+
   const [data, setData] = useState({
     name: "",
     price: "",
@@ -82,6 +92,8 @@ const userId = state.user._id;
   const handleSave = async () => {
     console.log("button pressed");
     setLoading(true);
+
+
     const formdata = new FormData();
 
     formdata.set("name", data.name);
@@ -90,7 +102,7 @@ const userId = state.user._id;
     formdata.set("genre", data.genre);
     formdata.set("artistName", data.artistName);
     formdata.set("category", data.category);
-    if (fileData.file) formdata.set("image", fileData.file, "profileImage");
+    if (fileData.file) formdata.set("image", fileData.file, "musicImage");
 
      // Include userId in the formdata
   formdata.set("userId", userId);
