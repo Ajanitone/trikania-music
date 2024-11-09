@@ -35,7 +35,7 @@ const Item1 = ({ item, width, handleDelete }) => {
           <Box>
             <img
               alt={product._id?.name}
-              src={product._id?.profileImage}
+              src={product._id?.musicImage}
               width="300px"
               height="400px"
               onClick={() => navigate(`/item/${product._id?._id}`)}

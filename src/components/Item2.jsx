@@ -28,7 +28,7 @@ const Item2 = ({ item, width }) => {
       >
         <img
           alt={item.name}
-          src={item.profileImage}
+          src={item.musicImage}
           width="200px"
           height="200px"
           onClick={() => navigate(`/item/${item._id}`)}

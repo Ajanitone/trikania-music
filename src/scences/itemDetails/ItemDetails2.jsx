@@ -132,7 +132,7 @@ const ItemDetails2 = () => {
               alt={data?.name}
               width="100%"
               height="100%"
-              src={`${data?.profileImage}`}
+              src={`${data?.musicImage}`}
               style={{
                 cursor: "pointer",
                 borderRadius: "5px",
