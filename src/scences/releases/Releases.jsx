@@ -70,7 +70,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
       {/* Picture-1 */}
       <Box margin="50px auto" title="image">
         <img
-          src={state.products[3]?.profileImage || profilePicture}
+          src={state.products[3]?.musicImage || profilePicture}
           alt="profile"
           style={{
             width: "200px",
@@ -129,7 +129,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
       {/* Picture-2 */}
       <Box margin="50px auto" title="image">
         <img
-          src={state.products[2]?.profileImage || profilePicture}
+          src={state.products[2]?.musicImage || profilePicture}
           alt="profile"
           style={{
             width: "200px",
@@ -154,15 +154,15 @@ const Ajaniphotos = ({ isDarkMode }) => {
 
 <Box>
 <Typography fontWeight="bold">
-{state.products[2]?.artistName || "Ajani"}
+{state.products[2]?.artistName || "Kaya-T"}
 
 </Typography>
 <Typography>
-    {state.products[2]?.name || "Silent Voices"} 
+    {state.products[2]?.name || "Kaya-T"} 
 </Typography>
 
 <Typography>
-    {state.products[2]?.description || "2020"} 
+    {state.products[2]?.description || "2022"} 
 </Typography>
 
 
@@ -187,7 +187,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
       {/* Picture-3 */}
       <Box margin="50px auto" title="image">
         <img
-          src={state.products[1]?.profileImage || profilePicture}
+          src={state.products[1]?.musicImage || profilePicture}
           alt="profile"
           style={{
             width: "200px",
@@ -212,15 +212,15 @@ const Ajaniphotos = ({ isDarkMode }) => {
 
 <Box>
 <Typography fontWeight="bold">
-{state.products[1]?.artistName || "Ajani"}
+{state.products[1]?.artistName || "Kaya-T"}
 
 </Typography>
 <Typography>
-    {state.products[1]?.name || "Silent Voices"} 
+    {state.products[1]?.name || "Lead Me"} 
 </Typography>
 
 <Typography>
-    {state.products[1]?.description || "2020"} 
+    {state.products[1]?.description || "2002"} 
 </Typography>
 
 
@@ -236,7 +236,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
                 color: isDarkMode ? "black" : "white",
                 backgroundColor: shades.secondary[300],
               }}
-              onClick={() => navigate("/kaya-music")}
+              onClick={() => navigate("/kaya-music/")}
             >
              Listen It 🎧
             </Button>
@@ -245,7 +245,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
       {/* Picture-4 */}
       <Box margin="50px auto" title="image">
         <img
-          src={state.products[0]?.profileImage || profilePicture}
+          src={state.products[0]?.musicImage || profilePicture}
           alt="profile"
           style={{
             width: "200px",
@@ -270,15 +270,15 @@ const Ajaniphotos = ({ isDarkMode }) => {
 
 <Box>
 <Typography fontWeight="bold">
-{state.products[0]?.artistName || "Ajani"}
+{state.products[0]?.artistName || "Zo Ataraxie"}
 
 </Typography>
 <Typography>
-    {state.products[0]?.name || "Silent Voices"} 
+    {state.products[0]?.name || "Ooh la la"} 
 </Typography>
 
 <Typography>
-    {state.products[0]?.description || "2020"} 
+    {state.products[0]?.description || "2021"} 
 </Typography>
 
 
@@ -294,7 +294,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
                 color: isDarkMode ? "black" : "white",
                 backgroundColor: shades.secondary[300],
               }}
-              onClick={() => navigate("/kaya-music")}
+              onClick={() => navigate("/zo-music")}
             >
              Listen It 🎧
             </Button>

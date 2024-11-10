@@ -48,6 +48,7 @@ import KayaTPress from "./scences/artists/kaya-t/KayaTPress";
 import Videos from "./scences/video/Videos";
 import Releases from "./scences/releases/Releases";
 import References from "./scences/references/References";
+import ZoMusic from "./scences/artists/zo-ataraxie/zoMusic";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -91,6 +92,11 @@ function App() {
 
             <Route
               path="/kaya-music/item/:itemId"
+              element={<ItemDetails3 isDarkMode={isDarkMode} />}
+            />
+
+<Route
+              path="/zo-music/item/:itemId"
               element={<ItemDetails3 isDarkMode={isDarkMode} />}
             />
             <Route
@@ -341,6 +347,16 @@ function App() {
               path="/references"
               element={
                 <References
+                  isDarkMode={isDarkMode}
+                  toggleDarkMode={toggleTheme}
+                />
+              }
+            />
+
+<Route
+              path="/zo-music"
+              element={
+                <ZoMusic
                   isDarkMode={isDarkMode}
                   toggleDarkMode={toggleTheme}
                 />

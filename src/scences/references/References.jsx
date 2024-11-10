@@ -330,6 +330,322 @@ Congo Ashantiroy
 </a>
       </Typography>
     </Box>
+
+
+          {/* ARTIST-12 */}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://www.instagram.com/cornelcampbellgorgon/?hl=de" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Cornel Campbell
+</a>
+      </Typography>
+    </Box>
+
+
+          {/* ARTIST-13 */}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://www.facebook.com/DFlameOfficial/?locale=de_DE" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+D-Fllame
+</a>
+      </Typography>
+    </Box>
+
+
+          {/* ARTIST-14 */}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://www.diefantastischenvier.de/" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Die Fantastichen Vier
+</a>
+      </Typography>
+    </Box>
+
+
+              {/* ARTIST-15 */}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://www.discogs.com/de/artist/929393-Doniki?srsltid=AfmBOoqli_kGc-p5Ex-KARrp5HEaeBddyakFX9-sV4AHZi7xovoXdvL9" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Doniki
+</a>
+      </Typography>
+    </Box>
+
+
+              {/* ARTIST-16 */}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="http://www.dutchiegold.com/" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Dutchie Gold
+</a>
+      </Typography>
+    </Box>
+
+
+
+              {/* ARTIST-16 */}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://emersound.live/" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Emersound
+</a>
+      </Typography>
+    </Box>
+
+
+
+
+              {/* ARTIST-17*/}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://de.wikipedia.org/wiki/Far_East_Band" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Far East Band
+</a>
+      </Typography>
+    </Box>
+
+
+
+              {/* ARTIST-18*/}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://www.youtube.com/watch?v=jyNgI8_AGMQ" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Feueralarm Band
+</a>
+      </Typography>
+    </Box>
+
+
+              {/* ARTIST-18*/}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://de.wikipedia.org/wiki/Frankie_Paul" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Frankie Paul
+</a>
+      </Typography>
+    </Box>
+
+
+
+              {/* ARTIST-19*/}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="http://www.ganjaman.info/Ganjaman_Berlin/Willkommen.html" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Ganjaman
+</a>
+      </Typography>
+    </Box>
+
+
+
+              {/* ARTIST-20*/}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://www.instagram.com/generaldegree1/?hl=de" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+General Degree
+</a>
+      </Typography>
+    </Box>
+
+
+                {/* ARTIST-21*/}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://www.instagram.com/glenswashington/?hl=de" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Glen Washington
+</a>
+      </Typography>
+    </Box>
+
+
+
+                {/* ARTIST-22*/}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://halfpintmusic.com/about/" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Half Pint
+</a>
+      </Typography>
+    </Box>
+
+
+
+                {/* ARTIST-23*/}
+  <Box>
+      
+      <Typography
+        mt="10px"
+        sx={{
+          "&:hover": { cursor: "pointer", color: "lime" },
+          marginTop: "10px",
+          color: isDarkMode ? "white" : "black",
+        }}
+      >
+     <a
+href="https://en.wikipedia.org/wiki/Hortense_Ellis" target="_blank"
+rel="noopener noreferrer"
+style={{ textDecoration: "none", color: isDarkMode ? "white" : "black" }}
+>
+Hortense Ellis
+</a>
+      </Typography>
+    </Box>
       </Box>
 
   
