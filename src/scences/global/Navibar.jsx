@@ -24,18 +24,17 @@ import axios from "axios";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { ColorRing } from "react-loader-spinner";
-import SettingsVoiceIcon from '@mui/icons-material/SettingsVoice';
+import SettingsVoiceIcon from "@mui/icons-material/SettingsVoice";
 import ExitToAppSharpIcon from "@mui/icons-material/ExitToAppSharp";
 import MeetingRoomSharpIcon from "@mui/icons-material/MeetingRoomSharp";
 import PopOver2 from "../../components/popover/PopOver2";
 import Logo from "../../logo/TRI_Logo_Herbs_RedBlack+Face.png";
- import Diversity3Icon from '@mui/icons-material/Diversity3';
- import TimelineIcon from '@mui/icons-material/Timeline';
- import AlbumIcon from '@mui/icons-material/Album';
- import YouTubeIcon from '@mui/icons-material/YouTube';
+import Diversity3Icon from "@mui/icons-material/Diversity3";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import AlbumIcon from "@mui/icons-material/Album";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import HeadphonesIcon from '@mui/icons-material/Headphones';
 
-
- 
 const Navbar = ({ isDarkMode, toggleTheme }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -50,15 +49,14 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
   const [staticModal, setStaticModal] = useState(false);
   const toggleShow = () => setStaticModal(!staticModal);
   const open = Boolean(anchorEl);
-  const [searchValue, setSearchValue] = useState({name:"",});
+  const [searchValue, setSearchValue] = useState({ name: "" });
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
-  const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
- 
-    const [isHovered, setIsHovered] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-
+  const [isSubmenuHovered, setIsSubmenuHovered] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [errorPopoverOpen, setErrorPopoverOpen] = useState(false);
@@ -73,12 +71,15 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
       return;
     }
     setLoading(true);
-    const response = await axios.get(baseUrl + `/products/searchProduct/${searchValue.name.trim()}`, {
-      withCredentials: true,
-    });
-  
+    const response = await axios.get(
+      baseUrl + `/products/searchProduct/${searchValue.name.trim()}`,
+      {
+        withCredentials: true,
+      }
+    );
+
     console.log("search getData", response);
-  
+
     if (response.data.success) {
       dispatchState({
         type: "loadProducts",
@@ -89,7 +90,6 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
     setSearchValue({ name: "" });
     setLoading(false);
   };
-  
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -140,11 +140,9 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
       zIndex="1"
       sx={{
         "&:hover": { cursor: "pointer", color: shades.secondary[500] },
-        display: isNonMobile ? "flex" : "block", 
+        display: isNonMobile ? "flex" : "block",
       }}
       ref={errorPopoverAnchorRef}
-    
-      
     >
       <Box
         sx={{
@@ -153,7 +151,6 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         }}
         color={!isDarkMode ? shades.primary[500] : undefined}
         title="username"
-        
       >
         <Typography variant="h7">Hi, {state.user.username}</Typography>
       </Box>
@@ -194,9 +191,8 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         <Box
           display="flex"
           justifyContent="space-between"
-          columnGap={isNonMobile ? "20px":"10px"}
+          columnGap={isNonMobile ? "20px" : "10px"}
           zIndex="2"
-          
         >
           {/* <IconButton
             onClick={() => navigate("/search-product")}
@@ -204,104 +200,141 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           >
             <SearchOutlined />
           </IconButton> */}
-     
 
-         <IconButton
+          {/* Artist */}
+          <IconButton
             sx={{
               color: isDarkMode ? "white" : "black",
               "&:hover": {
                 backgroundColor: shades.secondary[500],
                 color: shades.primary[100],
-              },display:"flex",flexDirection:"column"
+              },
+              display: "flex",
+              flexDirection: "row",
             }}
             onClick={() => navigate("/artists")}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            // onMouseEnter={() => setIsHovered(true)}
+            // onMouseLeave={() => setIsHovered(false)}
             title="Artists"
-           
           >
-            < Diversity3Icon  />
+            <Diversity3Icon />
 
-            {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">Artists</Typography>}
+            {isHovered && (
+              <Typography
+                sx={{
+                  color: isDarkMode ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: shades.secondary[500],
+                    color: shades.primary[100],
+                  },
+                }}
+                variant="body1"
+              >
+                Artists
+              </Typography>
+            )}
           </IconButton>
 
+          {/* Profile */}
           <IconButton
             sx={{
               color: isDarkMode ? "white" : "black",
               "&:hover": {
                 backgroundColor: shades.secondary[500],
                 color: shades.primary[100],
-              },display:state.user._id ? "flex" : "none",flexDirection:"column"
+              },
+              display: state.user._id ? "flex" : "none",
+              flexDirection: "column",
             }}
             onClick={() => navigate("/userprofile")}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            title="Artists"
-           
+            // onMouseEnter={() => setIsHovered(true)}
+            // onMouseLeave={() => setIsHovered(false)}
+            title="Profile"
           >
-            < PersonOutline  />
+            <PersonOutline />
 
-            {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">Profile</Typography>}
+            {isHovered && (
+              <Typography
+                sx={{
+                  color: isDarkMode ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: shades.secondary[500],
+                    color: shades.primary[100],
+                  },
+                }}
+                variant="body1"
+              >
+                Profile
+              </Typography>
+            )}
           </IconButton>
 
-
-
+          {/* Videos */}
           <IconButton
             sx={{
               color: isDarkMode ? "white" : "black",
               "&:hover": {
                 backgroundColor: shades.secondary[500],
                 color: shades.primary[100],
-              },display:"flex",flexDirection:"column"
+              },
+              display: "block",
+              flexDirection: "row",
             }}
             onClick={() => navigate("/videos")}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            // onMouseEnter={() => setIsHovered(true)}
+            // onMouseLeave={() => setIsHovered(false)}
             title="Videos
             "
           >
-            < YouTubeIcon  />
-            {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">Videos</Typography>}
+            <YouTubeIcon />
+            {isHovered && (
+              <Typography
+                sx={{
+                  color: isDarkMode ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: shades.secondary[500],
+                    color: shades.primary[100],
+                  },
+                }}
+                variant="body1"
+              >
+                Videos
+              </Typography>
+            )}
           </IconButton>
+
+          {/* Releases */}
           <IconButton
             sx={{
               color: isDarkMode ? "white" : "black",
               "&:hover": {
                 backgroundColor: shades.secondary[500],
                 color: shades.primary[100],
-              },display:"flex",flexDirection:"column"
+              },
+              display: "flex",
+              flexDirection: "row",
             }}
             onClick={() => navigate("/releases")}
             title="Releases"
-            
           >
-            < AlbumIcon  />
-            {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">Releases</Typography>}
+            <AlbumIcon />
+            {isHovered && (
+              <Typography
+                sx={{
+                  color: isDarkMode ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: shades.secondary[500],
+                    color: shades.primary[100],
+                  },
+                }}
+                variant="body1"
+              >
+                Releases
+              </Typography>
+            )}
           </IconButton>
+
+          {/* Shopping-cart */}
           <Badge
             badgeContent={cart.length}
             color="secondary"
@@ -322,21 +355,32 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 "&:hover": {
                   backgroundColor: shades.secondary[500],
                   color: shades.primary[100],
-                },display:"flex",flexDirection:"column"
+                },
+                display: "flex",
+                flexDirection: "row",
               }}
               onClick={() => dispatch(setIsCartOpen({}))}
               title="Shop"
             >
               <ShoppingBagOutlined />
-              {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">Shop</Typography>}
+              {isHovered && (
+                <Typography
+                  sx={{
+                    color: isDarkMode ? "white" : "black",
+                    "&:hover": {
+                      backgroundColor: shades.secondary[500],
+                      color: shades.primary[100],
+                    },
+                  }}
+                  variant="body1"
+                >
+                  Shop
+                </Typography>
+              )}
             </IconButton>
           </Badge>
+
+          {/* References */}
           <Badge
             badgeContent={wishList?.length}
             color="secondary"
@@ -357,21 +401,37 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 "&:hover": {
                   backgroundColor: shades.secondary[500],
                   color: shades.primary[100],
-                },display:"flex",flexDirection:"column"
+                },
+                display: "flex",
+                flexDirection: "column",
               }}
               onClick={() => navigate("/references")}
+              // onMouseEnter={() => setIsHovered(true)}
+              // onMouseLeave={() => setIsHovered(false)}
+
               title="References"
             >
               <TimelineIcon />
-              {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">References</Typography>}
+              {isHovered && (
+                <Typography
+                  sx={{
+                    color: isDarkMode ? "white" : "black",
+                    "&:hover": {
+                      backgroundColor: shades.secondary[500],
+                      color: shades.primary[100],
+                    },
+                  }}
+                  variant="body1"
+                >
+                  References
+                </Typography>
+              )}
             </IconButton>
           </Badge>
+
+
+
+          {/* Discography */}
           <Badge
             badgeContent={wishList?.length}
             color="secondary"
@@ -392,42 +452,112 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 "&:hover": {
                   backgroundColor: shades.secondary[500],
                   color: shades.primary[100],
-                },display:"flex",flexDirection:"column"
+                },
+                display: "flex",
+                flexDirection: "column",
               }}
-              onClick={() => navigate("/wishlist")}
+              onClick={() => navigate("/discography")}
+              // onMouseEnter={() => setIsHovered(true)}
+              // onMouseLeave={() => setIsHovered(false)}
+
+              title="Discography"
+            >
+              < HeadphonesIcon />
+              {isHovered && (
+                <Typography
+                  sx={{
+                    color: isDarkMode ? "white" : "black",
+                    "&:hover": {
+                      backgroundColor: shades.secondary[500],
+                      color: shades.primary[100],
+                    },
+                  }}
+                  variant="body1"
+                >
+                 Discography
+                </Typography>
+              )}
+            </IconButton>
+          </Badge>
+
+          {/* Find-your-voice */}
+          <Badge
+            badgeContent={wishList?.length}
+            color="secondary"
+            invisible={wishList?.length === 0}
+            sx={{
+              "&.MuiBadge-badge": {
+                right: 5,
+                top: 5,
+                padding: "0 4px",
+                height: "14px",
+                minWidth: "13px",
+              },
+            }}
+          >
+            <IconButton
+              sx={{
+                color: isDarkMode ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: shades.secondary[500],
+                  color: shades.primary[100],
+                },
+                display: "flex",
+                flexDirection: "column",
+              }}
+              onClick={() => navigate("/find-voice")}
               title="FindYourVoice"
             >
               <SettingsVoiceIcon />
-              {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">FindYourVoice</Typography>}
+              {isHovered && (
+                <Typography
+                  sx={{
+                    color: isDarkMode ? "white" : "black",
+                    "&:hover": {
+                      backgroundColor: shades.secondary[500],
+                      color: shades.primary[100],
+                    },
+                  }}
+                  variant="body1"
+                >
+                  FindYourVoice
+                </Typography>
+              )}
             </IconButton>
-          
           </Badge>
+
+          {/* Register */}
           <IconButton
             sx={{
               color: isDarkMode ? "white" : "black",
               "&:hover": {
                 backgroundColor: shades.secondary[500],
                 color: shades.primary[100],
-              },display:"flex",flexDirection:"column"
+              },
+              display: "flex",
+              flexDirection: "column",
             }}
             onClick={() => navigate("/register")}
             title="register"
           >
             <AppRegistrationIcon />
-            {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">Register</Typography>}
+            {isHovered && (
+              <Typography
+                sx={{
+                  color: isDarkMode ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: shades.secondary[500],
+                    color: shades.primary[100],
+                  },
+                }}
+                variant="body1"
+              >
+                Register
+              </Typography>
+            )}
           </IconButton>
+
+          {/* Log-out */}
 
           {state.user._id ? (
             <IconButton
@@ -452,26 +582,39 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 "&:hover": {
                   backgroundColor: shades.secondary[500],
                   color: shades.primary[100],
-                },display:"flex",flexDirection:"column"
+                },
+                display: "flex",
+                flexDirection: "column",
               }}
               onClick={() => navigate("/login")}
             >
               <ExitToAppSharpIcon />
-              {isHovered && <Typography     sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}variant="body1">Login</Typography>}
+              {isHovered && (
+                <Typography
+                  sx={{
+                    color: isDarkMode ? "white" : "black",
+                    "&:hover": {
+                      backgroundColor: shades.secondary[500],
+                      color: shades.primary[100],
+                    },
+                  }}
+                  variant="body1"
+                >
+                  Login
+                </Typography>
+              )}
             </IconButton>
           )}
 
+          {/* Theme-button */}
           <ThemeButton
             toggleTheme={toggleTheme}
             isDarkMode={isDarkMode}
             title="toggle-theme"
           />
+
+          {/* Administration */}
+
           {state.user.isAdmin ? (
             <IconButton
               sx={{
@@ -502,7 +645,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         <InputBase
           placeholder="Search"
           value={searchValue.name}
-          onChange={(e) => setSearchValue({name:e.target.value})}
+          onChange={(e) => setSearchValue({ name: e.target.value })}
           sx={{ ml: 2, flex: 1 }}
           onKeyUp={(e) => {
             if (e.key === "Enter") {
@@ -527,6 +670,8 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         </IconButton>
       </Box>
 
+      {/* Pop-over */}
+
       {success && (
         <PopOver2
           anchorEl={anchorEl}
@@ -536,6 +681,8 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           toggleShow={toggleShow}
         />
       )}
+
+      {/* Loader-1 */}
       {success && loading && (
         <ColorRing
           visible={true}
@@ -548,6 +695,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         />
       )}
 
+      {/* Loader-2 */}
       {loading && (
         <ColorRing
           visible={true}
@@ -560,6 +708,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         />
       )}
 
+      {/* Pop-over-2 */}
       <Popover
         open={errorPopoverOpen}
         anchorEl={errorPopoverAnchorRef.current}
