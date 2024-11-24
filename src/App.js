@@ -49,6 +49,8 @@ import Videos from "./scences/video/Videos";
 import Releases from "./scences/releases/Releases";
 import References from "./scences/references/References";
 import ZoMusic from "./scences/artists/zo-ataraxie/zoMusic";
+import Discography from "./scences/discography/Discography";
+import FindVoice from "./scences/findyourvoice/FindVoice";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -339,6 +341,34 @@ function App() {
                   isDarkMode={isDarkMode}
                   toggleDarkMode={toggleTheme}
                 />
+
+                
+              }
+            />
+
+<Route
+              path="/discography"
+              element={
+                <Discography
+                  isDarkMode={isDarkMode}
+                  toggleDarkMode={toggleTheme}
+                />
+
+                
+              }
+            />
+
+
+
+<Route
+              path="/find-voice"
+              element={
+                <FindVoice
+                  isDarkMode={isDarkMode}
+                  toggleDarkMode={toggleTheme}
+                />
+
+                
               }
             />
 
