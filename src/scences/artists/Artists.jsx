@@ -1,5 +1,5 @@
-import React, { useState, useContext,  } from "react";
-import { Box,   Typography , useMediaQuery,} from "@mui/material";
+import React, { useState, useContext } from "react";
+import { Box, Typography, useMediaQuery } from "@mui/material";
 import { shades } from "../../theme";
 import { HerbContext } from "../../context/Context";
 import { useNavigate } from "react-router-dom";
@@ -8,10 +8,7 @@ import profilePicture from "../../assets/angele-kamp-kcvRHtAyuig-unsplash.jpg";
 
 import ScrollTop from "../../components/ScrollTop";
 import Ajani from "../../artistpictures/ajani.png";
-import Kaya from "../../artistpictures/kaya.jpg"
-
-
-
+import Kaya from "../../artistpictures/kaya.jpg";
 
 const Artists = ({ isDarkMode }) => {
   const { state, dispatchState } = useContext(HerbContext);
@@ -22,21 +19,18 @@ const Artists = ({ isDarkMode }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   // Define a styled component with custom CSS
- 
-  const backgroundColor = isDarkMode ? "#000000" : "rgba(242, 38, 19, 0.4)";
 
+  const backgroundColor = isDarkMode ? "#000000" : "rgba(242, 38, 19, 0.4)";
 
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
-  const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
-
-
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
   return (
     <Box>
-     <ScrollTop isDarkMode={isDarkMode}/>
-     {/* AJANI */}
+      <ScrollTop isDarkMode={isDarkMode} />
+      {/* AJANI */}
       <Box
         className={`home ${isDarkMode ? "dark-mode" : ""}`}
         padding="10px"
@@ -73,52 +67,54 @@ const Artists = ({ isDarkMode }) => {
             pointerEvents: "none",
           }}
         />
-    
-        <Box title="image">
+
+        <Box title="Ajani">
           <img
             src={Ajani || profilePicture}
             alt="profile"
             style={{
-    width: "200px",
-    aspectRatio: "calc(1 + var(--f))",
-    objectFit: "cover",
-    cursor: "pointer",
-    borderRadius: "50%",
-    "--f": "0.1",
-    "--r": "10px",
-    "--_f": "calc(100% * var(--f) / (1 + var(--f)))",
-    "--_a": "calc(90deg * var(--f))",
-    clipPath: "inset(0 var(--_f) 0 0 round var(--r))",
-    transform: "perspective(400px) var(--_t, rotateY(var(--_a)))",
-    transition: "0.5s",
-  }}
-  onMouseEnter={(e) => {
-    e.target.style.clipPath = "inset(0 0 0 var(--_f)) round var(--r)";
-    e.target.style.setProperty(
-      "--_t",
-      "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
-    );
-  }}
-  onMouseLeave={(e) => {
-    e.target.style.clipPath = "inset(0 var(--_f) 0 0) round var(--r)";
-    e.target.style.setProperty("--_t", "");
-  }}
- 
+              width: "200px",
+              aspectRatio: "calc(1 + var(--f))",
+              objectFit: "cover",
+              cursor: "pointer",
+              borderRadius: "50%",
+              "--f": "0.1",
+              "--r": "10px",
+              "--_f": "calc(100% * var(--f) / (1 + var(--f)))",
+              "--_a": "calc(90deg * var(--f))",
+              clipPath: "inset(0 var(--_f) 0 0 round var(--r))",
+              transform: "perspective(400px) var(--_t, rotateY(var(--_a)))",
+              transition: "0.5s",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.clipPath = "inset(0 0 0 var(--_f)) round var(--r)";
+              e.target.style.setProperty(
+                "--_t",
+                "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
+              );
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.clipPath = "inset(0 var(--_f) 0 0) round var(--r)";
+              e.target.style.setProperty("--_t", "");
+            }}
           />
         </Box>
-   
-      <Typography   sx={{
-          "&:hover": { cursor: "pointer", color: shades.secondary[500] },
-          display: isNonMobile ? "block" : "block",
-        }}
-        color={!isDarkMode ? shades.primary[500] : undefined}
-        title="ajani" onClick={() => navigate("/ajani")}>Ajani</Typography>
-       
-        
-      </Box>
-{/* KAYA-T */}
 
-<Box
+        <Typography
+          sx={{
+            "&:hover": { cursor: "pointer", color: shades.secondary[500] },
+            display: isNonMobile ? "block" : "block",
+          }}
+          color={!isDarkMode ? shades.primary[500] : undefined}
+          title="ajani"
+          onClick={() => navigate("/ajani")}
+        >
+          Ajani
+        </Typography>
+      </Box>
+      {/* KAYA-T */}
+
+      <Box
         className={`home ${isDarkMode ? "dark-mode" : ""}`}
         padding="10px"
         width="80%"
@@ -154,48 +150,50 @@ const Artists = ({ isDarkMode }) => {
             pointerEvents: "none",
           }}
         />
-     
-        <Box title="image">
+
+        <Box title="Kaya-T">
           <img
             src={Kaya || profilePicture}
             alt="profile"
             style={{
-    width: "200px",
-    aspectRatio: "calc(1 + var(--f))",
-    objectFit: "cover",
-    cursor: "pointer",
-    borderRadius: "50%",
-    "--f": "0.1",
-    "--r": "10px",
-    "--_f": "calc(100% * var(--f) / (1 + var(--f)))",
-    "--_a": "calc(90deg * var(--f))",
-    clipPath: "inset(0 var(--_f) 0 0 round var(--r))",
-    transform: "perspective(400px) var(--_t, rotateY(var(--_a)))",
-    transition: "0.5s",
-  }}
-  onMouseEnter={(e) => {
-    e.target.style.clipPath = "inset(0 0 0 var(--_f)) round var(--r)";
-    e.target.style.setProperty(
-      "--_t",
-      "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
-    );
-  }}
-  onMouseLeave={(e) => {
-    e.target.style.clipPath = "inset(0 var(--_f) 0 0) round var(--r)";
-    e.target.style.setProperty("--_t", "");
-  }}
- 
+              width: "200px",
+              aspectRatio: "calc(1 + var(--f))",
+              objectFit: "cover",
+              cursor: "pointer",
+              borderRadius: "50%",
+              "--f": "0.1",
+              "--r": "10px",
+              "--_f": "calc(100% * var(--f) / (1 + var(--f)))",
+              "--_a": "calc(90deg * var(--f))",
+              clipPath: "inset(0 var(--_f) 0 0 round var(--r))",
+              transform: "perspective(400px) var(--_t, rotateY(var(--_a)))",
+              transition: "0.5s",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.clipPath = "inset(0 0 0 var(--_f)) round var(--r)";
+              e.target.style.setProperty(
+                "--_t",
+                "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
+              );
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.clipPath = "inset(0 var(--_f) 0 0) round var(--r)";
+              e.target.style.setProperty("--_t", "");
+            }}
           />
         </Box>
-   
-      <Typography   sx={{
-          "&:hover": { cursor: "pointer", color: shades.secondary[500] },
-          display: isNonMobile ? "block" : "block",
-        }}
-        color={!isDarkMode ? shades.primary[500] : undefined}
-        title="kaya-t" onClick={() => navigate("/kaya")}>Kaya-T</Typography>
-       
-        
+
+        <Typography
+          sx={{
+            "&:hover": { cursor: "pointer", color: shades.secondary[500] },
+            display: isNonMobile ? "block" : "block",
+          }}
+          color={!isDarkMode ? shades.primary[500] : undefined}
+          title="kaya-t"
+          onClick={() => navigate("/kaya")}
+        >
+          Kaya-T
+        </Typography>
       </Box>
     </Box>
   );

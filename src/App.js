@@ -51,6 +51,7 @@ import References from "./scences/references/References";
 import ZoMusic from "./scences/artists/zo-ataraxie/zoMusic";
 import Discography from "./scences/discography/Discography";
 import FindVoice from "./scences/findyourvoice/FindVoice";
+import VoiceContact from "./scences/contact/VoiceContact";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -97,8 +98,13 @@ function App() {
               element={<ItemDetails3 isDarkMode={isDarkMode} />}
             />
 
-<Route
+            <Route
               path="/zo-music/item/:itemId"
+              element={<ItemDetails3 isDarkMode={isDarkMode} />}
+            />
+
+            <Route
+              path="/herb-info/item/:itemId"
               element={<ItemDetails3 isDarkMode={isDarkMode} />}
             />
             <Route
@@ -341,39 +347,40 @@ function App() {
                   isDarkMode={isDarkMode}
                   toggleDarkMode={toggleTheme}
                 />
-
-                
               }
             />
 
-<Route
+            <Route
               path="/discography"
               element={
                 <Discography
                   isDarkMode={isDarkMode}
                   toggleDarkMode={toggleTheme}
                 />
-
-                
               }
             />
 
-
-
-<Route
+            <Route
               path="/find-voice"
               element={
                 <FindVoice
                   isDarkMode={isDarkMode}
                   toggleDarkMode={toggleTheme}
                 />
-
-                
               }
             />
 
+            <Route
+              path="/find-voice/voice-contact"
+              element={
+                <VoiceContact
+                  isDarkMode={isDarkMode}
+                  toggleDarkMode={toggleTheme}
+                />
+              }
+            />
 
-<Route
+            <Route
               path="/references"
               element={
                 <References
@@ -383,13 +390,10 @@ function App() {
               }
             />
 
-<Route
+            <Route
               path="/zo-music"
               element={
-                <ZoMusic
-                  isDarkMode={isDarkMode}
-                  toggleDarkMode={toggleTheme}
-                />
+                <ZoMusic isDarkMode={isDarkMode} toggleDarkMode={toggleTheme} />
               }
             />
           </Routes>

@@ -15,7 +15,7 @@ import AjaniFind from "../../disco-assets/ajani-find.jpg";
  */
 
 const FindVoice = ({ isDarkMode }) => {
-  const [isHovered, setIsHovered] = useState(false);
+  // const [isHovered, setIsHovered] = useState(false);
 
   // Define a styled component with custom CSS
 
@@ -25,10 +25,10 @@ const FindVoice = ({ isDarkMode }) => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const navigate = useNavigate();
-  const isNonMobile = useMediaQuery("(min-width:600px)");
+  // const isNonMobile = useMediaQuery("(min-width:600px)");
 
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  console.log("products", state.products);
+  // const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  // console.log("products", state.products);
 
   useEffect(() => {
     async function getData() {
@@ -64,9 +64,6 @@ const FindVoice = ({ isDarkMode }) => {
         position: "relative",
         overflow: "hidden",
       }}
-      position="relative"
-      onMouseOver={() => setIsHovered(true)}
-      onMouseOut={() => setIsHovered(false)}
     >
       <ScrollTop isDarkMode={isDarkMode} />
 
@@ -293,7 +290,6 @@ const FindVoice = ({ isDarkMode }) => {
             </Box>
           </Box>
           <Box width="50%">
-            {" "}
             <Typography
               fontWeight="bold"
               sx={{
@@ -345,10 +341,267 @@ const FindVoice = ({ isDarkMode }) => {
           </Box>
         </Box>
 
-        <Box mt="40px" display="flex" flexDirection="row" margin="50px auto">
-          <Box></Box>
-          <Box></Box>
-          <Box></Box>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <Box mt="40px" margin="50px auto">
+            <Box>
+              <Typography
+                fontWeight="bold"
+                sx={{
+                  fontSize: "24px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "red",
+                }}
+              >
+                Was
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Vocal
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Empowerment
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Workshop
+              </Typography>
+            </Box>
+            <Box></Box>
+            <Box></Box>
+          </Box>
+          <Box mt="40px" margin="50px auto">
+            <Box>
+              <Typography
+                fontWeight="bold"
+                sx={{
+                  fontSize: "24px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "red",
+                }}
+              >
+                Wo
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Atelier Delifesign
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Schenkendorfstr.3
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                10965 Berlin
+              </Typography>
+            </Box>
+          </Box>
+          <Box mt="40px" margin="50px auto">
+            <Box>
+              <Typography
+                fontWeight="bold"
+                sx={{
+                  fontSize: "24px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "red",
+                }}
+              >
+                Wer
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Das Angebot richtet sich an Schwarze* Kinder im Alter von 6 - 14
+                Jahren <br></br>(*Selbstbezeichnung und Hautfarbe spielen keine
+                Rolle: dark skin, light skin, passing - alle an Musik
+                interessierten Kinder der Afrikanischen Diaspora sind
+                willkommen!)
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="space-between"
+        >
+          <Box mt="40px" margin="50px auto">
+            <Box>
+              <Typography
+                fontWeight="bold"
+                sx={{
+                  fontSize: "24px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "red",
+                }}
+              >
+                Wann
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Jeden Montag
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                17:00-18:00 Uhr
+              </Typography>
+              {/* <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Workshop
+              </Typography> */}
+            </Box>
+            <Box></Box>
+            <Box></Box>
+          </Box>
+          <Box mt="40px" margin="50px auto">
+            <Box>
+              <Typography
+                fontWeight="bold"
+                sx={{
+                  fontSize: "24px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "red",
+                }}
+              >
+                Wieviel
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                Der Workshop wird gefördert und ist somit kostenlos (s.u.).
+              </Typography>
+            </Box>
+          </Box>
+          <Box mt="40px" margin="50px auto">
+            <Box>
+              <Typography
+                fontWeight="bold"
+                sx={{
+                  fontSize: "24px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "red",
+                }}
+              >
+                Anmeldung
+              </Typography>
+              <Typography
+                mt="10px"
+                sx={{
+                  fontSize: "16px", // Specify your desired font size
+                  "&:hover": { cursor: "pointer", color: "lime" },
+                  marginTop: "10px",
+                  color: isDarkMode ? "white" : "black",
+                }}
+              >
+                verbindlicheAnmeldungen bitte nur bei der Möglich-keit der
+                Teilnahme an allen o.g. Terminen mit Angabe des Namen, des
+                Alters, der Telefonnum-mer und der E-Mail-Adresse des
+                Teilnehmen-den.
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
+
+        <Box>
+          <Button
+            onClick={() => navigate("./voice-contact")}
+            fontWeight="bold"
+            sx={{
+              fontSize: "15px", // Specify your desired font size
+              "&:hover": { cursor: "pointer", color: "lime" },
+              marginTop: "10px",
+              color: isDarkMode ? "white" : "red",
+              backgroundColor: "white",
+            }}
+          >
+            Contact
+          </Button>
         </Box>
       </Box>
     </Box>

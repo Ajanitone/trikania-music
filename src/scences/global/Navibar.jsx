@@ -33,7 +33,8 @@ import Diversity3Icon from "@mui/icons-material/Diversity3";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import AlbumIcon from "@mui/icons-material/Album";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-import HeadphonesIcon from '@mui/icons-material/Headphones';
+import HeadphonesIcon from "@mui/icons-material/Headphones";
+import BalanceIcon from "@mui/icons-material/Balance";
 
 const Navbar = ({ isDarkMode, toggleTheme }) => {
   const navigate = useNavigate();
@@ -429,8 +430,6 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
             </IconButton>
           </Badge>
 
-
-
           {/* Discography */}
           <Badge
             badgeContent={wishList?.length}
@@ -462,7 +461,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
               title="Discography"
             >
-              < HeadphonesIcon />
+              <HeadphonesIcon />
               {isHovered && (
                 <Typography
                   sx={{
@@ -474,7 +473,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                   }}
                   variant="body1"
                 >
-                 Discography
+                  Discography
                 </Typography>
               )}
             </IconButton>
@@ -521,6 +520,52 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                   variant="body1"
                 >
                   FindYourVoice
+                </Typography>
+              )}
+            </IconButton>
+          </Badge>
+
+          {/* Herbs */}
+          <Badge
+            badgeContent={wishList?.length}
+            color="secondary"
+            invisible={wishList?.length === 0}
+            sx={{
+              "&.MuiBadge-badge": {
+                right: 5,
+                top: 5,
+                padding: "0 4px",
+                height: "14px",
+                minWidth: "13px",
+              },
+            }}
+          >
+            <IconButton
+              sx={{
+                color: isDarkMode ? "white" : "black",
+                "&:hover": {
+                  backgroundColor: shades.secondary[500],
+                  color: shades.primary[100],
+                },
+                display: "flex",
+                flexDirection: "column",
+              }}
+              onClick={() => navigate("/herb-info")}
+              title="trikania-herbs"
+            >
+              <BalanceIcon />
+              {isHovered && (
+                <Typography
+                  sx={{
+                    color: isDarkMode ? "white" : "black",
+                    "&:hover": {
+                      backgroundColor: shades.secondary[500],
+                      color: shades.primary[100],
+                    },
+                  }}
+                  variant="body1"
+                >
+                  Trikania-Herbs
                 </Typography>
               )}
             </IconButton>

@@ -36,7 +36,9 @@ const Item1 = () => {
       marginTop="100px"
       display="flex"
       flexWrap="wrap"
-      sx={{ display: !isNonMobile ? "block" : "flex" }}
+      sx={{
+        display: !isNonMobile ? "block" : "flex",
+      }}
     >
       <Box
         position="relative"
