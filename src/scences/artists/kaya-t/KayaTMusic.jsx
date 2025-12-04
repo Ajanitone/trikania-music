@@ -84,8 +84,8 @@ const KayaTMusic = ({ isDarkMode }) => {
           marginTop: "20px",
         }}
       >
-        {`${state?.products[2]?.artistName} ` || Artist}`s  Album{" "}
-        {`${state?.products[2]?.name}` || AlbumName}.
+        {`${state?.products[2]?.artistName} ` || Artist}`s Album{" "}
+        {`${state?.products[3]?.name}` || AlbumName}.
       </Typography>
 
       <Button
@@ -109,35 +109,31 @@ const KayaTMusic = ({ isDarkMode }) => {
         />
       </Box>
 
-
-
       {/* LEAD ME */}
       <Box m="200px 0px">
-      <Typography
-        sx={{
-          "&:hover": {
-            cursor: "pointer",
-            color: isDarkMode ? "red" : shades.secondary[500],
-          },
-          marginTop: "20px",
-        }}
-      >
-        {`${state?.products[1]?.artistName} ` || Artist}`s  Album{" "}
-        {`${state?.products[1]?.name}` || AlbumName}.
-      </Typography>
-
-      <Button
-        sx={{
-          "&:hover": { cursor: "pointer", color: "lime" },
-          marginTop: "10px",
-          color: isDarkMode ? "black" : "white",
-          backgroundColor: shades.secondary[300],
-        }}
-        onClick={() => navigate(`item/${state?.products[1]?._id}`)}
-      >
-        Buy it
-      </Button>
-        {" "}
+        <Typography
+          sx={{
+            "&:hover": {
+              cursor: "pointer",
+              color: isDarkMode ? "red" : shades.secondary[500],
+            },
+            marginTop: "20px",
+          }}
+        >
+          {`${state?.products[2]?.artistName} ` || Artist}`s Album{" "}
+          {`${state?.products[2]?.name}` || AlbumName}.
+        </Typography>
+        <Button
+          sx={{
+            "&:hover": { cursor: "pointer", color: "lime" },
+            marginTop: "10px",
+            color: isDarkMode ? "black" : "white",
+            backgroundColor: shades.secondary[300],
+          }}
+          onClick={() => navigate(`item/${state?.products[1]?._id}`)}
+        >
+          Buy it
+        </Button>{" "}
         <MusicPlayer4
           isDarkMode={isDarkMode}
           staticModal={staticModal}

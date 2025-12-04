@@ -83,8 +83,8 @@ const Ajanimusic = ({ isDarkMode }) => {
             marginTop: "20px",
           }}
         >
-          {`${state?.products[3]?.artistName} ` || Artist}`s Debut Album{" "}
-          {`${state?.products[3]?.name}` || AlbumName} is out now.
+          {`${state?.products[4]?.artistName} ` || Artist}`s Debut Album{" "}
+          {`${state?.products[4]?.name}` || AlbumName} is out now.
         </Typography>
 
         <Button
