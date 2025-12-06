@@ -14,15 +14,13 @@ const Home = () => {
 
   return (
     <div className={`home ${isDarkMode ? "dark-mode" : ""}`}>
-     {/*  <MainCarousel isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+      {/*  <MainCarousel isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       <ShoppingList1 isDarkMode={isDarkMode} /> */}
 
-
-<MainCarousels isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+      <MainCarousels isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
 
       <Subscribe isDarkMode={isDarkMode} />
-      <ScrollTop isDarkMode={isDarkMode}/>
-   s
+      <ScrollTop isDarkMode={isDarkMode} />
     </div>
   );
 };

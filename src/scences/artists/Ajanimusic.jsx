@@ -94,7 +94,7 @@ const Ajanimusic = ({ isDarkMode }) => {
             color: isDarkMode ? "black" : "white",
             backgroundColor: shades.secondary[300],
           }}
-          onClick={() => navigate(`item/${state?.products[3]?._id}`)}
+          onClick={() => navigate(`item/${state?.products[4]?._id}`)}
         >
           Buy it
         </Button>
