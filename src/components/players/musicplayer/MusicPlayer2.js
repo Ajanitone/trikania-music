@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   styled,
   Typography,
   Slider,
   Paper,
-  Stack,useMediaQuery
-
+  Stack,
+  useMediaQuery,
 } from "@mui/material";
-
-
 
 //#region-------------Icons-------------
 import VolumeDownIcon from "@mui/icons-material/VolumeDown";
@@ -77,12 +75,10 @@ const canvasStyle = {
   height: "100%",
   position: "absolute",
   top: 0,
-  left: 0, 
+  left: 0,
 };
 
-
-
-function MusicPlayer2({isDarkMode}) {
+function MusicPlayer2({ isDarkMode }) {
   const [playlist, setPlaylist] = useState([
     {
       src: ItsBurning,
@@ -90,78 +86,87 @@ function MusicPlayer2({isDarkMode}) {
       artist: "Ajani",
       genre: "Reggae",
       image: SilentPict,
-      album:"Silent Voices"
+      album: "Silent Voices",
     },
     {
       src: JahOurRedeemer,
       title: "Jah Our Redeemer",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
       src: WeNeedAMoses,
       title: "We Need A Moses",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
       src: SatisfyMySoul,
       title: "Satisfy My Soul",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
-      src:PlasticSmile,
+      src: PlasticSmile,
       title: "Plastic Smile",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
       src: SilentVoices,
       title: "Silent Voices",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
       src: SpecialInvitation,
       title: "Special Invitation",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
       src: EspeNkosi,
       title: "Espe´ Nkosi",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
-
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
-      src:MySunshine,
+      src: MySunshine,
       title: "My Sunshine",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
       src: PickMyselfUp,
       title: "Pick Myself Up",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
     {
       src: Junie,
       title: "Junie",
       artist: "Ajani",
       genre: "Reggae",
-      image: SilentPict, album:"Silent Voices"
+      image: SilentPict,
+      album: "Silent Voices",
     },
   ]);
 
@@ -179,15 +184,13 @@ function MusicPlayer2({isDarkMode}) {
   const [duration, setDuration] = useState(0);
   const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
 
-
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const isDesktop = useMediaQuery("(min-width:1024px)");
-const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
 
-
-    // Add a state to keep track of the scrolling position
-    const [scrollPosition, setScrollPosition] = useState(0);
+  // Add a state to keep track of the scrolling position
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   // State and Ref variables
   const canvasRef = useRef(null);
@@ -195,16 +198,10 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
   const [analyser, setAnalyser] = useState(null);
   const [visualizerOn, setVisualizerOn] = useState(false);
 
-
-
-
-
-
   // Modify the handleEnded function
 
-
-   // Use useEffect to update the scrolling position periodically
-   useEffect(() => {
+  // Use useEffect to update the scrolling position periodically
+  useEffect(() => {
     const scrollInterval = setInterval(() => {
       setScrollPosition((prevPosition) => prevPosition + 1);
     }, 100);
@@ -217,43 +214,266 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
     setCurrentSong(playlist[index]);
   }, [index, playlist]);
 
+  const handleEnded = useCallback(() => {
+    const nextIndex = (index + 1) % playlist.length;
+    setIndex(nextIndex);
+    // if you want to auto-continue play, you can also keep isPlaying true here, etc.
+  }, [index, playlist, setIndex]); // add deps as needed
+
+  //     setMediaElement(audioPlayer.current);
+  //     console.log("mediaElement", mediaElement);
+  //     audioPlayer.current.volume = volume / 100;
+  //     audioPlayer.current.src = playlist[index].src;
+  //     setCurrentSong(playlist[index]);
+  //     audioPlayer.current.load();
+  //     audioPlayer.current.addEventListener("canplaythrough", () => {
+  //       if (isPlaying) {
+  //         audioPlayer.current.play();
+  //       }
+  //       setDuration(audioPlayer?.current?.duration);
+  //       setIsLoaded(true);
+  //     });
+
+  //     audioPlayer.current.addEventListener("timeupdate", () => {
+  //       setElapsed(audioPlayer?.current?.currentTime);
+  //     });
+
+  //     audioPlayer.current.addEventListener("ended", handleEnded);
+  //     audioPlayer.current.addEventListener("volumechange", () => {
+  //       setVolume(audioPlayer.current.volume * 100);
+  //     });
+
+  //     return () => {
+  //       if (audioPlayer.current) {
+  //         audioPlayer.current.removeEventListener("ended", handleEnded);
+  //         audioPlayer.current.removeEventListener("canplaythrough", () => {});
+  //         audioPlayer.current.removeEventListener("timeupdate", () => {});
+  //         audioPlayer.current.removeEventListener("volumechange", () => {});
+  //       }
+  //     };
+  //   }
+  // }, [volume, playlist, index]);
+
+  // useEffect(() => {
+  //   if (!audioPlayer.current) return;
+  //   const audio = audioPlayer.current;
+
+  //   setMediaElement(audio);
+  //   console.log("mediaElement", audio);
+  //   audio.volume = volume / 100;
+  //   audio.src = playlist[index].src;
+  //   setCurrentSong(playlist[index]);
+  //   audio.load();
+
+  //   const handleCanPlayThrough = () => {
+  //     if (isPlaying) {
+  //       audio.play();
+  //     }
+  //     setDuration(audio.duration);
+  //     setIsLoaded(true);
+  //   };
+
+  //   const handleTimeUpdate = () => {
+  //     setElapsed(audio.currentTime);
+  //   };
+
+  //   const handleVolumeChange = () => {
+  //     setVolume(audio.volume * 100);
+  //   };
+
+  //   const handleAudioEnded = handleEnded; // your function
+
+  //   audio.addEventListener("canplaythrough", handleCanPlayThrough);
+  //   audio.addEventListener("timeupdate", handleTimeUpdate);
+  //   audio.addEventListener("volumechange", handleVolumeChange);
+  //   audio.addEventListener("ended", handleAudioEnded);
+
+  //   return () => {
+  //     audio.removeEventListener("canplaythrough", handleCanPlayThrough);
+  //     audio.removeEventListener("timeupdate", handleTimeUpdate);
+  //     audio.removeEventListener("volumechange", handleVolumeChange);
+  //     audio.removeEventListener("ended", handleAudioEnded);
+  //   };
+  // }, [volume, playlist, index, isPlaying, handleEnded]);
+  // -----UseEffect-Functions
+
+  // A-Load-A new Song
   useEffect(() => {
-    if (audioPlayer.current) {
-      setMediaElement(audioPlayer.current);
-      console.log("mediaElement", mediaElement);
-      audioPlayer.current.volume = volume / 100;
-      audioPlayer.current.src = playlist[index].src;
-      setCurrentSong(playlist[index]);
-      audioPlayer.current.load();
-      audioPlayer.current.addEventListener("canplaythrough", () => {
-        if (isPlaying) {
-          audioPlayer.current.play();
-        }
-        setDuration(audioPlayer?.current?.duration);
-        setIsLoaded(true);
-      });
+    if (!audioPlayer.current) return;
+    const audio = audioPlayer.current;
 
-      audioPlayer.current.addEventListener("timeupdate", () => {
-        setElapsed(audioPlayer?.current?.currentTime);
-      });
+    setMediaElement(audio);
+    audio.src = playlist[index].src;
+    setCurrentSong(playlist[index]);
+    audio.load();
 
-      audioPlayer.current.addEventListener("ended", handleEnded);
-      audioPlayer.current.addEventListener("volumechange", () => {
-        setVolume(audioPlayer.current.volume * 100);
-      });
- 
+    const handleCanPlayThrough = () => {
+      setDuration(audio.duration);
+      setIsLoaded(true);
+    };
 
-      return () => {
-        if (audioPlayer.current) {
-          audioPlayer.current.removeEventListener("ended", handleEnded);
-          audioPlayer.current.removeEventListener("canplaythrough", () => {});
-          audioPlayer.current.removeEventListener("timeupdate", () => {});
-          audioPlayer.current.removeEventListener("volumechange", () => {});
-        }
-      };
+    const handleTimeUpdate = () => {
+      setElapsed(audio.currentTime);
+    };
+
+    const handleVolumeChange = () => {
+      setVolume(audio.volume * 100);
+    };
+
+    const handleAudioEnded = handleEnded; // useCallback above
+
+    audio.addEventListener("canplaythrough", handleCanPlayThrough);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("volumechange", handleVolumeChange);
+    audio.addEventListener("ended", handleAudioEnded);
+
+    return () => {
+      audio.removeEventListener("canplaythrough", handleCanPlayThrough);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("volumechange", handleVolumeChange);
+      audio.removeEventListener("ended", handleAudioEnded);
+    };
+  }, [playlist, index, handleEnded]);
+
+  // Add Visualiser
+  //   if (!audio) return;
+
+  //   setMediaElement(audio);
+  //   console.log("mediaElement", audio);
+  //   audio.src = playlist[index].src;
+  //   setCurrentSong(playlist[index]);
+  //   audio.load();
+
+  //   const handleCanPlayThrough = () => {
+  //     if (isPlaying) {
+  //       audio
+  //         .play()
+  //         .then(() => {
+  //           drawVisualizer();
+  //         })
+  //         .catch((err) => {
+  //           console.warn("Play error:", err);
+  //         });
+  //     }
+  //     setDuration(audio.duration);
+  //     setIsLoaded(true);
+  //   };
+
+  //   const handleTimeUpdate = () => {
+  //     setElapsed(audio.currentTime);
+  //   };
+
+  //   const handleVolumeChange = () => {
+  //     setVolume(audio.volume * 100);
+  //   };
+
+  //   const handleAudioEnded = handleEnded;
+
+  //   audio.addEventListener("canplaythrough", handleCanPlayThrough);
+  //   audio.addEventListener("timeupdate", handleTimeUpdate);
+  //   audio.addEventListener("volumechange", handleVolumeChange);
+  //   audio.addEventListener("ended", handleAudioEnded);
+
+  //   return () => {
+  //     // When unmounting, audio might already be null (StrictMode / ref cleared)
+  //     if (!audio) return;
+
+  //     audio.removeEventListener("canplaythrough", handleCanPlayThrough);
+  //     audio.removeEventListener("timeupdate", handleTimeUpdate);
+  //     audio.removeEventListener("volumechange", handleVolumeChange);
+  //     audio.removeEventListener("ended", handleAudioEnded);
+  //   };
+  // }, [playlist, index, isPlaying, handleEnded, drawVisualizer]);
+
+  // Play A Song
+
+  // useEffect(() => {
+  //   const audio = audioPlayer.current;
+  //   if (!audio) return;
+
+  //   if (isPlaying) {
+  //     // if not ready yet, wait for canplaythrough once
+  //     if (audio.readyState >= 2) {
+  //       audio
+  //         .play()
+  //         .then(() => {
+  //           console.log("Audio play successful");
+  //           drawVisualizer();
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error playing audio:", error);
+  //         });
+  //     } else {
+  //       const onCanPlay = () => {
+  //         audio
+  //           .play()
+  //           .then(() => {
+  //             console.log("Audio play successful (after canplaythrough)");
+  //             drawVisualizer();
+  //           })
+  //           .catch((error) => {
+  //             console.error("Error playing audio:", error);
+  //           });
+  //         audio.removeEventListener("canplaythrough", onCanPlay);
+  //       };
+  //       audio.addEventListener("canplaythrough", onCanPlay);
+  //     }
+  //   } else {
+  //     if (!audio.paused) {
+  //       audio.pause();
+  //       console.log("Audio paused");
+  //     }
+  //   }
+  // }, [isPlaying, drawVisualizer]);
+
+  useEffect(() => {
+    const audio = audioPlayer.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      // ensure analyser is ready
+      setupAnalyser();
+
+      if (audio.readyState >= 2) {
+        audio
+          .play()
+          .then(() => {
+            console.log("Audio play successful");
+            drawVisualizer();
+          })
+          .catch((error) => {
+            console.error("Error playing audio:", error);
+          });
+      } else {
+        const onCanPlay = () => {
+          setupAnalyser();
+          audio
+            .play()
+            .then(() => {
+              console.log("Audio play successful (after canplaythrough)");
+              drawVisualizer();
+            })
+            .catch((error) => {
+              console.error("Error playing audio:", error);
+            });
+          audio.removeEventListener("canplaythrough", onCanPlay);
+        };
+        audio.addEventListener("canplaythrough", onCanPlay);
+      }
+    } else {
+      if (!audio.paused) {
+        audio.pause();
+        console.log("Audio paused");
+      }
     }
-  }, [volume, playlist, index]);
+  }, [isPlaying, drawVisualizer, setupAnalyser]);
 
+  // Volune Function
+  useEffect(() => {
+    if (!audioPlayer.current) return;
+    audioPlayer.current.volume = volume / 100;
+  }, [volume]);
+  // Time format Function
   function formatTime(time) {
     if (time && !isNaN(time)) {
       const minutes =
@@ -272,52 +492,30 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
   // ---PLAY
 
-const togglePlay = () => {
-  if (!isPlaying) {
-    if (isLoaded && audioPlayer.current.readyState >= 2) {
-      audioPlayer.current.play().then(() => {
-        console.log("Audio play successful");
-        setIsPlaying(true);
-        drawVisualizer(); // Call drawVisualizer when starting to play
-      }).catch((error) => {
-        console.error("Error playing audio:", error);
-      });
-    } else {
-      console.log("Audio not loaded or ready. Waiting for canplaythrough event.");
-      // You can optionally add a loading indicator or handle this case differently.
-    }
-  } else {
-    audioPlayer.current.pause();
-    setIsPlaying(false);
-    console.log("Audio paused");
-  }
-};
+  const togglePlay = () => {
+    setIsPlaying((prev) => !prev);
+  };
+  // const togglePlay = () => {
+  //   const audio = audioPlayer.current;
+  //   if (!audio) return;
 
-
-const handleEnded = () => {
-  const nextIndex = (index + 1) % playlist.length;
-  setIndex(nextIndex);
-
-  // Set a flag to check whether the audio is currently playing
-  const isCurrentlyPlaying = isPlaying;
-
-  audioPlayer.current.pause(); // Pause the current audio
-
-  audioPlayer.current.src = playlist[nextIndex].src;
-  audioPlayer.current.load(); // Load the new audio
-
-  // Use the canplaythrough event to ensure the new audio is loaded before playing
-  audioPlayer.current.addEventListener("canplaythrough", () => {
-    if (isCurrentlyPlaying) {
-      audioPlayer.current.play();
-      setIsPlaying(true);
-    }
-    // Remove the event listener to avoid multiple bindings
-    audioPlayer.current.removeEventListener("canplaythrough", () => {});
-  });
-};
-
-
+  //   if (!isPlaying) {
+  //     audio
+  //       .play()
+  //       .then(() => {
+  //         console.log("Audio play successful");
+  //         setIsPlaying(true);
+  //         drawVisualizer(); // Call drawVisualizer when starting to play
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error playing audio:", error);
+  //       });
+  //   } else {
+  //     audio.pause();
+  //     setIsPlaying(false);
+  //     console.log("Audio paused");
+  //   }
+  // };
 
   function VolumeBtns() {
     return mute ? (
@@ -350,7 +548,7 @@ const handleEnded = () => {
       handleLoadAndPlay();
     }
   };
-  
+
   const toggleForward = () => {
     if (audioPlayer.current.readyState >= 2) {
       audioPlayer.current.currentTime += 10;
@@ -358,18 +556,18 @@ const handleEnded = () => {
       handleLoadAndPlay();
     }
   };
-  
+
   const handleLoadAndPlay = () => {
     const nextIndex = (index + 1) % playlist.length;
     setIndex(nextIndex);
-  
+
     const isCurrentlyPlaying = isPlaying;
-  
+
     audioPlayer.current.pause(); // Pause the current audio
-  
+
     audioPlayer.current.src = playlist[nextIndex].src;
     audioPlayer.current.load(); // Load the new audio
-  
+
     // Use the canplaythrough event to ensure the new audio is loaded before playing
     audioPlayer.current.addEventListener("canplaythrough", () => {
       if (isCurrentlyPlaying) {
@@ -381,190 +579,119 @@ const handleEnded = () => {
       audioPlayer.current.removeEventListener("canplaythrough", () => {});
     });
   };
-  
 
+  //   const nextIndex = (index + 1) % playlist.length;
+  //   setIndex(nextIndex);
+  //   audioPlayer.current.src = playlist[nextIndex].src;
+  //   audioPlayer.current.play();
+  //   setIsPlaying(true);
+  // };
+
+  // const playPreviousSong = () => {
+  //   const nextIndex = index - 1 < 0 ? playlist.length - 1 : index - 1;
+  //   setIndex(nextIndex);
+  //   audioPlayer.current.src = playlist[nextIndex].src;
+  //   audioPlayer.current.play();
+  //   setIsPlaying(true);
+  // };
+
+  //  Analyser
   const playNextSong = () => {
     const nextIndex = (index + 1) % playlist.length;
     setIndex(nextIndex);
-    audioPlayer.current.src = playlist[nextIndex].src;
-    audioPlayer.current.play();
-    setIsPlaying(true);
+    setIsPlaying(true); // say "we WANT to be playing"
   };
 
   const playPreviousSong = () => {
-    const nextIndex = index - 1 < 0 ? playlist.length - 1 : index - 1;
-    setIndex(nextIndex);
-    audioPlayer.current.src = playlist[nextIndex].src;
-    audioPlayer.current.play();
+    const prevIndex = index - 1 < 0 ? playlist.length - 1 : index - 1;
+    setIndex(prevIndex);
     setIsPlaying(true);
   };
 
+  // useEffect(() => {
+  //   if (audioPlayer.current) {
+  //     audioPlayer.current.addEventListener("canplaythrough", () => {
+  //       setupAnalyser();
+  //       if (isPlaying) {
+  //         audioPlayer.current.play();
+  //       }
+  //     });
 
-
-  //  Analyser
- 
-
-  useEffect(() => {
-    if (audioPlayer.current) {
-      audioPlayer.current.addEventListener("canplaythrough", () => {
-        setupAnalyser();
-        if (isPlaying) {
-          audioPlayer.current.play();
-        }
-      });
-  
-      return () => {
-        audioPlayer.current.removeEventListener("canplaythrough", () => {});
-      };
-    }
-  }, [audioPlayer, isPlaying]);
-  
-  // function setupAnalyser() {
-  //   // Check if analyser is already set up
-  //   if (analyser) {
-  //     return;
+  //     return () => {
+  //       audioPlayer.current.removeEventListener("canplaythrough", () => {});
+  //     };
   //   }
-  
-  //   const audioContext = new AudioContext();
-  
-  //   // Check if the audio player is already connected to a source node
-  //   if (audioPlayer.current.srcObject) {
-  //     const sourceNode = audioContext.createMediaElementSource(audioPlayer.current);
-  //     const analyserNode = audioContext.createAnalyser();
-  //     analyserNode.fftSize = 256;
-  
-  //     // Connect the source node to the analyser only if it's not already connected
-  //     if (!sourceNode.connect(analyserNode)) {
-  //       sourceNode.disconnect();
-  //       sourceNode.connect(analyserNode);
-  //     }
-  
-  //     analyserNode.connect(audioContext.destination);
-  //     setAnalyser(analyserNode);
-  
-  //     // Start the visualizer when the audio starts playing
-  //     drawVisualizer();
-  //   }
-  // }
+  // }, [audioPlayer, isPlaying]);
+
   function setupAnalyser() {
     // Check if analyser is already set up
     if (analyser) {
       return;
     }
-  
+
     const audioContext = new AudioContext();
-  
+
     // Check if the audio player is already connected to a source node
     if (audioPlayer.current && audioPlayer.current.src) {
       try {
         // Try to create a new source node
-        const sourceNode = audioContext.createMediaElementSource(audioPlayer.current);
+        const sourceNode = audioContext.createMediaElementSource(
+          audioPlayer.current
+        );
         const analyserNode = audioContext.createAnalyser();
         analyserNode.fftSize = 256;
-  
+
         // Connect the source node to the analyser
         sourceNode.connect(analyserNode);
         analyserNode.connect(audioContext.destination);
         setAnalyser(analyserNode);
-  
+
         // Start the visualizer when the audio starts playing
         drawVisualizer();
       } catch (error) {
         // If an error occurs, it means the audio player is already connected
         console.error("Error creating source node:", error);
-  
+
         // You can add additional handling here if needed
       }
     }
   }
-  
-  
-  
-  
 
   function drawVisualizer() {
-
-
     if (!analyser) {
       console.error("Analyser not set up");
       return;
     }
-  const canvas = canvasRef.current;
-  const canvasCtx = canvas.getContext("2d");
-  const bufferLength = analyser.frequencyBinCount;
-  const dataArray = new Uint8Array(bufferLength);
+    const canvas = canvasRef.current;
+    const canvasCtx = canvas.getContext("2d");
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
 
-  
+    function draw() {
+      animationRef.current = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
 
-  function draw() {
-    animationRef.current = requestAnimationFrame(draw);
-    analyser.getByteFrequencyData(dataArray);
+      // Clear the canvas only once
+      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+      canvasCtx.fillStyle = "#b8f2e6";
+      canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Clear the canvas only once
-    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-    canvasCtx.fillStyle = "#b8f2e6";
-    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+      const barWidth = (canvas.width / bufferLength) * 2.5;
+      let x = 0;
 
-    const barWidth = (canvas.width / bufferLength) * 2.5;
-    let x = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = dataArray[i];
+        const hue = (i / bufferLength) * 360; // Map the frequency index to a color
 
-    for (let i = 0; i < bufferLength; i++) {
-      const barHeight = dataArray[i];
-      const hue = (i / bufferLength) * 360; // Map the frequency index to a color
+        canvasCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
 
-      canvasCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-      canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-      x += barWidth + 1;
+        x += barWidth + 1;
+      }
     }
+
+    draw();
   }
-
-  draw();
-}
-
-// function drawVisualizer() {
-//   const canvas = canvasRef.current;
-//   const canvasCtx = canvas.getContext("2d");
-//   const bufferLength = analyser.frequencyBinCount;
-//   const dataArray = new Uint8Array(bufferLength);
-
-//   function draw() {
-//     animationRef.current = requestAnimationFrame(draw);
-//     analyser.getByteFrequencyData(dataArray);
-
-//     // Clear the canvas only once
-//     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-//     canvasCtx.fillStyle = "#b8f2e6";
-//     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
-//     const angleIncrement = (2 * Math.PI) / bufferLength;
-//     const radius = 100;
-
-//     for (let i = 0; i < bufferLength; i++) {
-//       const amplitude = dataArray[i] / 2; // Adjust amplitude for better visualization
-//       const angle = i * angleIncrement;
-//       const x = canvas.width / 2 + radius * Math.cos(angle) * amplitude;
-//       const y = canvas.height / 2 + radius * Math.sin(angle) * amplitude;
-
-//       const hue = (i / bufferLength) * 360; // Map the frequency index to a color
-//       canvasCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-
-//       canvasCtx.beginPath();
-//       canvasCtx.arc(x, y, amplitude, 0, 2 * Math.PI);
-//       canvasCtx.fill();
-//     }
-//   }
-
-//   draw();
-// }
-
-
-
-
-
-  // Effect Hooks
-
-
 
   useEffect(() => {
     if (analyser && visualizerOn) {
@@ -577,35 +704,44 @@ const handleEnded = () => {
   // JSX
   return (
     <Div style={{ position: "relative", top: playerPosition.y }}>
-    
       {currentSong && (
         <audio src={currentSong.src} ref={audioPlayer} muted={false} />
       )}
       <CustomPaper elevation={5}>
         <Stack sx={{ display: "flex", justifyContent: "space-between" }}>
-
           {/* Display song title and artist with scrolling effect */}
-          <Stack sx={{ position: "relative", overflow: "hidden", height: "20px", marginLeft:"50px"}}>
-          <Typography
-      sx={{
-        position: "absolute",
-        whiteSpace: "nowrap", color: isDarkMode ? "white" :"black",
-        animation: "marquee 10s linear infinite", // Use CSS animation
-        '@keyframes marquee': {
-          from: {
-            transform: 'translateX(100%)', // Start offscreen to the right
-          },
-          to: {
-            transform: 'translateX(-100%)', // Move offscreen to the left
-          },
-        },
-      }}
-    >
-      {currentSong?.title && currentSong?.artist && currentSong?.album &&`${currentSong.title} - ${currentSong.artist} - ${currentSong.album}`}
-    </Typography>
-        </Stack>
+          <Stack
+            sx={{
+              position: "relative",
+              overflow: "hidden",
+              height: "20px",
+              marginLeft: "50px",
+            }}
+          >
+            <Typography
+              sx={{
+                position: "absolute",
+                whiteSpace: "nowrap",
+                color: isDarkMode ? "white" : "black",
+                animation: "marquee 10s linear infinite", // Use CSS animation
+                "@keyframes marquee": {
+                  from: {
+                    transform: "translateX(100%)", // Start offscreen to the right
+                  },
+                  to: {
+                    transform: "translateX(-100%)", // Move offscreen to the left
+                  },
+                },
+              }}
+            >
+              {currentSong?.title &&
+                currentSong?.artist &&
+                currentSong?.album &&
+                `${currentSong.title} - ${currentSong.artist} - ${currentSong.album}`}
+            </Typography>
+          </Stack>
 
-                       {/* Album Cover */}
+          {/* Album Cover */}
           <Stack
             direction="row"
             spacing={1}
@@ -615,7 +751,6 @@ const handleEnded = () => {
               alignItems: "center",
               justifyContent: "center",
               marginTop: "5px",
-              
             }}
           >
             <img
@@ -624,7 +759,7 @@ const handleEnded = () => {
               style={{ width: "100px", height: "100px", borderRadius: "50%" }}
             />
           </Stack>
-                      {/* Volume-Slider */}
+          {/* Volume-Slider */}
           <Stack
             direction="row"
             spacing={1}
@@ -643,50 +778,73 @@ const handleEnded = () => {
               onChange={(e, v) => setVolume(v)}
             />
           </Stack>
-                       {/* Controls */}
+          {/* Controls */}
           <Stack
             direction="row"
             spacing={1}
             sx={{
               display: "flex",
               width: "40%",
-              alignItems: "center",marginLeft:isNonMobile ?(isDesktop ? "130px": "140px")  : "80px",
+              alignItems: "center",
+              marginLeft: isNonMobile
+                ? isDesktop
+                  ? "130px"
+                  : "140px"
+                : "80px",
             }}
           >
             <SkipPreviousIcon
-              sx={{ color: isDarkMode ? "red" : "black", "&:hover": { color:isDarkMode ? "white": "red" } }}
+              sx={{
+                color: isDarkMode ? "red" : "black",
+                "&:hover": { color: isDarkMode ? "white" : "red" },
+              }}
               onClick={playPreviousSong}
               fontSize={"large"}
             />
             <FastRewindIcon
-              sx={{color: isDarkMode ? "red" : "black", "&:hover": { color: isDarkMode ? "white": "red" } }}
+              sx={{
+                color: isDarkMode ? "red" : "black",
+                "&:hover": { color: isDarkMode ? "white" : "red" },
+              }}
               onClick={toggleBackward}
             />
             {!isPlaying ? (
               <PlayArrowIcon
                 fontSize={"large"}
-                sx={{ color: isDarkMode ?"white":"red", "&:hover": { color:isDarkMode ? "red" :"lime" } }}
+                sx={{
+                  color: isDarkMode ? "white" : "red",
+                  "&:hover": { color: isDarkMode ? "red" : "lime" },
+                }}
                 onClick={togglePlay}
               />
             ) : (
               <PauseIcon
                 fontSize={"large"}
-                sx={{color: isDarkMode ?"lime":"red", "&:hover": {color:isDarkMode ? "red" :"lime" } }}
+                sx={{
+                  color: isDarkMode ? "lime" : "red",
+                  "&:hover": { color: isDarkMode ? "red" : "lime" },
+                }}
                 onClick={togglePlay}
               />
             )}
             <FastForwardIcon
-              sx={{color: isDarkMode ? "red" : "black", "&:hover": { color: isDarkMode ? "white": "red"  } }}
+              sx={{
+                color: isDarkMode ? "red" : "black",
+                "&:hover": { color: isDarkMode ? "white" : "red" },
+              }}
               onClick={toggleForward}
             />
             <SkipNextIcon
-              sx={{ color: isDarkMode ? "red" : "black", "&:hover": {color: isDarkMode ? "white": "red"  } }}
+              sx={{
+                color: isDarkMode ? "red" : "black",
+                "&:hover": { color: isDarkMode ? "white" : "red" },
+              }}
               onClick={playNextSong}
               fontSize={"large"}
             />
           </Stack>
 
-                        {/* Timebar */}
+          {/* Timebar */}
           <Stack
             direction="row"
             spacing={1}
@@ -697,7 +855,7 @@ const handleEnded = () => {
           />
         </Stack>
 
-                        {/* Visualiser */}
+        {/* Visualiser */}
         <Stack
           direction="row"
           spacing={1}
@@ -706,11 +864,21 @@ const handleEnded = () => {
             alignItems: "center",
           }}
         >
-          <Typography sx={{ color:isDarkMode ? "white" :"black", "&:hover": { color: "red" } }}>
+          <Typography
+            sx={{
+              color: isDarkMode ? "white" : "black",
+              "&:hover": { color: "red" },
+            }}
+          >
             {formatTime(elapsed)}
           </Typography>
           <PSlider thumbless="true" value={elapsed} max={duration} />
-          <Typography sx={{ color:isDarkMode ? "white" :"black", "&:hover": { color: "white" } }}>
+          <Typography
+            sx={{
+              color: isDarkMode ? "white" : "black",
+              "&:hover": { color: "white" },
+            }}
+          >
             {formatTime(duration - elapsed)}
           </Typography>
         </Stack>
@@ -721,9 +889,7 @@ const handleEnded = () => {
             display: "flex",
             justifyContent: "flex-start",
           }}
-        >
-       
-        </Stack>
+        ></Stack>
 
         <Stack
           direction="row"
@@ -749,8 +915,7 @@ const handleEnded = () => {
               style={canvasStyle}
               ref={canvasRef}
               onMouseEnter={() => setVisualizerOn(true)}
-              // onMouseLeave={() => setVisualizerOn(false)} 
-            
+              // onMouseLeave={() => setVisualizerOn(false)}
             />
           </div>
         </Stack>
@@ -759,4 +924,4 @@ const handleEnded = () => {
   );
 }
 
-export default MusicPlayer2
+export default MusicPlayer2;
