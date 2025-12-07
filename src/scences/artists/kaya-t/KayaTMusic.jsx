@@ -95,7 +95,7 @@ const KayaTMusic = ({ isDarkMode }) => {
           color: isDarkMode ? "black" : "white",
           backgroundColor: shades.secondary[300],
         }}
-        onClick={() => navigate(`item/${state?.products[2]?._id}`)}
+        onClick={() => navigate(`item/${state?.products[3]?._id}`)}
       >
         Buy it
       </Button>
@@ -130,7 +130,7 @@ const KayaTMusic = ({ isDarkMode }) => {
             color: isDarkMode ? "black" : "white",
             backgroundColor: shades.secondary[300],
           }}
-          onClick={() => navigate(`item/${state?.products[1]?._id}`)}
+          onClick={() => navigate(`item/${state?.products[2]?._id}`)}
         >
           Buy it
         </Button>{" "}
