@@ -98,7 +98,10 @@ const Product = ({isDarkMode}) => {
           background: "hsla(1, 0%, 100%, 0.55)",
           backdropFilter: "blur(30px)",
           borderRadius: "5px",
-          display: isNonMobile ? "flex" : "block",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "20px",
           border: "none",
           position: "relative",
           overflow: "hidden",
@@ -107,13 +110,12 @@ const Product = ({isDarkMode}) => {
         position="relative"
         onMouseOver={() => setIsHovered(true)}
         onMouseOut={() => setIsHovered(false)}
-        display="flex"
       >
       
         {state.products.map((item) => (
           <Item1
             item={item}
-            width={600}
+            width={100}
             handleDelete={handleDelete}
             id={item._id}
           />

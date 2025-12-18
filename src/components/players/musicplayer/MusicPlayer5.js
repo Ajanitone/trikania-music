@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   styled,
   Typography,
   Slider,
   Paper,
-  Stack,useMediaQuery
+  Stack,
+  useMediaQuery,
 
 } from "@mui/material";
 
@@ -76,10 +77,7 @@ const canvasStyle = {
   top: 0,
   left: 0, 
 };
-
-
-
-function MusicPlayer2({isDarkMode}) {
+function MusicPlayer5({ isDarkMode }) {
   const [playlist, setPlaylist] = useState([
     {
       src: Oohla ,
@@ -194,42 +192,98 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
     setCurrentSong(playlist[index]);
   }, [index, playlist]);
 
+  const handleEnded = useCallback(() => {
+    const nextIndex = (index + 1) % playlist.length;
+    setIndex(nextIndex);
+    // if you want to auto-continue play, you can also keep isPlaying true here, etc.
+  }, [index, playlist, setIndex]);
+
+  // A-Load-A new Song
   useEffect(() => {
-    if (audioPlayer.current) {
-      setMediaElement(audioPlayer.current);
-      console.log("mediaElement", mediaElement);
-      audioPlayer.current.volume = volume / 100;
-      audioPlayer.current.src = playlist[index].src;
-      setCurrentSong(playlist[index]);
-      audioPlayer.current.load();
-      audioPlayer.current.addEventListener("canplaythrough", () => {
-        if (isPlaying) {
-          audioPlayer.current.play();
+    if (!audioPlayer.current) return;
+    const audio = audioPlayer.current;
+
+    setMediaElement(audio);
+    audio.volume = volume / 100;
+    audio.src = playlist[index].src;
+    setCurrentSong(playlist[index]);
+    audio.load();
+
+    const handleCanPlayThrough = () => {
+      setDuration(audio.duration);
+      setIsLoaded(true);
+    };
+
+    const handleTimeUpdate = () => {
+      setElapsed(audio.currentTime);
+    };
+
+    const handleAudioEnded = handleEnded; // useCallback above
+
+    audio.addEventListener("canplaythrough", handleCanPlayThrough);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("ended", handleAudioEnded);
+
+    return () => {
+      if (!audio || !audio.removeEventListener) return;
+      audio.removeEventListener("canplaythrough", handleCanPlayThrough);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("ended", handleAudioEnded);
+    };
+  }, [playlist, index, handleEnded]);
+
+  useEffect(() => {
+    const audio = audioPlayer.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      // ensure analyser is ready
+      setupAnalyser();
+
+      if (audio.readyState >= 2) {
+        audio
+          .play()
+          .then(() => {
+            console.log("Audio play successful");
+            drawVisualizer();
+          })
+          .catch((error) => {
+            console.error("Error playing audio:", error);
+          });
+      } else {
+        const onCanPlay = () => {
+          if (!audio) return;
+          setupAnalyser();
+          audio
+            .play()
+            .then(() => {
+              console.log("Audio play successful (after canplaythrough)");
+              drawVisualizer();
+            })
+            .catch((error) => {
+              console.error("Error playing audio:", error);
+            });
+          if (audio && audio.removeEventListener) {
+            audio.removeEventListener("canplaythrough", onCanPlay);
+          }
+        };
+        if (audio && audio.addEventListener) {
+          audio.addEventListener("canplaythrough", onCanPlay);
         }
-        setDuration(audioPlayer?.current?.duration);
-        setIsLoaded(true);
-      });
-
-      audioPlayer.current.addEventListener("timeupdate", () => {
-        setElapsed(audioPlayer?.current?.currentTime);
-      });
-
-      audioPlayer.current.addEventListener("ended", handleEnded);
-      audioPlayer.current.addEventListener("volumechange", () => {
-        setVolume(audioPlayer.current.volume * 100);
-      });
- 
-
-      return () => {
-        if (audioPlayer.current) {
-          audioPlayer.current.removeEventListener("ended", handleEnded);
-          audioPlayer.current.removeEventListener("canplaythrough", () => {});
-          audioPlayer.current.removeEventListener("timeupdate", () => {});
-          audioPlayer.current.removeEventListener("volumechange", () => {});
-        }
-      };
+      }
+    } else {
+      if (!audio.paused) {
+        audio.pause();
+        console.log("Audio paused");
+      }
     }
-  }, [volume, playlist, index]);
+  }, [isPlaying, drawVisualizer, setupAnalyser]);
+
+  // Volume Function
+  useEffect(() => {
+    if (!audioPlayer.current) return;
+    audioPlayer.current.volume = volume / 100;
+  }, [volume]);
 
   function formatTime(time) {
     if (time && !isNaN(time)) {
@@ -249,50 +303,9 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
   // ---PLAY
 
-const togglePlay = () => {
-  if (!isPlaying) {
-    if (isLoaded && audioPlayer.current.readyState >= 2) {
-      audioPlayer.current.play().then(() => {
-        console.log("Audio play successful");
-        setIsPlaying(true);
-        drawVisualizer(); // Call drawVisualizer when starting to play
-      }).catch((error) => {
-        console.error("Error playing audio:", error);
-      });
-    } else {
-      console.log("Audio not loaded or ready. Waiting for canplaythrough event.");
-      // You can optionally add a loading indicator or handle this case differently.
-    }
-  } else {
-    audioPlayer.current.pause();
-    setIsPlaying(false);
-    console.log("Audio paused");
-  }
-};
-
-
-const handleEnded = () => {
-  const nextIndex = (index + 1) % playlist.length;
-  setIndex(nextIndex);
-
-  // Set a flag to check whether the audio is currently playing
-  const isCurrentlyPlaying = isPlaying;
-
-  audioPlayer.current.pause(); // Pause the current audio
-
-  audioPlayer.current.src = playlist[nextIndex].src;
-  audioPlayer.current.load(); // Load the new audio
-
-  // Use the canplaythrough event to ensure the new audio is loaded before playing
-  audioPlayer.current.addEventListener("canplaythrough", () => {
-    if (isCurrentlyPlaying) {
-      audioPlayer.current.play();
-      setIsPlaying(true);
-    }
-    // Remove the event listener to avoid multiple bindings
-    audioPlayer.current.removeEventListener("canplaythrough", () => {});
-  });
-};
+  const togglePlay = () => {
+    setIsPlaying((prev) => !prev);
+  };
 
 
 
@@ -337,65 +350,54 @@ const handleEnded = () => {
   };
   
   const handleLoadAndPlay = () => {
+    const audio = audioPlayer.current;
+    if (!audio) return;
+
     const nextIndex = (index + 1) % playlist.length;
     setIndex(nextIndex);
   
     const isCurrentlyPlaying = isPlaying;
   
-    audioPlayer.current.pause(); // Pause the current audio
+    audio.pause(); // Pause the current audio
   
-    audioPlayer.current.src = playlist[nextIndex].src;
-    audioPlayer.current.load(); // Load the new audio
+    audio.src = playlist[nextIndex].src;
+    audio.load(); // Load the new audio
   
     // Use the canplaythrough event to ensure the new audio is loaded before playing
-    audioPlayer.current.addEventListener("canplaythrough", () => {
+    const onCanPlay = () => {
+      if (!audio) return;
       if (isCurrentlyPlaying) {
-        audioPlayer.current.play();
+        audio.play();
         setIsPlaying(true);
         drawVisualizer(); // Call drawVisualizer when starting to play
       }
       // Remove the event listener to avoid multiple bindings
-      audioPlayer.current.removeEventListener("canplaythrough", () => {});
-    });
+      if (audio && audio.removeEventListener) {
+        audio.removeEventListener("canplaythrough", onCanPlay);
+      }
+    };
+
+    if (audio && audio.addEventListener) {
+      audio.addEventListener("canplaythrough", onCanPlay);
+    }
   };
   
 
   const playNextSong = () => {
     const nextIndex = (index + 1) % playlist.length;
     setIndex(nextIndex);
-    audioPlayer.current.src = playlist[nextIndex].src;
-    audioPlayer.current.play();
-    setIsPlaying(true);
+    setIsPlaying(true); // say "we WANT to be playing"
   };
 
   const playPreviousSong = () => {
-    const nextIndex = index - 1 < 0 ? playlist.length - 1 : index - 1;
-    setIndex(nextIndex);
-    audioPlayer.current.src = playlist[nextIndex].src;
-    audioPlayer.current.play();
+    const prevIndex = index - 1 < 0 ? playlist.length - 1 : index - 1;
+    setIndex(prevIndex);
     setIsPlaying(true);
   };
 
 
 
   //  Analyser
- 
-
-  useEffect(() => {
-    if (audioPlayer.current) {
-      audioPlayer.current.addEventListener("canplaythrough", () => {
-        setupAnalyser();
-        if (isPlaying) {
-          audioPlayer.current.play();
-        }
-      });
-  
-      return () => {
-        audioPlayer.current.removeEventListener("canplaythrough", () => {});
-      };
-    }
-  }, [audioPlayer, isPlaying]);
-  
   // function setupAnalyser() {
   //   // Check if analyser is already set up
   //   if (analyser) {
@@ -542,8 +544,10 @@ const handleEnded = () => {
   // Effect Hooks
 
 
-
   useEffect(() => {
+    const audio = audioPlayer.current;
+    if (!audio) return;
+
     if (analyser && visualizerOn) {
       drawVisualizer();
     } else {
@@ -736,4 +740,4 @@ const handleEnded = () => {
   );
 }
 
-export default MusicPlayer2
+export default MusicPlayer5;

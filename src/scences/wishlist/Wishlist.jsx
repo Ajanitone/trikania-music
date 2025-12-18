@@ -14,8 +14,7 @@ function Wishlist() {
   const navigate = useNavigate();
   useEffect(() => {
     async function getData() {
-      if (!state.user._id) {
-        // If searchValue is empty or contains only whitespace, return or display an error message
+      if (!state.user._id || !baseUrl) {
         return;
       }
       const response = await axios.get(
@@ -30,7 +29,7 @@ function Wishlist() {
     }
 
     getData();
-  }, []);
+  }, [state.user._id, baseUrl]);
 
   const handleDelete = async (id) => {
     if (!state.user._id)
@@ -57,10 +56,6 @@ function Wishlist() {
       setWishlist([...oldData]);
     }
   };
-  useEffect(() => {
-    if (!state.user._id) navigate("/");
-  }, []);
-
   return (
     <Box>
     <ScrollTop/>

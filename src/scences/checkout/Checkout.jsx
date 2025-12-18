@@ -9,9 +9,20 @@ import Shipping from "./Shipping";
 import { loadStripe } from "@stripe/stripe-js";
 import { HerbContext } from "../../context/Context";
 import axios from "axios";
-const stripePromise = loadStripe(
-  "pk_live_51NCUdfHrkFOTAGN6EZmjUqJNgrG007O8eJCeE2NNsExjVrtQo0KIK0qJKhORU077FtfIfBTlFqoZNRsAPbkX5lMj006oXMN0Ny"
-);
+const stripePublicKey =
+  process.env.REACT_APP_STRIPE_PUBLIC_KEY ||
+  (process.env.NODE_ENV !== "production"
+    ? process.env.REACT_APP_STRIPE_TEST_KEY
+    : undefined);
+const usingTestKey =
+  !process.env.REACT_APP_STRIPE_PUBLIC_KEY &&
+  process.env.NODE_ENV !== "production" &&
+  Boolean(process.env.REACT_APP_STRIPE_TEST_KEY);
+if (usingTestKey) {
+  // eslint-disable-next-line no-console
+  console.info("[checkout] Using Stripe test key from REACT_APP_STRIPE_TEST_KEY");
+}
+const stripePromise = stripePublicKey ? loadStripe(stripePublicKey) : null;
 
 const Checkout = () => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -63,6 +74,24 @@ const Checkout = () => {
   }
 
   async function makePayment1(values, cart) {
+    if (!stripePromise) {
+      alert(
+        "Checkout disabled: set REACT_APP_STRIPE_PUBLIC_KEY (prod) or REACT_APP_STRIPE_TEST_KEY (dev)."
+      );
+      return;
+    }
+    if (!userId) {
+      alert("You need to be logged in before checking out.");
+      return;
+    }
+    if (!cart?.length) {
+      alert("Your cart is empty.");
+      return;
+    }
+    if (!baseUrl) {
+      alert("Server base URL is not configured.");
+      return;
+    }
     const stripe = await stripePromise;
 
     try {

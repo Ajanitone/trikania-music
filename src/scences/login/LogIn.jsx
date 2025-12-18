@@ -14,16 +14,7 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import Logo from "../../logo/TRI_Logo_Herbs_RedBlack+Face.png";
-import ScrollTop from "../../components/ScrollTop"
-<ColorRing
-  visible={true}
-  height="80"
-  width="80"
-  ariaLabel="blocks-loading"
-  wrapperStyle={{}}
-  wrapperClass="blocks-wrapper"
-  colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-/>;
+import ScrollTop from "../../components/ScrollTop";
 
 const LogIn = ({ isDarkMode }) => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -40,6 +31,9 @@ const LogIn = ({ isDarkMode }) => {
 
 
   const checkTokenValidity = async (token) => {
+    if (!baseUrl) {
+      return;
+    }
     try {
       const response = await axios.post(baseUrl + '/users/validateToken', { token });
   
@@ -80,6 +74,9 @@ const LogIn = ({ isDarkMode }) => {
     };
   
     try {
+      if (!baseUrl) {
+        throw new Error("REACT_APP_BASE_URL is not configured");
+      }
       const response = await axios.post(baseUrl + "/users/login", loginData, {
         withCredentials: true,
       });
@@ -104,9 +101,16 @@ const LogIn = ({ isDarkMode }) => {
       }
     } catch (error) {
       console.error("Error during login:", error);
-      // Handle the error appropriately
+      setErrorMessage(
+        error?.response?.data?.error ||
+          error?.message ||
+          "Login failed. Please try again."
+      );
+      setErrorPopoverOpen(true);
+    } finally {
+      setLoading(false);
     }
-  }, [data, setLoading, setErrorMessage, setErrorPopoverOpen, dispatchState, navigate]);
+  }, [data, baseUrl, dispatchState, navigate]);
   
   // Replace the dependencies list with the appropriate dependencies for your component.
   
@@ -229,7 +233,7 @@ const LogIn = ({ isDarkMode }) => {
             sx={{ ml: 1, flex: 1 }}
             placeholder="Password"
             id="form1"
-            type="text"
+            type="password"
             name="password"
             value={data.password}
             onChange={handleChange}

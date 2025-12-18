@@ -76,6 +76,7 @@ const canvasStyle = {
   position: "absolute",
   top: 0,
   left: 0,
+  background: "white",
 };
 
 function MusicPlayer2({ isDarkMode }) {
@@ -194,9 +195,11 @@ function MusicPlayer2({ isDarkMode }) {
 
   // State and Ref variables
   const canvasRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const dataArrayRef = useRef(null);
+  const sourceNodeRef = useRef(null);
   const animationRef = useRef(null);
-  const [analyser, setAnalyser] = useState(null);
-  const [visualizerOn, setVisualizerOn] = useState(false);
 
   // Modify the handleEnded function
 
@@ -220,7 +223,6 @@ function MusicPlayer2({ isDarkMode }) {
     // if you want to auto-continue play, you can also keep isPlaying true here, etc.
   }, [index, playlist, setIndex]); // add deps as needed
 
-  //     setMediaElement(audioPlayer.current);
   //     console.log("mediaElement", mediaElement);
   //     audioPlayer.current.volume = volume / 100;
   //     audioPlayer.current.src = playlist[index].src;
@@ -303,6 +305,7 @@ function MusicPlayer2({ isDarkMode }) {
     const audio = audioPlayer.current;
 
     setMediaElement(audio);
+    audio.volume = volume / 100;
     audio.src = playlist[index].src;
     setCurrentSong(playlist[index]);
     audio.load();
@@ -316,21 +319,15 @@ function MusicPlayer2({ isDarkMode }) {
       setElapsed(audio.currentTime);
     };
 
-    const handleVolumeChange = () => {
-      setVolume(audio.volume * 100);
-    };
-
     const handleAudioEnded = handleEnded; // useCallback above
 
     audio.addEventListener("canplaythrough", handleCanPlayThrough);
     audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("volumechange", handleVolumeChange);
     audio.addEventListener("ended", handleAudioEnded);
 
     return () => {
       audio.removeEventListener("canplaythrough", handleCanPlayThrough);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("volumechange", handleVolumeChange);
       audio.removeEventListener("ended", handleAudioEnded);
     };
   }, [playlist, index, handleEnded]);
@@ -426,32 +423,152 @@ function MusicPlayer2({ isDarkMode }) {
   //   }
   // }, [isPlaying, drawVisualizer]);
 
+  const setupAudioGraph = useCallback(() => {
+    const element = audioPlayer.current;
+    if (!element) return null;
+
+    if (!audioContextRef.current) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      audioContextRef.current = new AudioCtx();
+    }
+
+    const audioCtx = audioContextRef.current;
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+
+    if (!sourceNodeRef.current) {
+      try {
+        sourceNodeRef.current = audioCtx.createMediaElementSource(element);
+      } catch (error) {
+        console.error("Error creating media element source", error);
+        return null;
+      }
+    }
+
+    let analyser = analyserRef.current;
+    try {
+      if (!analyser) {
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256;
+        analyserRef.current = analyser;
+      }
+
+      sourceNodeRef.current.disconnect();
+      analyser.disconnect();
+      sourceNodeRef.current.connect(analyser);
+      analyser.connect(audioCtx.destination);
+
+      const bufferLength = analyser.frequencyBinCount;
+      dataArrayRef.current = new Uint8Array(bufferLength);
+
+      return analyser;
+    } catch (err) {
+      console.error("Analyser setup failed, falling back to direct audio", err);
+      try {
+        sourceNodeRef.current.disconnect();
+        sourceNodeRef.current.connect(audioCtx.destination);
+      } catch (e) {
+        console.error("Direct audio fallback failed", e);
+      }
+      return null;
+    }
+  }, []);
+
+  const stopVisualizer = useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+  }, []);
+
+  const startVisualizer = useCallback(() => {
+    const analyser = setupAudioGraph();
+    const canvas = canvasRef.current;
+    const dataArray = dataArrayRef.current;
+    if (!analyser || !canvas || !dataArray) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    if (!canvas.width) canvas.width = canvas.offsetWidth || 800;
+    if (!canvas.height) canvas.height = canvas.offsetHeight || 200;
+
+    const bufferLength = dataArray.length;
+    const draw = () => {
+      animationRef.current = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+
+      ctx.fillStyle = "#b8f2e6";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const barWidth = (canvas.width / bufferLength) * 2.5;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = dataArray[i];
+        const hue = (i / bufferLength) * 360;
+
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+        x += barWidth + 1;
+      }
+    };
+
+    stopVisualizer();
+    draw();
+  }, [setupAudioGraph, stopVisualizer]);
+
+  useEffect(() => {
+    return () => {
+      stopVisualizer();
+      if (sourceNodeRef.current) {
+        try {
+          sourceNodeRef.current.disconnect();
+        } catch (e) {}
+      }
+      if (analyserRef.current) {
+        try {
+          analyserRef.current.disconnect();
+        } catch (e) {}
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close().catch(() => {});
+      }
+    };
+  }, [stopVisualizer]);
+
   useEffect(() => {
     const audio = audioPlayer.current;
     if (!audio) return;
 
-    if (isPlaying) {
-      // ensure analyser is ready
-      setupAnalyser();
+    if (!audioContextRef.current) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      audioContextRef.current = new AudioCtx();
+    }
+    if (audioContextRef.current.state === "suspended") {
+      audioContextRef.current.resume();
+    }
 
+    if (isPlaying) {
       if (audio.readyState >= 2) {
         audio
           .play()
           .then(() => {
             console.log("Audio play successful");
-            drawVisualizer();
+            startVisualizer();
           })
           .catch((error) => {
             console.error("Error playing audio:", error);
           });
       } else {
         const onCanPlay = () => {
-          setupAnalyser();
           audio
             .play()
             .then(() => {
               console.log("Audio play successful (after canplaythrough)");
-              drawVisualizer();
+              startVisualizer();
             })
             .catch((error) => {
               console.error("Error playing audio:", error);
@@ -465,14 +582,16 @@ function MusicPlayer2({ isDarkMode }) {
         audio.pause();
         console.log("Audio paused");
       }
+      stopVisualizer();
     }
-  }, [isPlaying, drawVisualizer, setupAnalyser]);
+  }, [isPlaying, startVisualizer, stopVisualizer]);
 
   // Volune Function
   useEffect(() => {
     if (!audioPlayer.current) return;
     audioPlayer.current.volume = volume / 100;
-  }, [volume]);
+    audioPlayer.current.muted = mute;
+  }, [volume, mute]);
   // Time format Function
   function formatTime(time) {
     if (time && !isNaN(time)) {
@@ -493,7 +612,32 @@ function MusicPlayer2({ isDarkMode }) {
   // ---PLAY
 
   const togglePlay = () => {
-    setIsPlaying((prev) => !prev);
+    const audio = audioPlayer.current;
+    if (!audio) return;
+
+    if (!audioContextRef.current) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      audioContextRef.current = new AudioCtx();
+    }
+    if (audioContextRef.current.state === "suspended") {
+      audioContextRef.current.resume();
+    }
+
+    if (!isPlaying) {
+      audio
+        .play()
+        .then(() => {
+          setIsPlaying(true);
+          startVisualizer();
+        })
+        .catch((error) => {
+          console.error("Error playing audio:", error);
+        });
+    } else {
+      audio.pause();
+      setIsPlaying(false);
+      stopVisualizer();
+    }
   };
   // const togglePlay = () => {
   //   const audio = audioPlayer.current;
@@ -573,7 +717,7 @@ function MusicPlayer2({ isDarkMode }) {
       if (isCurrentlyPlaying) {
         audioPlayer.current.play();
         setIsPlaying(true);
-        drawVisualizer(); // Call drawVisualizer when starting to play
+        startVisualizer(); // start visualizer when starting to play
       }
       // Remove the event listener to avoid multiple bindings
       audioPlayer.current.removeEventListener("canplaythrough", () => {});
@@ -608,104 +752,16 @@ function MusicPlayer2({ isDarkMode }) {
     setIsPlaying(true);
   };
 
-  // useEffect(() => {
-  //   if (audioPlayer.current) {
-  //     audioPlayer.current.addEventListener("canplaythrough", () => {
-  //       setupAnalyser();
-  //       if (isPlaying) {
-  //         audioPlayer.current.play();
-  //       }
-  //     });
-
-  //     return () => {
-  //       audioPlayer.current.removeEventListener("canplaythrough", () => {});
-  //     };
-  //   }
-  // }, [audioPlayer, isPlaying]);
-
-  function setupAnalyser() {
-    // Check if analyser is already set up
-    if (analyser) {
-      return;
-    }
-
-    const audioContext = new AudioContext();
-
-    // Check if the audio player is already connected to a source node
-    if (audioPlayer.current && audioPlayer.current.src) {
-      try {
-        // Try to create a new source node
-        const sourceNode = audioContext.createMediaElementSource(
-          audioPlayer.current
-        );
-        const analyserNode = audioContext.createAnalyser();
-        analyserNode.fftSize = 256;
-
-        // Connect the source node to the analyser
-        sourceNode.connect(analyserNode);
-        analyserNode.connect(audioContext.destination);
-        setAnalyser(analyserNode);
-
-        // Start the visualizer when the audio starts playing
-        drawVisualizer();
-      } catch (error) {
-        // If an error occurs, it means the audio player is already connected
-        console.error("Error creating source node:", error);
-
-        // You can add additional handling here if needed
-      }
-    }
-  }
-
-  function drawVisualizer() {
-    if (!analyser) {
-      console.error("Analyser not set up");
-      return;
-    }
-    const canvas = canvasRef.current;
-    const canvasCtx = canvas.getContext("2d");
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
-    function draw() {
-      animationRef.current = requestAnimationFrame(draw);
-      analyser.getByteFrequencyData(dataArray);
-
-      // Clear the canvas only once
-      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-      canvasCtx.fillStyle = "#b8f2e6";
-      canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const barWidth = (canvas.width / bufferLength) * 2.5;
-      let x = 0;
-
-      for (let i = 0; i < bufferLength; i++) {
-        const barHeight = dataArray[i];
-        const hue = (i / bufferLength) * 360; // Map the frequency index to a color
-
-        canvasCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-        canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-        x += barWidth + 1;
-      }
-    }
-
-    draw();
-  }
-
-  useEffect(() => {
-    if (analyser && visualizerOn) {
-      drawVisualizer();
-    } else {
-      cancelAnimationFrame(animationRef.current);
-    }
-  }, [analyser, visualizerOn]);
-
   // JSX
   return (
     <Div style={{ position: "relative", top: playerPosition.y }}>
       {currentSong && (
-        <audio src={currentSong.src} ref={audioPlayer} muted={false} />
+        <audio
+          src={currentSong.src}
+          ref={audioPlayer}
+          muted={mute}
+          crossOrigin="anonymous"
+        />
       )}
       <CustomPaper elevation={5}>
         <Stack sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -914,8 +970,9 @@ function MusicPlayer2({ isDarkMode }) {
             <canvas
               style={canvasStyle}
               ref={canvasRef}
-              onMouseEnter={() => setVisualizerOn(true)}
-              // onMouseLeave={() => setVisualizerOn(false)}
+              onMouseEnter={() => {
+                if (isPlaying) startVisualizer();
+              }}
             />
           </div>
         </Stack>

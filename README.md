@@ -71,3 +71,18 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 # trikania-music
 # trikania-music
 # trikania-music
+
+## Deploying with AWS Amplify (CI/CD)
+
+1) **Connect repo**: In the Amplify Console, choose “New app → Host web app”, pick your Git provider/branch, and point it at this project root.
+2) **Build settings**: `amplify.yml` in the repo already tells Amplify to `npm ci` then `npm run build`, publishing the `build/` folder.
+3) **Environment variables** (Amplify Console → App settings → Environment variables):
+   - `REACT_APP_BASE_URL` (your deployed API URL, e.g., `https://api.example.com`)
+   - `REACT_APP_STRIPE_PUBLIC_KEY` (live publishable key for production)
+   - `REACT_APP_STRIPE_TEST_KEY` (optional; only used in dev)
+   Do **not** add any `sk_...` secret keys to the frontend; those belong only on your backend.
+4) **Backend/API**: Deploy your server separately (e.g., AWS Elastic Beanstalk, ECS/Fargate, or Lambda/API Gateway) and enable CORS for your Amplify domain. Configure your server with `STRIPE_SECRET_KEY`, DB creds, and other secrets.
+5) **Custom domain/HTTPS**: Attach your domain in Amplify Console; it will provision ACM certs automatically.
+6) **Test**: After Amplify builds, verify login/register, checkout (with Stripe test mode if applicable), wishlist, and other flows against your deployed API.
+
+For local dev, use a `.env` file with your test publishable key and local API URL, then restart `npm start` after changes.

@@ -35,6 +35,7 @@ import AlbumIcon from "@mui/icons-material/Album";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import BalanceIcon from "@mui/icons-material/Balance";
+import MarkEmailUnreadIcon from "@mui/icons-material/MarkEmailUnread";
 
 const Navbar = ({ isDarkMode, toggleTheme }) => {
   const navigate = useNavigate();
@@ -69,6 +70,11 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
   const handleSearch = async () => {
     if (searchValue.name.trim() === "") {
       // If searchValue is empty or contains only whitespace, return or display an error message
+      return;
+    }
+    if (!baseUrl) {
+      setErrorMessage("Server base URL is not configured.");
+      setErrorPopoverOpen(true);
       return;
     }
     setLoading(true);
@@ -106,6 +112,11 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
   }, []);
 
   const handleLogOut = async () => {
+    if (!baseUrl) {
+      setErrorMessage("Server base URL is not configured.");
+      setErrorPopoverOpen(true);
+      return;
+    }
     setLoading(true);
     const response = await axios.get(baseUrl + "/users/logout", {
       withCredentials: true,
@@ -165,43 +176,12 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         padding="10px"
         borderRadius="10px"
       >
-        {/* <Box
-          display="flex"
-          onClick={() => navigate("/")}
-          sx={{
-            "&:hover": { cursor: "pointer", color: shades.primary[300] },
-          }}
-          color={!isDarkMode ? shades.secondary[500] : shades.primary[100]}
-          title="trikania-music"
-        >
-          <img
-            src={Logo}
-            alt="logo"
-            style={{
-              width: "30px",
-              height:"30px",
-              borderRadius: "50%",
-              
-            }}
-          />
-          <Typography sx={{ display: isNonMobile ? "block" : "none" }}>
-            TrikaniaMusic 🎼
-          </Typography>
-        </Box> */}
-
         <Box
           display="flex"
           justifyContent="space-between"
           columnGap={isNonMobile ? "20px" : "10px"}
           zIndex="2"
         >
-          {/* <IconButton
-            onClick={() => navigate("/search-product")}
-            sx={{ color: isDarkMode ? "white" : "black" }}
-          >
-            <SearchOutlined />
-          </IconButton> */}
-
           {/* Artist */}
           <IconButton
             sx={{
@@ -479,7 +459,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
             </IconButton>
           </Badge>
 
-          {/* Find-your-voice */}
+          {/* Beats */}
           <Badge
             badgeContent={wishList?.length}
             color="secondary"
@@ -504,8 +484,8 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                 display: "flex",
                 flexDirection: "column",
               }}
-              onClick={() => navigate("/find-voice")}
-              title="FindYourVoice"
+              onClick={() => navigate("/beats")}
+              title="Beats"
             >
               <SettingsVoiceIcon />
               {isHovered && (
@@ -519,7 +499,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
                   }}
                   variant="body1"
                 >
-                  FindYourVoice
+                  Beats
                 </Typography>
               )}
             </IconButton>
@@ -661,19 +641,34 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           {/* Administration */}
 
           {state.user.isAdmin ? (
-            <IconButton
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                "&:hover": {
-                  backgroundColor: shades.secondary[500],
-                  color: shades.primary[100],
-                },
-              }}
-              onClick={() => navigate("/settings")}
-              title="admin"
-            >
-              <AdminPanelSettingsOutlinedIcon />
-            </IconButton>
+            <>
+              <IconButton
+                sx={{
+                  color: isDarkMode ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: shades.secondary[500],
+                    color: shades.primary[100],
+                  },
+                }}
+                onClick={() => navigate("/settings")}
+                title="admin"
+              >
+                <AdminPanelSettingsOutlinedIcon />
+              </IconButton>
+              <IconButton
+                sx={{
+                  color: isDarkMode ? "white" : "black",
+                  "&:hover": {
+                    backgroundColor: shades.secondary[500],
+                    color: shades.primary[100],
+                  },
+                }}
+                onClick={() => navigate("/workmail")}
+                title="WorkMail Provisioning"
+              >
+                <MarkEmailUnreadIcon />
+              </IconButton>
+            </>
           ) : (
             ""
           )}

@@ -90,11 +90,7 @@ function ContextProvider({ children }) {
             cart: [...action.payload],
           },
         };
-      // case "addProducts":
-      //   return {
-      //     ...state,
-      //     products: [...state.products, ...action.payload],
-      //   };
+
       case "searchUsers":
         return {
           ...state,
@@ -158,6 +154,49 @@ function ContextProvider({ children }) {
           newsletters: [...oldNewsletters],
         };
 
+      case "addBeat":
+        return {
+          ...state,
+          beats: [...state.beats, action.payload],
+        };
+
+      case "loadBeats":
+        return {
+          ...state,
+          beats: [...action.payload],
+        };
+
+      case "removeBeat":
+        const oldBeats = [
+          ...state.beats.filter((item) => item._id !== action.payload),
+        ];
+
+        return {
+          ...state,
+          beats: [...oldBeats],
+        };
+
+      case "editBeat":
+        const editBeats = [...state.beats];
+
+        const ids = editBeats.findIndex(
+          (item) => item._id === action.payload._id
+        );
+
+        editBeats[ids] = { ...action.payload };
+        console.log("🚀 ~ reducer ~ editBeats", editBeats[ids]);
+
+        return {
+          ...state,
+          beats: [...editBeats],
+        };
+
+      case "searchBeats":
+        return {
+          ...state,
+          beats: [...action.payload],
+        };
+
       default:
         return state;
     }
@@ -179,6 +218,7 @@ function ContextProvider({ children }) {
       country: "",
     },
     products: [],
+    beats: [],
 
     isFetching: false,
     error: false,

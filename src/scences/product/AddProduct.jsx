@@ -36,6 +36,10 @@ const AddProduct = ({ isDarkMode }) => {
     url: "",
     file: null,
   });
+  const [audioData, setAudioData] = useState({
+    url: "",
+    file: null,
+  });
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -61,6 +65,14 @@ const userId = state.user._id;
     });
   };
 
+  const handleAudioChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAudioData({
+      url: URL.createObjectURL(file),
+      file,
+    });
+  };
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
@@ -103,32 +115,43 @@ const userId = state.user._id;
     formdata.set("artistName", data.artistName);
     formdata.set("category", data.category);
     if (fileData.file) formdata.set("image", fileData.file, "musicImage");
+    if (audioData.file) formdata.set("audio", audioData.file, "productAudio");
 
      // Include userId in the formdata
   formdata.set("userId", userId);
 
-    const config = {
-      headers: { "content-type": "multipart/form-data" },
-      withCredentials: true,
-    };
+    try {
+      const response = await axios.post(
+        baseUrl + "/products/addProduct",
+        formdata,
+        {
+          // Let the browser set multipart boundaries automatically
+          withCredentials: true,
+        }
+      );
 
-    const response = await axios.post(
-      baseUrl + "/products/addProduct",
-      formdata,
-      config
-    );
+      console.log("handleData response", response);
 
-    console.log("handleData response", response);
-
-    if (response.data.success) {
-      setLoading(false);
-      setErrorMessage("Product added");
+      if (response.data.success) {
+        setErrorMessage("Product added");
+        setErrorPopoverOpen(true);
+        dispatchState({
+          type: "addProduct",
+          payload: response.data.product,
+        });
+        navigate("/products");
+      } else {
+        setErrorMessage(response.data.error || "Add product failed");
+        setErrorPopoverOpen(true);
+      }
+    } catch (error) {
+      console.error("Add product failed", error);
+      setErrorMessage(
+        error?.response?.data?.error || "Request failed. Please try again."
+      );
       setErrorPopoverOpen(true);
-      dispatchState({
-        type: "addProduct",
-        payload: response.data.product,
-      });
-      navigate("/products");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -334,6 +357,44 @@ const userId = state.user._id;
               onChange={(e) => handleImageChange(e, setFiledata)}
               title="file"
             />
+          </label>
+        </Box>
+        <Box
+          p="2px 2px"
+          m="5px auto"
+          display="flex"
+          alignItems="center"
+          width="75%"
+          backgroundColor="#F2F2F2"
+          justifyContent="center"
+          sx={{ borderRadius: "5px" }}
+        >
+          <label
+            htmlFor="audioInput"
+            className="file-input-label"
+            style={{ width: "100%" }}
+          >
+            <Typography sx={{ mb: 1, color: "#333" }}>
+              Upload audio file
+            </Typography>
+            <InputBase
+              id="audioInput"
+              type="file"
+              inputProps={{ accept: "audio/*" }}
+              className="file-input"
+              onChange={handleAudioChange}
+              title="audio"
+              sx={{ width: "100%" }}
+            />
+            {audioData.url && (
+              <audio
+                controls
+                src={audioData.url}
+                style={{ marginTop: "8px", width: "100%" }}
+              >
+                Your browser does not support the audio element.
+              </audio>
+            )}
           </label>
         </Box>
         <Box

@@ -66,51 +66,51 @@ const KayaTMusic = ({ isDarkMode }) => {
       onMouseOut={() => setIsHovered(false)}
     >
       <ScrollTop isDarkMode={isDarkMode} />
+      <Box padding="50px" width="100%" margin="2px auto" textAlign="center">
+        <Typography
+          sx={{
+            fontWeight: "bold",
+            "&:hover": { cursor: "pointer", color: shades.secondary[500] },
+          }}
+        >
+          Kaya-T-Music
+        </Typography>
+        <Typography
+          sx={{
+            "&:hover": {
+              cursor: "pointer",
+              color: isDarkMode ? "red" : shades.secondary[500],
+            },
+            marginTop: "20px",
+          }}
+        >
+          {`${state?.products[2]?.artistName} ` || Artist}`s Album{" "}
+          {`${state?.products[3]?.name}` || AlbumName}.
+        </Typography>
 
-      <Typography
-        sx={{
-          fontWeight: "bold",
-          "&:hover": { cursor: "pointer", color: shades.secondary[500] },
-        }}
-      >
-        Kaya-T-Music
-      </Typography>
-      <Typography
-        sx={{
-          "&:hover": {
-            cursor: "pointer",
-            color: isDarkMode ? "red" : shades.secondary[500],
-          },
-          marginTop: "20px",
-        }}
-      >
-        {`${state?.products[2]?.artistName} ` || Artist}`s Album{" "}
-        {`${state?.products[3]?.name}` || AlbumName}.
-      </Typography>
+        <Button
+          sx={{
+            "&:hover": { cursor: "pointer", color: "lime" },
+            marginTop: "10px",
+            color: isDarkMode ? "black" : "white",
+            backgroundColor: shades.secondary[300],
+          }}
+          onClick={() => navigate(`item/${state?.products[3]?._id}`)}
+        >
+          Buy it
+        </Button>
 
-      <Button
-        sx={{
-          "&:hover": { cursor: "pointer", color: "lime" },
-          marginTop: "10px",
-          color: isDarkMode ? "black" : "white",
-          backgroundColor: shades.secondary[300],
-        }}
-        onClick={() => navigate(`item/${state?.products[3]?._id}`)}
-      >
-        Buy it
-      </Button>
-
-      <Box>
-        {" "}
-        <MusicPlayer3
-          isDarkMode={isDarkMode}
-          staticModal={staticModal}
-          setStaticModal={setStaticModal}
-        />
+        <Box>
+          <MusicPlayer3
+            isDarkMode={isDarkMode}
+            staticModal={staticModal}
+            setStaticModal={setStaticModal}
+          />
+        </Box>
       </Box>
 
       {/* LEAD ME */}
-      <Box m="200px 0px">
+      <Box padding="50px" width="100%" margin="400px auto" textAlign="center">
         <Typography
           sx={{
             "&:hover": {

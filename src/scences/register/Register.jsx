@@ -1,20 +1,10 @@
-import React, { useState, useRef ,useEffect} from "react";
+import React, { useState, useRef ,useEffect,useCallback} from "react";
 import { Box, Typography, InputBase, Button, Popover,useMediaQuery} from "@mui/material";
 import ScrollTop from "../../components/ScrollTop";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
 import Logo from "../../logo/TRI_Logo_Herbs_RedBlack+Face.png";
-
-<ColorRing
-  visible={true}
-  height="80"
-  width="80"
-  ariaLabel="blocks-loading"
-  wrapperStyle={{}}
-  wrapperClass="blocks-wrapper"
-  colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-/>;
 const Register = ({ isDarkMode }) => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -38,7 +28,7 @@ const Register = ({ isDarkMode }) => {
   });
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleRegister = useCallback(async () => {
     // Validate the form fields
     if (data.username.length < 3) {
       setErrorMessage("Username must be more than 2 characters");
@@ -66,6 +56,9 @@ const Register = ({ isDarkMode }) => {
 
     setLoading(true);
     try {
+      if (!baseUrl) {
+        throw new Error("REACT_APP_BASE_URL is not configured");
+      }
       const response = await axios.post(baseUrl + "/users/register", data, {
         withCredentials: true,
       });
@@ -86,10 +79,16 @@ const Register = ({ isDarkMode }) => {
       }
     } catch (error) {
       console.log("error", error.message);
+      setErrorMessage(
+        error?.response?.data?.error ||
+          error?.message ||
+          "Registration failed. Please try again."
+      );
+      setErrorPopoverOpen(true);
     } finally {
       setLoading(false);
     }
-  };
+  }, [baseUrl, data, navigate]);
   
 
   // Email validation helper function

@@ -1,21 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  Box,
-  Typography,
-  IconButton,
-  InputBase,
-  Button,
-  Checkbox,
-  Divider,
-} from "@mui/material";
-import FilterVintageIcon from "@mui/icons-material/FilterVintage";
+import { Box, Button } from "@mui/material";
 
 import { HerbContext } from "../../context/Context";
-import axios from "axios";
+
 import { useNavigate } from "react-router-dom";
 import { ColorRing } from "react-loader-spinner";
-import profilePicture from "../../assets/angele-kamp-kcvRHtAyuig-unsplash.jpg";
-import ScrollTop from "../../components/ScrollTop"
+
+import ScrollTop from "../../components/ScrollTop";
 <ColorRing
   visible={true}
   height="80"
@@ -37,18 +28,18 @@ const Settings = ({ isDarkMode }) => {
 
   return (
     <Box>
-    <ScrollTop isDarkMode={isDarkMode}/>
+      <ScrollTop isDarkMode={isDarkMode} />
       <Box
-      marginTop="100px"
+        marginTop="100px"
         width="max(400px,30%)"
         height="75%"
         backgroundColor="white"
         sx={{
-        background: "linear-gradient(to right, rgba(120, 9, 9, 0.2), #f5f3f4)",
-        borderRadius: "10px"
-      }}
+          background:
+            "linear-gradient(to right, rgba(120, 9, 9, 0.2), #f5f3f4)",
+          borderRadius: "10px",
+        }}
       >
-        
         <Box
           p="4px 4px"
           m="15px auto"
@@ -107,7 +98,7 @@ const Settings = ({ isDarkMode }) => {
               Products
             </Button>
           )}
-        </Box>{" "}
+        </Box>
         <Box
           p="4px 4px"
           m="15px auto"
@@ -195,6 +186,37 @@ const Settings = ({ isDarkMode }) => {
               }}
             >
               Newsletter
+            </Button>
+          )}
+        </Box>
+
+        <Box
+          p="4px 4px"
+          m="15px auto"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          width="75%"
+          backgroundColor="#F2F2F2"
+          sx={{ borderRadius: "5px", marginTop: "70px" }} // Add borderRadius style
+        >
+          {loading ? (
+            <ColorRing />
+          ) : (
+            <Button
+              className="w-100 mb-4"
+              size="md"
+              onClick={() => navigate("/add-beat")}
+              sx={{
+                width: "50%",
+                background:
+                  "linear-gradient(to right, rgba(100, 9, 9, 0.2), #f5f3f4)",
+                marginTop: "10px",
+                color: "red",
+                "&:hover": { color: "white" },
+              }}
+            >
+              Add-Beats
             </Button>
           )}
         </Box>

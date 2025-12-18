@@ -24,7 +24,7 @@ const Footer = ({ isDarkMode }) => {
   return (
     <Box
       mt="70px"
-      p="40px 0"
+      p="24px 0"
       sx={{
         backgroundColor: isDarkMode ? "black" : "",
       }}
@@ -36,8 +36,8 @@ const Footer = ({ isDarkMode }) => {
         gridTemplateColumns={
           isNonMobile ? "repeat(3, minmax(180px, 1fr))" : "1fr"
         }
-        gap="28px"
-        padding="24px"
+        gap="16px"
+        padding="16px"
         sx={{
           borderRadius: "10px",
           boxShadow: "0 2px 4px rgba(1, 1, 1, 0.1)",
@@ -199,7 +199,7 @@ const Footer = ({ isDarkMode }) => {
               sx={{
                 border: 0,
                 width: "100%",
-                height: isNonMobile ? "180px" : "200px",
+                height: isNonMobile ? "150px" : "170px",
                 display: "block",
               }}
             />

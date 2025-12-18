@@ -47,7 +47,7 @@ const Ajanimusic = ({ isDarkMode }) => {
       className={`home ${isDarkMode ? "dark-mode" : ""}`}
       padding="10px"
       width="80%"
-      height="100vh"
+      minHeight="100vh"
       margin="100px auto"
       textAlign="center"
       sx={{
@@ -58,55 +58,56 @@ const Ajanimusic = ({ isDarkMode }) => {
         boxShadow: "0 2px 4px rgba(1, 1, 1, 0.1)",
         border: "none",
         position: "relative",
-        overflow: "hidden",
+        overflow: "visible",
       }}
       position="relative"
       onMouseOver={() => setIsHovered(true)}
       onMouseOut={() => setIsHovered(false)}
     >
       <ScrollTop isDarkMode={isDarkMode} />
+      <Box padding="50px" width="100%" margin="2px auto" textAlign="center">
+        <Box>
+          <Typography
+            sx={{
+              "&:hover": { cursor: "pointer", color: shades.secondary[500] },
+            }}
+          >
+            Ajani-Music
+          </Typography>
+          <Typography
+            sx={{
+              "&:hover": {
+                cursor: "pointer",
+                color: isDarkMode ? "red" : shades.secondary[500],
+              },
+              marginTop: "20px",
+            }}
+          >
+            {`${state?.products[4]?.artistName} ` || Artist}`s Debut Album{" "}
+            {`${state?.products[4]?.name}` || AlbumName} is out now.
+          </Typography>
 
-      <Box>
-        <Typography
-          sx={{
-            "&:hover": { cursor: "pointer", color: shades.secondary[500] },
-          }}
-        >
-          Ajani-Music
-        </Typography>
-        <Typography
-          sx={{
-            "&:hover": {
-              cursor: "pointer",
-              color: isDarkMode ? "red" : shades.secondary[500],
-            },
-            marginTop: "20px",
-          }}
-        >
-          {`${state?.products[4]?.artistName} ` || Artist}`s Debut Album{" "}
-          {`${state?.products[4]?.name}` || AlbumName} is out now.
-        </Typography>
-
-        <Button
-          sx={{
-            "&:hover": { cursor: "pointer", color: "lime" },
-            marginTop: "10px",
-            color: isDarkMode ? "black" : "white",
-            backgroundColor: shades.secondary[300],
-          }}
-          onClick={() => navigate(`item/${state?.products[4]?._id}`)}
-        >
-          Buy it
-        </Button>
+          <Button
+            sx={{
+              "&:hover": { cursor: "pointer", color: "lime" },
+              marginTop: "10px",
+              color: isDarkMode ? "black" : "white",
+              backgroundColor: shades.secondary[300],
+            }}
+            onClick={() => navigate(`item/${state?.products[4]?._id}`)}
+          >
+            Buy it
+          </Button>
+        </Box>
+        <Box>
+          <MusicPlayer2
+            isDarkMode={isDarkMode}
+            staticModal={staticModal}
+            setStaticModal={setStaticModal}
+          />
+        </Box>
       </Box>
-      <Box>
-        <MusicPlayer2
-          isDarkMode={isDarkMode}
-          staticModal={staticModal}
-          setStaticModal={setStaticModal}
-        />
-      </Box>
-      <Box padding="50px" width="100%" margin="100px auto" textAlign="center">
+      <Box padding="50px" width="100%" margin="400px auto" textAlign="center">
         <Box title="ajani">
           <Button
             sx={{

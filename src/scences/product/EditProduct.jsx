@@ -24,12 +24,13 @@ import ScrollTop from "../../components/ScrollTop";
   colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
 />;
 
-const EditProduct = ({isDarkMode}) => {
+const EditProduct = ({ isDarkMode }) => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { state, dispatchState } = useContext(HerbContext);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const userId = state.user._id;
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -44,12 +45,18 @@ const EditProduct = ({isDarkMode}) => {
     url: "",
     file: null,
   });
+  const [audioData, setAudioData] = useState({
+    url: "",
+    file: null,
+  });
 
   const [data, setData] = useState({
     name: "",
     price: "",
     description: "",
     category: "",
+    genre: "",
+    artistName: "",
     image: fileData.file,
   });
 
@@ -70,6 +77,12 @@ const EditProduct = ({isDarkMode}) => {
         // }
 
         setData(response.data.product);
+        if (response.data.product?.audio) {
+          setAudioData((prev) => ({
+            ...prev,
+            url: response.data.product.audio,
+          }));
+        }
       }
     }
 
@@ -80,6 +93,14 @@ const EditProduct = ({isDarkMode}) => {
     setFiledata({
       url: URL.createObjectURL(e.target.files[0]), // Use e.target instead of e.currentTarget
       file: e.target.files[0], // Use e.target instead of e.currentTarget
+    });
+  };
+  const handleAudioChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAudioData({
+      url: URL.createObjectURL(file),
+      file,
     });
   };
   const handleChange = (e) => {
@@ -105,35 +126,50 @@ const EditProduct = ({isDarkMode}) => {
     formdata.set("price", data.price);
     formdata.set("description", data.description);
     formdata.set("category", data.category);
-    if (fileData.file) formdata.set("image", fileData.file, "profileImage");
+    formdata.set("genre", data.genre);
+    formdata.set("artistName", data.artistName);
+    formdata.set("_id", id);
+    if (userId) formdata.set("userId", userId);
+    if (fileData.file) formdata.set("image", fileData.file, "MusicImage");
+    if (audioData.file) formdata.set("audio", audioData.file, "productAudio");
 
-    const config = {
-      headers: { "content-type": "multipart/form-data" },
-      withCredentials: true,
-    };
+    try {
+      const response = await axios.post(
+        baseUrl + "/products/editProduct",
+        formdata,
+        {
+          // Let the browser set multipart boundaries automatically
+          withCredentials: true,
+        }
+      );
 
-    const response = await axios.post(
-      baseUrl + "/products/addProduct",
-      formdata,
-      config
-    );
+      console.log("handleData response", response);
 
-    console.log("handleData response", response);
-
-    if (response.data.success) {
+      if (response.data.success) {
+        setErrorMessage("Product updated");
+        setErrorPopoverOpen(true); // Open the error Popover
+        dispatchState({
+          type: "editProduct",
+          payload: response.data.product,
+        });
+        navigate("/products");
+      } else {
+        setErrorMessage(response.data.error || "Update failed");
+        setErrorPopoverOpen(true);
+      }
+    } catch (error) {
+      console.error("Edit product failed", error);
+      setErrorMessage(
+        error?.response?.data?.error || "Request failed. Please try again."
+      );
+      setErrorPopoverOpen(true);
+    } finally {
       setLoading(false);
-      setErrorMessage("Product updated");
-      setErrorPopoverOpen(true); // Open the error Popover
-      dispatchState({
-        type: "addProduct",
-        payload: response.data.product,
-      });
-      navigate("/products");
     }
   };
   return (
     <Box>
-     <ScrollTop isDarkMode={isDarkMode}/>
+      <ScrollTop isDarkMode={isDarkMode} />
       <Box
         padding="10px"
         width="80%"
@@ -258,6 +294,46 @@ const EditProduct = ({isDarkMode}) => {
           />
         </Box>
         <Box
+          p="2px 4px"
+          m="15px auto"
+          display="flex"
+          alignItems="center"
+          width="75%"
+          backgroundColor="#F2F2F2"
+          sx={{ borderRadius: "5px" }} // Add borderRadius style
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="genre"
+            id="form1"
+            type="text"
+            name="genre"
+            value={data.genre}
+            onChange={handleChange}
+            title="product-genre"
+          />
+        </Box>
+        <Box
+          p="2px 4px"
+          m="15px auto"
+          display="flex"
+          alignItems="center"
+          width="75%"
+          backgroundColor="#F2F2F2"
+          sx={{ borderRadius: "5px" }} // Add borderRadius style
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="artist-name"
+            id="form1"
+            type="text"
+            name="artistName"
+            value={data.artistName}
+            onChange={handleChange}
+            title="artistName"
+          />
+        </Box>
+        <Box
           p="2px 2px"
           m="5px auto"
           display="flex"
@@ -293,6 +369,44 @@ const EditProduct = ({isDarkMode}) => {
           </label>
         </Box>
         <Box
+          p="2px 2px"
+          m="5px auto"
+          display="flex"
+          alignItems="center"
+          width="75%"
+          backgroundColor="#F2F2F2"
+          justifyContent="center"
+          sx={{ borderRadius: "5px" }}
+        >
+          <label
+            htmlFor="audioInput"
+            className="file-input-label"
+            style={{ width: "100%" }}
+          >
+            <Typography sx={{ mb: 1, color: "#333" }}>
+              Upload audio file
+            </Typography>
+            <InputBase
+              id="audioInput"
+              type="file"
+              inputProps={{ accept: "audio/*" }}
+              className="file-input"
+              onChange={handleAudioChange}
+              title="audio"
+              sx={{ width: "100%" }}
+            />
+            {audioData.url && (
+              <audio
+                controls
+                src={audioData.url}
+                style={{ marginTop: "8px", width: "100%" }}
+              >
+                Your browser does not support the audio element.
+              </audio>
+            )}
+          </label>
+        </Box>
+        <Box
           p="2px 4px"
           m="15px auto"
           display="flex"
@@ -315,7 +429,7 @@ const EditProduct = ({isDarkMode}) => {
                 marginTop: "10px",
               }}
             >
-              Add
+              Update
             </Button>
           )}
         </Box>

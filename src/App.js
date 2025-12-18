@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import Home from "./scences/home/Home";
+
 import Homes from "./scences/home/Homes";
 import ItemDetails3 from "./scences/itemDetails/ItemDetails3";
 import Checkout from "./scences/checkout/Checkout";
 import Confirmation from "./scences/checkout/Confirmation";
-import Navbar from "./scences/global/Navbar";
+
 import Navibar from "./scences/global/Navibar";
 import CartMenu from "./scences/global/CartMenu";
 import Footer from "./scences/global/Footer";
@@ -31,6 +31,7 @@ import HerbInfo from "./scences/herb-info/HerbInfo";
 import Newsletter from "./scences/newsletter/Newsletter";
 import Terms from "./scences/terms/Terms";
 import Privacy from "./scences/terms/Privacy";
+import WorkMailProvision from "./scences/workmail/WorkMailProvision";
 
 import LogoStyles from "./scences/global/LogoStyles";
 import Artists from "./scences/artists/Artists";
@@ -50,7 +51,10 @@ import Releases from "./scences/releases/Releases";
 import References from "./scences/references/References";
 import ZoMusic from "./scences/artists/zo-ataraxie/zoMusic";
 import Discography from "./scences/discography/Discography";
-import FindVoice from "./scences/findyourvoice/FindVoice";
+import Beats from "./scences/beats/Beats";
+import AddBeat from "./scences/beats/AddBeat";
+import EditBeat from "./scences/beats/EditBeat";
+import SearchBeat from "./scences/beats/SearchBeat";
 import VoiceContact from "./scences/contact/VoiceContact";
 
 const ScrollToTop = () => {
@@ -61,11 +65,9 @@ const ScrollToTop = () => {
   return null;
 };
 function App() {
-  function Example() {
-    useEffect(() => {
-      document.title = "TrikaniaMusic 🎼";
-    }, []);
-  }
+  useEffect(() => {
+    document.title = "TrikaniaMusic 🎼";
+  }, []);
 
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -80,16 +82,10 @@ function App() {
           <LogoStyles isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
           <Navibar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
           <ScrollToTop />
-          <Example />
           <Routes>
             <Route path="/" element={<Homes isDarkMode={isDarkMode} />} />
             <Route
               path="/ajani-music/item/:itemId"
-              element={<ItemDetails3 isDarkMode={isDarkMode} />}
-            />
-
-            <Route
-              path="/kaya-music/item/:itemId"
               element={<ItemDetails3 isDarkMode={isDarkMode} />}
             />
 
@@ -140,6 +136,12 @@ function App() {
               path="/editprofile"
               element={<EditProfile isDarkMode={isDarkMode} />}
             />
+            <Route
+              path="/beats"
+              element={
+                <Beats isDarkMode={isDarkMode} toggleDarkMode={toggleTheme} />
+              }
+            />
             <Route element={<AdminLayout />}>
               <Route
                 path="/settings"
@@ -157,7 +159,18 @@ function App() {
                 path="/edit-product/:id"
                 element={<EditProduct isDarkMode={isDarkMode} />}
               />
-
+              <Route
+                path="/add-beat"
+                element={<AddBeat isDarkMode={isDarkMode} />}
+              />
+              <Route
+                path="/edit-beat/:id"
+                element={<EditBeat isDarkMode={isDarkMode} />}
+              />
+              <Route
+                path="/search-beat"
+                element={<SearchBeat isDarkMode={isDarkMode} />}
+              />
               <Route
                 path="/users"
                 element={
@@ -185,6 +198,10 @@ function App() {
                     toggleDarkMode={toggleTheme}
                   />
                 }
+              />
+              <Route
+                path="/workmail"
+                element={<WorkMailProvision isDarkMode={isDarkMode} />}
               />
             </Route>
 
@@ -354,16 +371,6 @@ function App() {
               path="/discography"
               element={
                 <Discography
-                  isDarkMode={isDarkMode}
-                  toggleDarkMode={toggleTheme}
-                />
-              }
-            />
-
-            <Route
-              path="/find-voice"
-              element={
-                <FindVoice
                   isDarkMode={isDarkMode}
                   toggleDarkMode={toggleTheme}
                 />
