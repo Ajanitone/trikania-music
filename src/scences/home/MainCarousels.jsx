@@ -104,7 +104,8 @@ const MainCarousel = ({ isDarkMode, toggleTheme }) => {
               backgroundAttachment: "fixed",
               borderRadius: "10px",
             }}
-            loading={index === 0 ? "eager" : "lazy"}
+            // Force eager loading to avoid blanks on slower connections/cache.
+            loading="eager"
             fetchpriority={index === 0 ? "high" : "auto"}
           />
 
