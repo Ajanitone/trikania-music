@@ -102,6 +102,7 @@ const MainCarousel = ({ isDarkMode, toggleTheme }) => {
               height: "500px",
               objectFit: "contain",
               backgroundAttachment: "fixed",
+              borderRadius: "10px",
             }}
             loading={index === 0 ? "eager" : "lazy"}
             fetchpriority={index === 0 ? "high" : "auto"}
