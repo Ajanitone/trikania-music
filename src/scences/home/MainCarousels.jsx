@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import {
   Box,
   Typography,
@@ -35,46 +35,19 @@ const MainCarousel = ({ isDarkMode, toggleTheme }) => {
       ),
     []
   );
-  const [imagesReady, setImagesReady] = useState(false);
+  const preloadedRef = useRef(false);
 
-  // Preload all carousel images once so they are instantly available when the
-  // component mounts or remounts after navigation.
+  // Preload images in the background (once) but do not block initial render.
   useEffect(() => {
-    let isMounted = true;
-    const preloaders = heroImages.map(
-      (src) =>
-        new Promise((resolve) => {
-          const image = new Image();
-          image.src = src;
-          image.onload = image.onerror = resolve;
-        })
-    );
-    Promise.all(preloaders).then(() => {
-      if (isMounted) {
-        setImagesReady(true);
-      }
+    if (preloadedRef.current) return;
+    preloadedRef.current = true;
+    heroImages.forEach((src) => {
+      const image = new Image();
+      image.src = src;
     });
-    return () => {
-      isMounted = false;
-    };
   }, [heroImages]);
 
   const navigate = useNavigate();
-  if (!imagesReady) {
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="500px"
-        sx={{ backgroundColor: isDarkMode ? "#111" : "#fafafa" }}
-      >
-        <Typography variant="h6" color={isDarkMode ? "white" : "black"}>
-          Loading photos…
-        </Typography>
-      </Box>
-    );
-  }
   return (
     <Carousel
       className={`home ${isDarkMode ? "dark-mode" : ""}`}
@@ -134,8 +107,10 @@ const MainCarousel = ({ isDarkMode, toggleTheme }) => {
               objectFit: "contain",
               backgroundAttachment: "fixed",
             }}
+            loading={index === 0 ? "eager" : "lazy"}
+            fetchpriority={index === 0 ? "high" : "auto"}
           />
-        
+
         </Box>
       ))}
     </Carousel>
