@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Typography,
@@ -27,8 +27,54 @@ const heroTextureImports = importAll(
 );
 const MainCarousel = ({ isDarkMode, toggleTheme }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  // Normalize the asset imports to plain src strings so we can preload them.
+  const heroImages = useMemo(
+    () =>
+      Object.values(heroTextureImports).map((img) =>
+        typeof img === "string" ? img : img?.default || img
+      ),
+    []
+  );
+  const [imagesReady, setImagesReady] = useState(false);
+
+  // Preload all carousel images once so they are instantly available when the
+  // component mounts or remounts after navigation.
+  useEffect(() => {
+    let isMounted = true;
+    const preloaders = heroImages.map(
+      (src) =>
+        new Promise((resolve) => {
+          const image = new Image();
+          image.src = src;
+          image.onload = image.onerror = resolve;
+        })
+    );
+    Promise.all(preloaders).then(() => {
+      if (isMounted) {
+        setImagesReady(true);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [heroImages]);
 
   const navigate = useNavigate();
+  if (!imagesReady) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="500px"
+        sx={{ backgroundColor: isDarkMode ? "#111" : "#fafafa" }}
+      >
+        <Typography variant="h6" color={isDarkMode ? "white" : "black"}>
+          Loading photos…
+        </Typography>
+      </Box>
+    );
+  }
   return (
     <Carousel
       className={`home ${isDarkMode ? "dark-mode" : ""}`}
@@ -77,7 +123,7 @@ const MainCarousel = ({ isDarkMode, toggleTheme }) => {
         </IconButton>
       )}
     >
-      {Object.values(heroTextureImports).map((texture, index) => (
+      {heroImages.map((texture, index) => (
         <Box key={`carousel-image-${index}`}>
           <img
             src={texture}
