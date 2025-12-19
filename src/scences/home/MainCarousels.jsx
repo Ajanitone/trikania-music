@@ -10,15 +10,15 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 // Explicit imports avoid dynamic require issues in some build setups.
-import hero1 from "../../assets-1/ajani-1.jpeg";
-import hero2 from "../../assets-1/ajani-2.jpeg";
-import hero3 from "../../assets-1/joseph-grant-1.jpeg";
-import hero4 from "../../assets-1/joseph-grant-2.jpeg";
-import hero5 from "../../assets-1/kaya-t-1.jpeg";
-import hero6 from "../../assets-1/kaya-t-2.jpg";
-import hero7 from "../../assets-1/kaya-t-3.jpg";
-import hero8 from "../../assets-1/kaya-t-4.jpeg";
-import hero9 from "../../assets-1/zo-ataraxie-1.jpeg";
+import hero1 from "../../assets-1/hero-ajani-1.jpeg";
+import hero2 from "../../assets-1/hero-ajani-2.jpeg";
+import hero3 from "../../assets-1/hero-joseph-grant-1.jpeg";
+import hero4 from "../../assets-1/hero-joseph-grant-2.jpeg";
+import hero5 from "../../assets-1/hero-kaya-t-1.jpeg";
+import hero6 from "../../assets-1/hero-kaya-t-2.jpg";
+import hero7 from "../../assets-1/hero-kaya-t-3.jpg";
+import hero8 from "../../assets-1/hero-kaya-t-4.jpeg";
+import hero9 from "../../assets-1/hero-zo-ataraxie-1.jpeg";
 
 const heroImages = [
   hero1,
