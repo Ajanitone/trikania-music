@@ -1,40 +1,37 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   Box,
-  Typography,
   IconButton,
-  useMediaQuery,
-  Button,
 } from "@mui/material";
 import { Carousel } from "react-responsive-carousel";
 
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import the dark mode CSS file
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { shades } from "../../theme";
-import { useNavigate } from "react-router-dom";
 
-// import all image from assets folder
+// Explicit imports avoid dynamic require issues in some build setups.
+import hero1 from "../../assets-1/ajani-1.jpeg";
+import hero2 from "../../assets-1/ajani-2.jpeg";
+import hero3 from "../../assets-1/joseph-grant-1.jpeg";
+import hero4 from "../../assets-1/joseph-grant-2.jpeg";
+import hero5 from "../../assets-1/kaya-t-1.jpeg";
+import hero6 from "../../assets-1/kaya-t-2.jpg";
+import hero7 from "../../assets-1/kaya-t-3.jpg";
+import hero8 from "../../assets-1/kaya-t-4.jpeg";
+import hero9 from "../../assets-1/zo-ataraxie-1.jpeg";
 
-const importAll = (r) =>
-  r.keys().reduce((acc, item) => {
-    acc[item.replace("./", "")] = r(item);
-    return acc;
-  }, {});
-
-const heroTextureImports = importAll(
-  require.context("../../assets-1", false, /\.(png|jpe?g|svg)$/)
-);
+const heroImages = [
+  hero1,
+  hero2,
+  hero3,
+  hero4,
+  hero5,
+  hero6,
+  hero7,
+  hero8,
+  hero9,
+];
 const MainCarousel = ({ isDarkMode, toggleTheme }) => {
-  const isNonMobile = useMediaQuery("(min-width:600px)");
-  // Normalize the asset imports to plain src strings so we can preload them.
-  const heroImages = useMemo(
-    () =>
-      Object.values(heroTextureImports).map((img) =>
-        typeof img === "string" ? img : img?.default || img
-      ),
-    []
-  );
   const preloadedRef = useRef(false);
 
   // Preload images in the background (once) but do not block initial render.
@@ -45,9 +42,8 @@ const MainCarousel = ({ isDarkMode, toggleTheme }) => {
       const image = new Image();
       image.src = src;
     });
-  }, [heroImages]);
+  }, []);
 
-  const navigate = useNavigate();
   return (
     <Carousel
       className={`home ${isDarkMode ? "dark-mode" : ""}`}
