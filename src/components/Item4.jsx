@@ -50,8 +50,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Bluevervain}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -81,8 +81,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Lemonvervain}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -114,8 +114,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Meadowsweet}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -149,8 +149,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Dandelion}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -182,8 +182,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Burdock}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -215,8 +215,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Lungwort}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -245,8 +245,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Icelandmoss}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -275,8 +275,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Cinnamon}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -309,8 +309,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Willowbark}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -340,8 +340,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Oliveleaves}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -371,8 +371,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Walnutleaves}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -401,8 +401,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Flaxseed}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -432,8 +432,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Hempseed}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
@@ -464,8 +464,8 @@ const Item1 = () => {
           <img
             alt=""
             src={Lemonleaves}
-            width="300px"
-            height="400px"
+            width="150px"
+            height="200px"
             style={{
               cursor: "pointer",
               borderRadius: "10px",
