@@ -27,8 +27,9 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 
 
 
-import Oohla from "../../../musicassets/others/ooh-la-la.mp3"
-import OohlaPict from "../../../musicassets/others/Oh-lala.jpeg"
+// Serve audio and cover from public to avoid hashed bundle/caching issues.
+const Oohla = "/music/zo/track01-ooh-la-la.mp3";
+const OohlaPict = "/music/zo/cover-ooh-la-la.jpeg";
 
 
 
@@ -191,6 +192,26 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
   useEffect(() => {
     setCurrentSong(playlist[index]);
   }, [index, playlist]);
+
+  // Load the current track into the audio element whenever the index changes,
+  // and auto-play if we were already playing.
+  useEffect(() => {
+    const audio = audioPlayer.current;
+    if (!audio || !playlist[index]) return;
+
+    audio.src = playlist[index].src;
+    audio.load();
+
+    if (isPlaying) {
+      audio
+        .play()
+        .then(() => setDuration(audio.duration || 0))
+        .catch((err) => {
+          console.error("Error playing audio:", err);
+          setIsPlaying(false);
+        });
+    }
+  }, [index, isPlaying, playlist]);
 
   const handleEnded = useCallback(() => {
     const nextIndex = (index + 1) % playlist.length;
