@@ -2,6 +2,9 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { shades } from "../theme";
+import { useNavigate } from "react-router-dom";
+
 // Serve from public/herbs to avoid hashed bundle caching issues.
 const Bluevervain = "/herbs/blue-vervain.jpeg";
 const Lemonvervain = "/herbs/lemon-vervain.jpeg";
@@ -17,9 +20,6 @@ const Walnutleaves = "/herbs/walnutleaves.jpeg";
 const Flaxseed = "/herbs/flaxseed.jpeg";
 const Hempseed = "/herbs/hempseed.jpeg";
 const Lemonleaves = "/herbs/lemonleaves.jpeg";
-import { shades } from "../theme";
-
-import { useNavigate } from "react-router-dom";
 
 const Item1 = () => {
   // const navigate = useNavigate();
