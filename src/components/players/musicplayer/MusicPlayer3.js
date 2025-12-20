@@ -22,18 +22,19 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 //#region-------------------Tracks----------------------
 
-import DanceInTheMoonlight from "../../../musicassets/kaya-t-mp3/01 - Kaya T - Dance in the Moonlight 03.mp3";
-import Music from "../../../musicassets/kaya-t-mp3/02 - Kaya T - Music 03.mp3";
-import Questions from "../../../musicassets/kaya-t-mp3/03 - Kaya T - Questions 03.mp3";
-import NeverLetYouGo from "../../../musicassets/kaya-t-mp3/04 - Kaya T - Never Let You Go 03.mp3";
-import RunAwayFromYou from "../../../musicassets/kaya-t-mp3/05 - Kaya T - Runaway 03.mp3";
-import How from "../../../musicassets/kaya-t-mp3/06 - Kaya T - How 03.mp3";
-import Why from "../../../musicassets/kaya-t-mp3/07 - Kaya T - Why 03.mp3";
-import ShowALikkle from "../../../musicassets/kaya-t-mp3/08 - Kaya T - Show A Likkle 03.mp3";
-import Mj from "../../../musicassets/kaya-t-mp3/09 - Kaya T - MJ 03.mp3";
-import InLine from "../../../musicassets/kaya-t-mp3/10 - Kaya T - In Line 03.mp3";
-import Wednesday from "../../../musicassets/kaya-t-mp3/11 - Kaya T - Wednesday 03.mp3";
-import KayaTPict from "../../../musicassets/kaya-t-mp3/kaya-t.png";
+// Serve audio and cover from public to avoid hashed bundle/caching issues.
+const DanceInTheMoonlight = "/music/kaya/track01-dance-in-the-moonlight.mp3";
+const Music = "/music/kaya/track02-music.mp3";
+const Questions = "/music/kaya/track03-questions.mp3";
+const NeverLetYouGo = "/music/kaya/track04-never-let-you-go.mp3";
+const RunAwayFromYou = "/music/kaya/track05-runaway.mp3";
+const How = "/music/kaya/track06-how.mp3";
+const Why = "/music/kaya/track07-why.mp3";
+const ShowALikkle = "/music/kaya/track08-show-a-likkle.mp3";
+const Mj = "/music/kaya/track09-mj.mp3";
+const InLine = "/music/kaya/track10-in-line.mp3";
+const Wednesday = "/music/kaya/track11-wednesday.mp3";
+const KayaTPict = "/music/kaya/296x296cc.webp";
 // #region--------------STYLED COMPONENTS------------------------------
 const Div = styled("div")(() => ({
   backgroundColor: "cec6c3",

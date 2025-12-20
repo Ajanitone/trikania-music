@@ -27,15 +27,16 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 
 
 
-import LeadMe from "../../../musicassets/leadme-mp3/Lead Me.mp3"
-import TripOfLove from "../../../musicassets/leadme-mp3/Trip Of Love.mp3"
-import LoveAffair from "../../../musicassets/leadme-mp3/Love Affair.mp3"
-import NothingInThisWorld from "../../../musicassets/leadme-mp3/Nothing In This World.mp3"
-import YouAreWhatINeed from "../../../musicassets/leadme-mp3/You Are What I Need.mp3"
-import ReadyToTurn from "../../../musicassets/leadme-mp3/I´m Ready To Turn .mp3"
-import Souls from "../../../musicassets/leadme-mp3/I Love Your Soul.mp3"
-import Feel from "../../../musicassets/leadme-mp3/Feel.mp3"
-import LeadMePict from "../../../musicassets/leadme-mp3/Lead-me.jpeg"
+// Serve audio and cover from public to avoid hashed bundle/caching issues.
+const LeadMe = "/music/leadme/track01-lead-me.mp3";
+const TripOfLove = "/music/leadme/track02-trip-of-love.mp3";
+const LoveAffair = "/music/leadme/track03-love-affair.mp3";
+const NothingInThisWorld = "/music/leadme/track04-nothing-in-this-world.mp3";
+const YouAreWhatINeed = "/music/leadme/track05-you-are-what-i-need.mp3";
+const ReadyToTurn = "/music/leadme/track06-im-ready-to-turn.mp3";
+const Souls = "/music/leadme/track07-i-love-your-soul.mp3";
+const Feel = "/music/leadme/track08-feel.mp3";
+const LeadMePict = "/music/leadme/cover-lead-me.jpeg";
 
 
 
