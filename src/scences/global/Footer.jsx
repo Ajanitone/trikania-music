@@ -13,7 +13,7 @@ const Footer = ({ isDarkMode }) => {
   const copyRight = new Date().getFullYear();
 
   function sendEmail() {
-    const email = "info@trikaniamusic.de";
+    const email = "workmail@trikaniamusic.com";
     const subject = "Hello TrikaniaMusic";
     const body = "Hi TrikaniaMusic,%0D%0A";
 
@@ -217,7 +217,7 @@ const Footer = ({ isDarkMode }) => {
             }}
           >
             <Typography mb="4px" p="2px">
-              Email: info@trikaniamusic.de
+              Email: workmail@trikaniamusic.com
             </Typography>
           </Button>
           <Button
