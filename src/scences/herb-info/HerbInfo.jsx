@@ -4,11 +4,9 @@ import ScrollTop from "../../components/ScrollTop";
 import { shades } from "../../theme";
 import axios from "axios";
 import { HerbContext } from "../../context/Context";
-import Ajani from "../../artistpictures/ajani.png";
-import profilePicture from "../../assets/angele-kamp-kcvRHtAyuig-unsplash.jpg";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery, Typography, Box, Button } from "@mui/material";
-import TeaImage from "../../disco-assets/janitea.jpg";
+const TEA_FALLBACK = "/disco/tea-image.jpeg";
 
 const HerbInfo = ({ isDarkMode }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -107,7 +105,7 @@ const HerbInfo = ({ isDarkMode }) => {
         sx={{ display: "flex", justifyContent: "center", marginBottom: "50px" }}
       >
         <img
-          src={`${state?.products[0]?.musicImage}` || TeaImage}
+          src={state?.products[0]?.musicImage || TEA_FALLBACK}
           alt="Disiswo"
           style={{
             width: "200px",
