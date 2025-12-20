@@ -30,9 +30,18 @@ const ItemDetails2 = () => {
     description: "",
     category: "",
     image: "",
+    musicImage: "",
     genre: "",
     artistName: "",
   });
+
+  // Normalize relative media URLs to absolute paths so images always load.
+  const normalizeMediaUrl = (url) => {
+    if (!url) return "";
+    if (url.startsWith("http")) return url;
+    if (url.startsWith("/")) return url;
+    return `${baseUrl}/${url}`;
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -134,7 +143,10 @@ const ItemDetails2 = () => {
               alt={data?.name}
               width="100%"
               height="100%"
-              src={`${data?.musicImage}`}
+              src={
+                normalizeMediaUrl(data?.musicImage || data?.image) ||
+                "/music/ajani/cover-silent-voices.jpg"
+              }
               style={{
                 cursor: "pointer",
                 borderRadius: "5px",
