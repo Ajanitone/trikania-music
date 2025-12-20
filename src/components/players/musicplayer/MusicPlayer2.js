@@ -22,18 +22,19 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 //#region-------------------Tracks----------------------
 
-import ItsBurning from "../../../musicassets/ajani-mp3/01 - it´s burning 004.mp3";
-import JahOurRedeemer from "../../../musicassets/ajani-mp3/02 - jah our redeemer 003.mp3";
-import WeNeedAMoses from "../../../musicassets/ajani-mp3/03 - we need a moses 002.mp3";
-import SatisfyMySoul from "../../../musicassets/ajani-mp3/04 - Satisfy My Soul 002.mp3";
-import PlasticSmile from "../../../musicassets/ajani-mp3/05 - plastic smile 002.mp3";
-import SilentVoices from "../../../musicassets/ajani-mp3/06 - silent voices 002.mp3";
-import SpecialInvitation from "../../../musicassets/ajani-mp3/07 - special invitation003.mp3";
-import EspeNkosi from "../../../musicassets/ajani-mp3/08 - Espe Nkosi 004.mp3";
-import MySunshine from "../../../musicassets/ajani-mp3/09 - my sunshine 003.mp3";
-import PickMyselfUp from "../../../musicassets/ajani-mp3/10 - pick myself up 004.mp3";
-import Junie from "../../../musicassets/ajani-mp3/11 - junie 005.mp3";
-import SilentPict from "../../../musicassets/ajani-mp3/silent voices cover.jpg";
+// Serve audio and cover from public to avoid build hash/caching issues.
+const ItsBurning = "/music/ajani/track01-its-burning.mp3";
+const JahOurRedeemer = "/music/ajani/track02-jah-our-redeemer.mp3";
+const WeNeedAMoses = "/music/ajani/track03-we-need-a-moses.mp3";
+const SatisfyMySoul = "/music/ajani/track04-satisfy-my-soul.mp3";
+const PlasticSmile = "/music/ajani/track05-plastic-smile.mp3";
+const SilentVoices = "/music/ajani/track06-silent-voices.mp3";
+const SpecialInvitation = "/music/ajani/track07-special-invitation.mp3";
+const EspeNkosi = "/music/ajani/track08-espe-nkosi.mp3";
+const MySunshine = "/music/ajani/track09-my-sunshine.mp3";
+const PickMyselfUp = "/music/ajani/track10-pick-myself-up.mp3";
+const Junie = "/music/ajani/track11-junie.mp3";
+const SilentPict = "/music/ajani/cover-silent-voices.jpg";
 
 // #region--------------STYLED COMPONENTS------------------------------
 const Div = styled("div")(() => ({
