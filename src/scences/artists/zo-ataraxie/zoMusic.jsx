@@ -82,7 +82,7 @@ const ZoMusic = ({ isDarkMode }) => {
           marginTop: "20px",
         }}
       >
-        {`${state?.products[1]?.artistName} ` || Artist}`s singlle{" "}
+        {`${state?.products[1]?.artistName} ` || Artist}`s single{" "}
         {`${state?.products[1]?.name}` || AlbumName} is out now.
       </Typography>
 
@@ -93,7 +93,7 @@ const ZoMusic = ({ isDarkMode }) => {
           color: isDarkMode ? "black" : "white",
           backgroundColor: shades.secondary[300],
         }}
-        onClick={() => navigate(`item/${state?.products[0]?._id}`)}
+        onClick={() => navigate(`item/${state?.products[1]?._id}`)}
       >
         Buy it
       </Button>
