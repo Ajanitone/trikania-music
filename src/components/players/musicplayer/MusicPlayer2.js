@@ -214,15 +214,37 @@ function MusicPlayer2({ isDarkMode }) {
     return () => clearInterval(scrollInterval);
   }, []);
 
-  useEffect(() => {
-    setCurrentSong(playlist[index]);
-  }, [index, playlist]);
+useEffect(() => {
+  setCurrentSong(playlist[index]);
+}, [index, playlist]);
 
-  const handleEnded = useCallback(() => {
-    const nextIndex = (index + 1) % playlist.length;
-    setIndex(nextIndex);
-    // if you want to auto-continue play, you can also keep isPlaying true here, etc.
-  }, [index, playlist, setIndex]); // add deps as needed
+// Load the current track into the audio element whenever the index changes,
+// and auto-play if we were already playing.
+useEffect(() => {
+  const audio = audioPlayer.current;
+  if (!audio || !playlist[index]) return;
+
+  audio.src = playlist[index].src;
+  audio.load();
+
+  if (isPlaying) {
+    audio
+      .play()
+      .then(() => {
+        setDuration(audio.duration || 0);
+      })
+      .catch((err) => {
+        console.error("Error playing audio:", err);
+        setIsPlaying(false);
+      });
+  }
+}, [index, isPlaying, playlist]);
+
+const handleEnded = useCallback(() => {
+  const nextIndex = (index + 1) % playlist.length;
+  setIndex(nextIndex);
+  // if you want to auto-continue play, you can also keep isPlaying true here, etc.
+}, [index, playlist, setIndex]); // add deps as needed
 
   //     console.log("mediaElement", mediaElement);
   //     audioPlayer.current.volume = volume / 100;
