@@ -82,8 +82,8 @@ const ZoMusic = ({ isDarkMode }) => {
           marginTop: "20px",
         }}
       >
-        {`${state?.products[0]?.artistName} ` || Artist}`s singlle{" "}
-        {`${state?.products[0]?.name}` || AlbumName} is out now.
+        {`${state?.products[1]?.artistName} ` || Artist}`s singlle{" "}
+        {`${state?.products[1]?.name}` || AlbumName} is out now.
       </Typography>
 
       <Button
@@ -98,14 +98,14 @@ const ZoMusic = ({ isDarkMode }) => {
         Buy it
       </Button>
 
-      <Box padding="50px" width="100%" margin="100px auto" textAlign="center">
+      <Box>
         <MusicPlayer5
           isDarkMode={isDarkMode}
           staticModal={staticModal}
           setStaticModal={setStaticModal}
         />
       </Box>
-      <Box padding="50px" width="100%" margin="100px auto" textAlign="center">
+      <Box padding="50px" width="100%" margin="400px auto" textAlign="center">
         <Box title="zo-ataraxie">
           <Button
             sx={{

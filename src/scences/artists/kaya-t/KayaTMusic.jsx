@@ -84,7 +84,7 @@ const KayaTMusic = ({ isDarkMode }) => {
             marginTop: "20px",
           }}
         >
-          {`${state?.products[2]?.artistName} ` || Artist}`s Album{" "}
+          {`${state?.products[2]?.artistName} ` || Artist}`s Album
           {`${state?.products[3]?.name}` || AlbumName}.
         </Typography>
 
