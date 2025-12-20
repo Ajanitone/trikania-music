@@ -9,27 +9,17 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import the da
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
-// Explicit imports avoid dynamic require issues in some build setups.
-import hero1 from "../../assets-1/hero-ajani-one.jpeg";
-import hero2 from "../../assets-1/hero-ajani-two.jpeg";
-import hero3 from "../../assets-1/hero-joseph-grant-1.jpeg";
-import hero4 from "../../assets-1/hero-joseph-grant-2.jpeg";
-import hero5 from "../../assets-1/hero-kaya-one.jpeg";
-import hero6 from "../../assets-1/hero-kaya-t-2.jpg";
-import hero7 from "../../assets-1/hero-kaya-t-3.jpg";
-import hero8 from "../../assets-1/hero-kaya-t-4.jpeg";
-import hero9 from "../../assets-1/hero-zo-one.jpeg";
-
+// Serve from public/hero to avoid bundler hash/caching issues.
 const heroImages = [
-  hero1,
-  hero2,
-  hero3,
-  hero4,
-  hero5,
-  hero6,
-  hero7,
-  hero8,
-  hero9,
+  "/hero/hero-ajani-one.jpeg",
+  "/hero/hero-ajani-two.jpeg",
+  "/hero/hero-joseph-grant-1.jpeg",
+  "/hero/hero-joseph-grant-2.jpeg",
+  "/hero/hero-kaya-one.jpeg",
+  "/hero/hero-kaya-t-2.jpg",
+  "/hero/hero-kaya-t-3.jpg",
+  "/hero/hero-kaya-t-4.jpeg",
+  "/hero/hero-zo-one.jpeg",
 ];
 const MainCarousel = ({ isDarkMode, toggleTheme }) => {
   const preloadedRef = useRef(false);
