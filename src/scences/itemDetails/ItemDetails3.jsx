@@ -23,6 +23,7 @@ const ItemDetails2 = () => {
   const dispatch = useDispatch();
   console.log("products", state.products);
   const baseUrl = process.env.REACT_APP_BASE_URL;
+  const trimmedBaseUrl = baseUrl?.replace(/\/+$/, "") || "";
 
   const [data, setData] = useState({
     name: "",
@@ -37,10 +38,48 @@ const ItemDetails2 = () => {
 
   // Normalize relative media URLs to absolute paths so images always load.
   const normalizeMediaUrl = (url) => {
-    if (!url) return "";
+    if (!url || typeof url !== "string") return "";
     if (url.startsWith("http")) return url;
-    if (url.startsWith("/")) return url;
-    return `${baseUrl}/${url}`;
+    const cleanPath = url.startsWith("/") ? url : `/${url}`;
+    return trimmedBaseUrl ? `${trimmedBaseUrl}${cleanPath}` : cleanPath;
+  };
+
+  const resolveImagePath = (product) => {
+    if (!product) return "";
+
+    const candidates = [
+      product.musicImage,
+      product.image,
+      product.imageUrl,
+      product.images,
+    ];
+
+    for (const candidate of candidates) {
+      if (!candidate) continue;
+
+      if (typeof candidate === "string") return candidate;
+
+      if (Array.isArray(candidate)) {
+        const fromArray = candidate
+          .map((item) => {
+            if (typeof item === "string") return item;
+            if (item?.url) return item.url;
+            if (item?.path) return item.path;
+            if (item?.secure_url) return item.secure_url;
+            return "";
+          })
+          .find(Boolean);
+        if (fromArray) return fromArray;
+      }
+
+      if (typeof candidate === "object") {
+        if (candidate.url) return candidate.url;
+        if (candidate.path) return candidate.path;
+        if (candidate.secure_url) return candidate.secure_url;
+      }
+    }
+
+    return "";
   };
 
   const handleChange = (event, newValue) => {
@@ -132,6 +171,14 @@ const ItemDetails2 = () => {
         payload: response.data.wishlist,
       });
   };
+
+  const stateProduct = state.products.find(
+    (product) => product._id === itemId
+  );
+  const imagePath =
+    resolveImagePath(data) || resolveImagePath(stateProduct) || "";
+  const productImageSrc =
+    normalizeMediaUrl(imagePath) || "/music/ajani/cover-silent-voices.jpg";
   return (
     <Box>
       <ScrollTop />
@@ -143,10 +190,7 @@ const ItemDetails2 = () => {
               alt={data?.name}
               width="100%"
               height="100%"
-              src={
-                normalizeMediaUrl(data?.musicImage || data?.image) ||
-                "/music/ajani/cover-silent-voices.jpg"
-              }
+              src={productImageSrc}
               style={{
                 cursor: "pointer",
                 borderRadius: "5px",
