@@ -187,6 +187,9 @@ function MusicPlayer3({ isDarkMode }) {
 
   const isDesktop = useMediaQuery("(min-width:1024px)");
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
+  const isIOS = /iPad|iPhone|iPod/.test(
+    typeof navigator !== "undefined" ? navigator.userAgent : ""
+  );
 
   // Add a state to keep track of the scrolling position
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -277,6 +280,18 @@ function MusicPlayer3({ isDarkMode }) {
     const audio = audioPlayer.current;
     if (!audio) return;
 
+    if (isIOS) {
+      if (isPlaying) {
+        audio
+          .play()
+          .then(() => {})
+          .catch((error) => console.error("iOS play error:", error));
+      } else if (!audio.paused) {
+        audio.pause();
+      }
+      return;
+    }
+
     if (isPlaying) {
       // ensure analyser is ready
       setupAnalyser();
@@ -345,6 +360,22 @@ function MusicPlayer3({ isDarkMode }) {
   // ---PLAY
 
   const togglePlay = () => {
+    const audio = audioPlayer.current;
+    if (!audio) return;
+
+    if (isIOS) {
+      if (audio.paused) {
+        audio
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch((err) => console.error("iOS play error:", err));
+      } else {
+        audio.pause();
+        setIsPlaying(false);
+      }
+      return;
+    }
+
     setIsPlaying((prev) => !prev);
   };
 
@@ -461,6 +492,7 @@ function MusicPlayer3({ isDarkMode }) {
   //   }
   // }
   function setupAnalyser() {
+    if (isIOS) return;
     // Check if analyser is already set up
     if (analyser) {
       return;
@@ -495,6 +527,7 @@ function MusicPlayer3({ isDarkMode }) {
   }
 
   function drawVisualizer() {
+    if (isIOS) return;
     if (!analyser) {
       console.error("Analyser not set up");
       return;

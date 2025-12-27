@@ -196,11 +196,14 @@ function MusicPlayer2({ isDarkMode }) {
 
   // State and Ref variables
   const canvasRef = useRef(null);
-  const audioContextRef = useRef(null);
-  const analyserRef = useRef(null);
-  const dataArrayRef = useRef(null);
-  const sourceNodeRef = useRef(null);
-  const animationRef = useRef(null);
+const audioContextRef = useRef(null);
+const analyserRef = useRef(null);
+const dataArrayRef = useRef(null);
+const sourceNodeRef = useRef(null);
+const animationRef = useRef(null);
+  const isIOS = /iPad|iPhone|iPod/.test(
+    typeof navigator !== "undefined" ? navigator.userAgent : ""
+  );
 
   // Modify the handleEnded function
 
@@ -447,6 +450,7 @@ const handleEnded = useCallback(() => {
   // }, [isPlaying, drawVisualizer]);
 
   const setupAudioGraph = useCallback(() => {
+    if (isIOS) return null; // skip Web Audio on iOS to avoid playback blocks
     const element = audioPlayer.current;
     if (!element) return null;
 
@@ -566,6 +570,18 @@ const handleEnded = useCallback(() => {
     const audio = audioPlayer.current;
     if (!audio) return;
 
+    // On iOS, skip Web Audio graph and just play/pause directly
+    if (isIOS) {
+      if (isPlaying) {
+        audio
+          .play()
+          .catch((error) => console.error("iOS play error:", error));
+      } else if (!audio.paused) {
+        audio.pause();
+      }
+      return;
+    }
+
     if (!audioContextRef.current) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       audioContextRef.current = new AudioCtx();
@@ -638,12 +654,18 @@ const handleEnded = useCallback(() => {
     const audio = audioPlayer.current;
     if (!audio) return;
 
-    if (!audioContextRef.current) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      audioContextRef.current = new AudioCtx();
+    if (!audio.src) {
+      audio.load();
     }
-    if (audioContextRef.current.state === "suspended") {
-      audioContextRef.current.resume();
+
+    if (!isIOS) {
+      if (!audioContextRef.current) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        audioContextRef.current = new AudioCtx();
+      }
+      if (audioContextRef.current.state === "suspended") {
+        audioContextRef.current.resume();
+      }
     }
 
     if (!isPlaying) {
@@ -651,7 +673,7 @@ const handleEnded = useCallback(() => {
         .play()
         .then(() => {
           setIsPlaying(true);
-          startVisualizer();
+          if (!isIOS) startVisualizer();
         })
         .catch((error) => {
           console.error("Error playing audio:", error);

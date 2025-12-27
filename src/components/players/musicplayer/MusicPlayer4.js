@@ -167,6 +167,9 @@ function MusicPlayer4({ isDarkMode }) {
 
   const isDesktop = useMediaQuery("(min-width:1024px)");
 const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+const isIOS = /iPad|iPhone|iPod/.test(
+  typeof navigator !== "undefined" ? navigator.userAgent : ""
+);
 
 
     // Add a state to keep track of the scrolling position
@@ -264,6 +267,18 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const audio = audioPlayer.current;
     if (!audio) return;
 
+    if (isIOS) {
+      if (isPlaying) {
+        audio
+          .play()
+          .then(() => {})
+          .catch((error) => console.error("iOS play error:", error));
+      } else if (!audio.paused) {
+        audio.pause();
+      }
+      return;
+    }
+
     if (isPlaying) {
       // ensure analyser is ready
       setupAnalyser();
@@ -330,6 +345,22 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
   // ---PLAY
 
   const togglePlay = () => {
+    const audio = audioPlayer.current;
+    if (!audio) return;
+
+    if (isIOS) {
+      if (audio.paused) {
+        audio
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch((err) => console.error("iOS play error:", err));
+      } else {
+        audio.pause();
+        setIsPlaying(false);
+      }
+      return;
+    }
+
     setIsPlaying((prev) => !prev);
   };
 
@@ -449,11 +480,12 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
   //     drawVisualizer();
   //   }
   // }
-  function setupAnalyser() {
-    // Check if analyser is already set up
-    if (analyser) {
-      return;
-    }
+function setupAnalyser() {
+  if (isIOS) return;
+  // Check if analyser is already set up
+  if (analyser) {
+    return;
+  }
   
     const audioContext = new AudioContext();
   
@@ -486,8 +518,7 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
   
 
   function drawVisualizer() {
-
-
+    if (isIOS) return;
     if (!analyser) {
       console.error("Analyser not set up");
       return;
