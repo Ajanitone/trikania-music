@@ -844,8 +844,8 @@ const handleEnded = useCallback(() => {
             spacing={1}
             sx={{
               display: "flex",
-              justifyContent: "flex-start",
-              width: "25%",
+              justifyContent: "center",
+              width: "100%",
               alignItems: "center",
             }}
           >
@@ -863,13 +863,9 @@ const handleEnded = useCallback(() => {
             spacing={1}
             sx={{
               display: "flex",
-              width: "40%",
+              width: "100%",
               alignItems: "center",
-              marginLeft: isNonMobile
-                ? isDesktop
-                  ? "130px"
-                  : "140px"
-                : "80px",
+              justifyContent: "center",
             }}
           >
             <SkipPreviousIcon
