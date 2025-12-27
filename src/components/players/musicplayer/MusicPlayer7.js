@@ -221,6 +221,16 @@ function MusicPlayer2({ isDarkMode }) {
     return trimmedBase ? `${trimmedBase}${cleanPath}` : cleanPath;
   };
 
+  const optimizeCloudinaryImage = (url) => {
+    if (!url) return "";
+    if (!url.includes("res.cloudinary.com")) return url;
+    // insert a lightweight transform for small, fast thumbnails
+    return url.replace(
+      "/upload/",
+      "/upload/f_auto,q_auto,w_300,h_300,c_fill/"
+    );
+  };
+
   useEffect(() => {
     if (state?.beats?.length) {
       const normalized = state.beats
@@ -233,7 +243,9 @@ function MusicPlayer2({ isDarkMode }) {
             title: beat.beatName || beat.name || "Unknown Title",
             artist: beat.name || beat.beatName || "Unknown Artist",
             genre: beat.genre || "Unknown",
-            image: normalizeMediaUrl(beat.beatImage) || SilentPict,
+            image:
+              optimizeCloudinaryImage(normalizeMediaUrl(beat.beatImage)) ||
+              SilentPict,
             album: beat.category || "Beats",
           };
         })
@@ -856,6 +868,8 @@ function MusicPlayer2({ isDarkMode }) {
           src={currentSong.src}
           ref={audioPlayer}
           muted={mute}
+          preload="metadata"
+          playsInline
           crossOrigin="anonymous"
         />
       )}
