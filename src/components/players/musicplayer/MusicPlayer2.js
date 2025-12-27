@@ -783,6 +783,8 @@ const handleEnded = useCallback(() => {
           src={currentSong.src}
           ref={audioPlayer}
           muted={mute}
+          preload="metadata"
+          playsInline
           crossOrigin="anonymous"
         />
       )}

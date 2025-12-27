@@ -580,7 +580,13 @@ function MusicPlayer3({ isDarkMode }) {
   return (
     <Div style={{ position: "relative", top: playerPosition.y }}>
       {currentSong && (
-        <audio src={currentSong.src} ref={audioPlayer} muted={false} />
+        <audio
+          src={currentSong.src}
+          ref={audioPlayer}
+          muted={false}
+          preload="metadata"
+          playsInline
+        />
       )}
       <CustomPaper elevation={5}>
         <Stack sx={{ display: "flex", justifyContent: "space-between" }}>
