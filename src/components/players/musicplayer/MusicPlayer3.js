@@ -586,6 +586,7 @@ function MusicPlayer3({ isDarkMode }) {
           muted={false}
           preload="metadata"
           playsInline
+          crossOrigin="anonymous"
         />
       )}
       <CustomPaper elevation={5}>

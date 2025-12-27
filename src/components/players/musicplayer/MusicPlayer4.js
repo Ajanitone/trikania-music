@@ -588,6 +588,7 @@ const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
           muted={false}
           preload="metadata"
           playsInline
+          crossOrigin="anonymous"
         />
       )}
       <CustomPaper elevation={5}>
