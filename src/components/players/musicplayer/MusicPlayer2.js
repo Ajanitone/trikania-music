@@ -786,6 +786,7 @@ const handleEnded = useCallback(() => {
           preload="metadata"
           playsInline
           crossOrigin="anonymous"
+          crossOrigin="anonymous"
         />
       )}
       <CustomPaper elevation={5}>
