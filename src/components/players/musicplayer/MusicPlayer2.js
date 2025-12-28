@@ -196,11 +196,12 @@ function MusicPlayer2({ isDarkMode }) {
 
   // State and Ref variables
   const canvasRef = useRef(null);
-const audioContextRef = useRef(null);
-const analyserRef = useRef(null);
-const dataArrayRef = useRef(null);
-const sourceNodeRef = useRef(null);
-const animationRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const dataArrayRef = useRef(null);
+  const sourceNodeRef = useRef(null);
+  const animationRef = useRef(null);
+  const currentIndexRef = useRef(0);
   const isIOS = /iPad|iPhone|iPod/.test(
     typeof navigator !== "undefined" ? navigator.userAgent : ""
   );
@@ -224,6 +225,7 @@ const animationRef = useRef(null);
       src: playlist[index]?.src,
       length: playlist.length,
     });
+    currentIndexRef.current = index;
   }, [index, playlist]);
 
 // Load the current track into the audio element whenever the index changes,
@@ -872,6 +874,7 @@ const handleEnded = useCallback(() => {
 
     setIndex(normalized);
     setCurrentSong(nextSong);
+    currentIndexRef.current = normalized;
 
     if (audio && nextSong) {
       audio.pause();
@@ -894,8 +897,8 @@ const handleEnded = useCallback(() => {
     }
   };
 
-  const playNextSong = () => playTrackAt(index + 1);
-  const playPreviousSong = () => playTrackAt(index - 1);
+  const playNextSong = () => playTrackAt(currentIndexRef.current + 1);
+  const playPreviousSong = () => playTrackAt(currentIndexRef.current - 1);
 
   // JSX
   return (
