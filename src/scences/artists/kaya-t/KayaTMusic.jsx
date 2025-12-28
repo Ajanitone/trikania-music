@@ -84,7 +84,7 @@ const KayaTMusic = ({ isDarkMode }) => {
             marginTop: "20px",
           }}
         >
-          {`${state?.products[2]?.artistName} ` || Artist}`s Album
+          {`${state?.products[3]?.artistName} ` || Artist}`s Album
           {`${state?.products[3]?.name}` || AlbumName}.
         </Typography>
 
@@ -133,7 +133,7 @@ const KayaTMusic = ({ isDarkMode }) => {
           onClick={() => navigate(`item/${state?.products[2]?._id}`)}
         >
           Buy it
-        </Button>{" "}
+        </Button>
         <MusicPlayer4
           isDarkMode={isDarkMode}
           staticModal={staticModal}

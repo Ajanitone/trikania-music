@@ -435,15 +435,29 @@ function MusicPlayer2({ isDarkMode }) {
 
   // A-Load-A new Song
   useEffect(() => {
-    if (!audioPlayer.current) return;
+    if (!audioPlayer.current || !playlist[index]) return;
     const audio = audioPlayer.current;
+    const newSrc = playlist[index].src;
+    const currentSrc = audio.getAttribute("src") || audio.src || "";
+
+    setMediaElement(audio);
+    audio.volume = volume / 100;
+    setCurrentSong(playlist[index]);
+
+    // Avoid reloading the same source; iOS/Safari stalls if we keep resetting src.
+    if (
+      currentSrc === newSrc ||
+      (audio.src && audio.src.endsWith(newSrc))
+    ) {
+      if (isPlaying && audio.paused) {
+        audio.play().catch((e) => console.warn("Resume play error:", e));
+      }
+      return;
+    }
 
     setIsLoading(true);
     setLoadError("");
-    setMediaElement(audio);
-    audio.volume = volume / 100;
-    audio.src = playlist[index].src;
-    setCurrentSong(playlist[index]);
+    audio.src = newSrc;
     audio.load();
 
     const handleCanPlayThrough = () => {
@@ -486,11 +500,11 @@ function MusicPlayer2({ isDarkMode }) {
       audio.removeEventListener("canplaythrough", handleCanPlayThrough);
       audio.removeEventListener("loadeddata", handleLoadedData);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
-        audio.removeEventListener("playing", handlePlaying);
+      audio.removeEventListener("playing", handlePlaying);
       audio.removeEventListener("ended", handleAudioEnded);
       audio.removeEventListener("error", handleError);
     };
-  }, [playlist, index, handleEnded]);
+  }, [playlist, index, handleEnded, isPlaying]);
 
   // Volune Function
   useEffect(() => {
