@@ -5,6 +5,7 @@ import {
   Slider,
   Paper,
   Stack,
+  useMediaQuery,
 } from "@mui/material";
 
 //#region-------------Icons-------------
@@ -21,7 +22,7 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 //#region-------------------Tracks----------------------
 
-// Serve audio and cover from public to avoid build hash/caching issues.
+// Serve audio and cover from public to avoid hashed bundle/caching issues.
 const ItsBurning = "/music/ajani/track01-its-burning.mp3";
 const JahOurRedeemer = "/music/ajani/track02-jah-our-redeemer.mp3";
 const WeNeedAMoses = "/music/ajani/track03-we-need-a-moses.mp3";
@@ -34,7 +35,6 @@ const MySunshine = "/music/ajani/track09-my-sunshine.mp3";
 const PickMyselfUp = "/music/ajani/track10-pick-myself-up.mp3";
 const Junie = "/music/ajani/track11-junie.mp3";
 const SilentPict = "/music/ajani/cover-silent-voices.jpg";
-
 // #region--------------STYLED COMPONENTS------------------------------
 const Div = styled("div")(() => ({
   backgroundColor: "cec6c3",
@@ -76,10 +76,8 @@ const canvasStyle = {
   position: "absolute",
   top: 0,
   left: 0,
-  background: "white",
 };
-
-function MusicPlayer2({ isDarkMode }) {
+function MusicPlayer3({ isDarkMode }) {
   const [playlist, setPlaylist] = useState([
     {
       src: ItsBurning,
@@ -171,71 +169,93 @@ function MusicPlayer2({ isDarkMode }) {
     },
   ]);
 
+  const [mediaElement, setMediaElement] = useState(null);
+  const [staticModal, setStaticModal] = useState(false);
+
   const [index, setIndex] = useState(0);
   const [currentSong, setCurrentSong] = useState();
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(10);
   const [mute, setMute] = useState(false);
   const audioPlayer = useRef();
+  const [isLoaded, setIsLoaded] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [playerPosition, setPlayerPosition] = useState({ x: 0, y: 0 });
 
-  // State and Ref variables
-  const canvasRef = useRef(null);
-  const audioContextRef = useRef(null);
-  const analyserRef = useRef(null);
-  const dataArrayRef = useRef(null);
-  const sourceNodeRef = useRef(null);
-  const animationRef = useRef(null);
+  const isNonMobile = useMediaQuery("(min-width:600px)");
+
+  const isDesktop = useMediaQuery("(min-width:1024px)");
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
   const isIOS = /iPad|iPhone|iPod/.test(
     typeof navigator !== "undefined" ? navigator.userAgent : ""
   );
 
+  // Add a state to keep track of the scrolling position
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  // State and Ref variables
+  const canvasRef = useRef(null);
+  const animationRef = useRef(null);
+  const [analyser, setAnalyser] = useState(null);
+  const [visualizerOn, setVisualizerOn] = useState(false);
+
   // Modify the handleEnded function
+
+  // Use useEffect to update the scrolling position periodically
+  useEffect(() => {
+    const scrollInterval = setInterval(() => {
+      setScrollPosition((prevPosition) => prevPosition + 1);
+    }, 100);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(scrollInterval);
+  }, []);
 
   useEffect(() => {
     setCurrentSong(playlist[index]);
-    setElapsed(0);
-    console.log("[MusicPlayer2] setCurrentSong", {
-      index,
-      src: playlist[index]?.src,
-      length: playlist.length,
-    });
   }, [index, playlist]);
+
+  // Load the current track into the audio element whenever the index changes,
+  // and auto-play if we were already playing.
+  useEffect(() => {
+    const audio = audioPlayer.current;
+    if (!audio || !playlist[index]) return;
+
+    audio.src = playlist[index].src;
+    audio.load();
+
+    if (isPlaying) {
+      audio
+        .play()
+        .then(() => setDuration(audio.duration || 0))
+        .catch((err) => {
+          console.error("Error playing audio:", err);
+          setIsPlaying(false);
+        });
+    }
+  }, [index, isPlaying, playlist]);
 
   const handleEnded = useCallback(() => {
     const nextIndex = (index + 1) % playlist.length;
     setIndex(nextIndex);
     // if you want to auto-continue play, you can also keep isPlaying true here, etc.
-  }, [index, playlist, setIndex]); // add deps as needed
+  }, [index, playlist, setIndex]);
 
-  // -----UseEffect-Functions
-
-  // Single effect to load the current track and wire listeners.
-  // Avoid reloading the same src (important for iOS/Safari).
+  // A-Load-A new Song
   useEffect(() => {
+    if (!audioPlayer.current) return;
     const audio = audioPlayer.current;
-    if (!audio || !playlist[index]) return;
 
-    const newSrc = playlist[index].src;
-    const currentSrc = audio.getAttribute("src") || audio.src || "";
-
+    setMediaElement(audio);
     audio.volume = volume / 100;
+    audio.src = playlist[index].src;
     setCurrentSong(playlist[index]);
-
-    // Avoid reloading the same source if it is already set.
-    if (currentSrc !== newSrc && !(audio.src && audio.src.endsWith(newSrc))) {
-      audio.src = newSrc;
-      audio.load();
-    }
+    audio.load();
 
     const handleCanPlayThrough = () => {
-      setDuration(audio.duration || 0);
-      if (isPlaying && audio.paused) {
-        audio
-          .play()
-          .catch((err) => console.warn("Resume play error:", err));
-      }
+      setDuration(audio.duration);
+      setIsLoaded(true);
     };
 
     const handleTimeUpdate = () => {
@@ -248,204 +268,79 @@ function MusicPlayer2({ isDarkMode }) {
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("ended", handleAudioEnded);
 
-    // If we are supposed to be playing, kick off playback.
-    if (isPlaying && audio.paused) {
-      audio
-        .play()
-        .catch((err) => {
-          console.error("Error playing audio:", err);
-          setIsPlaying(false);
-        });
-    }
-
     return () => {
+      if (!audio || !audio.removeEventListener) return;
       audio.removeEventListener("canplaythrough", handleCanPlayThrough);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("ended", handleAudioEnded);
     };
-  }, [playlist, index, handleEnded, isPlaying]);
-
-  const setupAudioGraph = useCallback(() => {
-    if (isIOS) return null; // skip Web Audio on iOS to avoid playback blocks
-    const element = audioPlayer.current;
-    if (!element) return null;
-
-    if (!audioContextRef.current) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      audioContextRef.current = new AudioCtx();
-    }
-
-    const audioCtx = audioContextRef.current;
-    if (audioCtx.state === "suspended") {
-      audioCtx.resume();
-    }
-
-    if (!sourceNodeRef.current) {
-      try {
-        sourceNodeRef.current = audioCtx.createMediaElementSource(element);
-      } catch (error) {
-        console.error("Error creating media element source", error);
-        return null;
-      }
-    }
-
-    let analyser = analyserRef.current;
-    try {
-      if (!analyser) {
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256;
-        analyserRef.current = analyser;
-      }
-
-      sourceNodeRef.current.disconnect();
-      analyser.disconnect();
-      sourceNodeRef.current.connect(analyser);
-      analyser.connect(audioCtx.destination);
-
-      const bufferLength = analyser.frequencyBinCount;
-      dataArrayRef.current = new Uint8Array(bufferLength);
-
-      return analyser;
-    } catch (err) {
-      console.error("Analyser setup failed, falling back to direct audio", err);
-      try {
-        sourceNodeRef.current.disconnect();
-        sourceNodeRef.current.connect(audioCtx.destination);
-      } catch (e) {
-        console.error("Direct audio fallback failed", e);
-      }
-      return null;
-    }
-  }, []);
-
-  const stopVisualizer = useCallback(() => {
-    if (animationRef.current) {
-      cancelAnimationFrame(animationRef.current);
-      animationRef.current = null;
-    }
-  }, []);
-
-  const startVisualizer = useCallback(() => {
-    const analyser = setupAudioGraph();
-    const canvas = canvasRef.current;
-    const dataArray = dataArrayRef.current;
-    if (!analyser || !canvas || !dataArray) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    if (!canvas.width) canvas.width = canvas.offsetWidth || 800;
-    if (!canvas.height) canvas.height = canvas.offsetHeight || 200;
-
-    const bufferLength = dataArray.length;
-    const draw = () => {
-      animationRef.current = requestAnimationFrame(draw);
-      analyser.getByteFrequencyData(dataArray);
-
-      ctx.fillStyle = "#b8f2e6";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const barWidth = (canvas.width / bufferLength) * 2.5;
-      let x = 0;
-
-      for (let i = 0; i < bufferLength; i++) {
-        const barHeight = dataArray[i];
-        const hue = (i / bufferLength) * 360;
-
-        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-        x += barWidth + 1;
-      }
-    };
-
-    stopVisualizer();
-    draw();
-  }, [setupAudioGraph, stopVisualizer]);
-
-  useEffect(() => {
-    return () => {
-      stopVisualizer();
-      if (sourceNodeRef.current) {
-        try {
-          sourceNodeRef.current.disconnect();
-        } catch (e) {}
-      }
-      if (analyserRef.current) {
-        try {
-          analyserRef.current.disconnect();
-        } catch (e) {}
-      }
-      if (audioContextRef.current) {
-        audioContextRef.current.close().catch(() => {});
-      }
-    };
-  }, [stopVisualizer]);
+  }, [playlist, index, handleEnded]);
 
   useEffect(() => {
     const audio = audioPlayer.current;
     if (!audio) return;
 
-    // On iOS, skip Web Audio graph and just play/pause directly
     if (isIOS) {
       if (isPlaying) {
-        audio.play().catch((error) => console.error("iOS play error:", error));
+        audio
+          .play()
+          .then(() => {})
+          .catch((error) => console.error("iOS play error:", error));
       } else if (!audio.paused) {
         audio.pause();
       }
       return;
     }
 
-    if (!audioContextRef.current) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      audioContextRef.current = new AudioCtx();
-    }
-    if (audioContextRef.current.state === "suspended") {
-      audioContextRef.current.resume();
-    }
-
     if (isPlaying) {
+      // ensure analyser is ready
+      setupAnalyser();
+
       if (audio.readyState >= 2) {
         audio
           .play()
           .then(() => {
             console.log("Audio play successful");
-            startVisualizer();
+            drawVisualizer();
           })
           .catch((error) => {
             console.error("Error playing audio:", error);
           });
       } else {
         const onCanPlay = () => {
+          if (!audio) return;
+          setupAnalyser();
           audio
             .play()
             .then(() => {
               console.log("Audio play successful (after canplaythrough)");
-              startVisualizer();
+              drawVisualizer();
             })
             .catch((error) => {
               console.error("Error playing audio:", error);
             });
-          audio.removeEventListener("canplaythrough", onCanPlay);
+          if (audio && audio.removeEventListener) {
+            audio.removeEventListener("canplaythrough", onCanPlay);
+          }
         };
-        audio.addEventListener("canplaythrough", onCanPlay);
+        if (audio) {
+          audio.addEventListener("canplaythrough", onCanPlay);
+        }
       }
     } else {
       if (!audio.paused) {
         audio.pause();
         console.log("Audio paused");
       }
-      stopVisualizer();
     }
-  }, [isPlaying, startVisualizer, stopVisualizer]);
+  }, [isPlaying, drawVisualizer, setupAnalyser]);
 
   // Volune Function
   useEffect(() => {
     if (!audioPlayer.current) return;
     audioPlayer.current.volume = volume / 100;
-    audioPlayer.current.muted = mute;
-  }, [volume, mute]);
-  // Time format Function
+  }, [volume]);
+
   function formatTime(time) {
     if (time && !isNaN(time)) {
       const minutes =
@@ -468,145 +363,22 @@ function MusicPlayer2({ isDarkMode }) {
     const audio = audioPlayer.current;
     if (!audio) return;
 
-    if (!audio.src) {
-      audio.load();
+    if (isIOS) {
+      if (audio.paused) {
+        audio
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch((err) => console.error("iOS play error:", err));
+      } else {
+        audio.pause();
+        setIsPlaying(false);
+      }
+      return;
     }
 
-    if (!isIOS) {
-      if (!audioContextRef.current) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        audioContextRef.current = new AudioCtx();
-      }
-      if (audioContextRef.current.state === "suspended") {
-        audioContextRef.current.resume();
-      }
-    }
-
-    if (!isPlaying) {
-      audio
-        .play()
-        .then(() => {
-          setIsPlaying(true);
-          if (!isIOS) startVisualizer();
-        })
-        .catch((error) => {
-          console.error("Error playing audio:", error);
-        });
-    } else {
-      audio.pause();
-      setIsPlaying(false);
-      stopVisualizer();
-    }
+    setIsPlaying((prev) => !prev);
   };
 
-  // iOS: render a minimal native player to avoid Web Audio/visualizer issues
-  if (isIOS) {
-    const iconColor = isDarkMode ? "white" : "black";
-    const activeColor = "#ff4d4d";
-    const playColor = isPlaying ? "#4caf50" : iconColor;
-
-    return (
-      <Div style={{ position: "relative", top: 0 }}>
-        <CustomPaper elevation={5}>
-          <Stack sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <Typography
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                textAlign: "center",
-              }}
-            >
-              {currentSong?.title || "Track"}
-            </Typography>
-            <Typography
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                textAlign: "center",
-              }}
-            >
-              {currentSong?.artist || "Ajani"}
-            </Typography>
-            <img
-              src={currentSong?.image || SilentPict}
-              alt="Cover"
-              style={{ width: 140, height: 140, borderRadius: "50%" }}
-            />
-            {/* Progress bar with seek support for iOS */}
-            <Stack
-              direction="row"
-              spacing={2}
-              sx={{ width: "100%", alignItems: "center", px: 1 }}
-            >
-              <Typography sx={{ color: iconColor, fontSize: "0.8rem" }}>
-                {formatTime(elapsed)}
-              </Typography>
-              <PSlider
-                size="small"
-                value={elapsed}
-                min={0}
-                max={Number.isFinite(duration) ? duration : 0}
-                onChange={(_, value) => {
-                  const next = Number(value) || 0;
-                  setElapsed(next);
-                  if (audioPlayer.current) {
-                    audioPlayer.current.currentTime = next;
-                  }
-                }}
-                sx={{
-                  color: "#e53935",
-                  "& .MuiSlider-thumb": {
-                    width: 12,
-                    height: 12,
-                    display: "block",
-                  },
-                }}
-              />
-              <Typography sx={{ color: iconColor, fontSize: "0.8rem" }}>
-                {formatTime(
-                  (Number.isFinite(duration) ? duration : 0) - elapsed
-                )}
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={2} justifyContent="center">
-              <SkipPreviousIcon
-                sx={{ color: iconColor, "&:active": { color: activeColor } }}
-                fontSize="large"
-                onClick={playPreviousSong}
-              />
-              {!isPlaying ? (
-                <PlayArrowIcon
-                  sx={{ color: playColor, "&:active": { color: activeColor } }}
-                  fontSize="large"
-                  onClick={togglePlay}
-                />
-              ) : (
-                <PauseIcon
-                  sx={{ color: playColor, "&:active": { color: activeColor } }}
-                  fontSize="large"
-                  onClick={togglePlay}
-                />
-              )}
-              <SkipNextIcon
-                sx={{ color: iconColor, "&:active": { color: activeColor } }}
-                fontSize="large"
-                onClick={playNextSong}
-              />
-            </Stack>
-            <audio
-              key={currentSong?.src || index}
-              ref={audioPlayer}
-              src={currentSong?.src}
-              preload="metadata"
-              playsInline
-              crossOrigin="anonymous"
-              onTimeUpdate={(e) => setElapsed(e.target.currentTime)}
-              onLoadedMetadata={(e) => setDuration(e.target.duration || 0)}
-              style={{ width: "100%", display: "none" }}
-            />
-          </Stack>
-        </CustomPaper>
-      </Div>
-    );
-  }
 
   function VolumeBtns() {
     return mute ? (
@@ -633,7 +405,7 @@ function MusicPlayer2({ isDarkMode }) {
   }
 
   const toggleBackward = () => {
-    if (audioPlayer.current && audioPlayer.current.readyState >= 2) {
+    if (audioPlayer.current.readyState >= 2) {
       audioPlayer.current.currentTime -= 10;
     } else {
       handleLoadAndPlay();
@@ -641,7 +413,7 @@ function MusicPlayer2({ isDarkMode }) {
   };
 
   const toggleForward = () => {
-    if (audioPlayer.current && audioPlayer.current.readyState >= 2) {
+    if (audioPlayer.current.readyState >= 2) {
       audioPlayer.current.currentTime += 10;
     } else {
       handleLoadAndPlay();
@@ -649,80 +421,49 @@ function MusicPlayer2({ isDarkMode }) {
   };
 
   const handleLoadAndPlay = () => {
+    const audio = audioPlayer.current;
+    if (!audio) return;
+
     const nextIndex = (index + 1) % playlist.length;
     setIndex(nextIndex);
 
     const isCurrentlyPlaying = isPlaying;
-    const audio = audioPlayer.current;
-    if (!audio) return;
 
     audio.pause(); // Pause the current audio
-    
-    const onCanPlay = () => {
-      if (isCurrentlyPlaying) {
-        audio
-          .play()
-          .then(() => {
-            setIsPlaying(true);
-            if (!isIOS) startVisualizer();
-          })
-          .catch((err) => console.error("Play error after load:", err));
-      }
-      audio.removeEventListener("canplaythrough", onCanPlay);
-    };
-
-    // Ensure the new audio is loaded before playing
-    audio.addEventListener("canplaythrough", onCanPlay);
 
     audio.src = playlist[nextIndex].src;
     audio.load(); // Load the new audio
+
+    // Use the canplaythrough event to ensure the new audio is loaded before playing
+    const onCanPlay = () => {
+      if (!audio) return;
+      if (isCurrentlyPlaying) {
+        audio.play();
+        setIsPlaying(true);
+        drawVisualizer(); // Call drawVisualizer when starting to play
+      }
+      // Remove the event listener to avoid multiple bindings
+      if (audio && audio.removeEventListener) {
+        audio.removeEventListener("canplaythrough", onCanPlay);
+      }
+    };
+
+    audio.addEventListener("canplaythrough", onCanPlay);
   };
 
-  //  Analyser
   const playTrackAt = (target) => {
     if (!playlist.length) return;
-    const len = playlist.length;
-    const normalized = ((target % len) + len) % len;
-    const nextSong = playlist[normalized];
     const audio = audioPlayer.current;
-
-    console.log("[MusicPlayer2] playTrackAt", {
-      target,
-      normalized,
-      nextSrc: nextSong?.src,
-      length: len,
-      isIOS,
-    });
-
+    const normalized = ((target % playlist.length) + playlist.length) % playlist.length;
     setIndex(normalized);
-    setCurrentSong(nextSong);
-
-    if (audio && nextSong) {
+    if (isIOS && audio && playlist[normalized]) {
       audio.pause();
-      
-      const playOnceReady = () => {
-        const playPromise = audio.play();
-        if (playPromise && playPromise.then) {
-          playPromise
-            .then(() => setIsPlaying(true))
-            .catch((err) => {
-              if (err?.name === "AbortError") {
-                console.warn("Play aborted, retrying next click");
-              } else {
-                console.error("Play error:", err);
-              }
-              setIsPlaying(false);
-            });
-        } else {
-          setIsPlaying(true);
-        }
-      };
-
-      audio.addEventListener("loadedmetadata", playOnceReady, { once: true });
-
-      audio.src = nextSong.src;
+      audio.src = playlist[normalized].src;
       audio.load();
-      audio.currentTime = 0;
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.error("iOS play error:", err));
     } else {
       setIsPlaying(true);
     }
@@ -731,14 +472,249 @@ function MusicPlayer2({ isDarkMode }) {
   const playNextSong = () => playTrackAt(index + 1);
   const playPreviousSong = () => playTrackAt(index - 1);
 
-  // JSX
-  return (
-    <Div style={{ position: "relative", top: 0 }}>
+  //  Analyser
+
+  // function setupAnalyser() {
+  //   // Check if analyser is already set up
+  //   if (analyser) {
+  //     return;
+  //   }
+
+  //   const audioContext = new AudioContext();
+
+  //   // Check if the audio player is already connected to a source node
+  //   if (audioPlayer.current.srcObject) {
+  //     const sourceNode = audioContext.createMediaElementSource(audioPlayer.current);
+  //     const analyserNode = audioContext.createAnalyser();
+  //     analyserNode.fftSize = 256;
+
+  //     // Connect the source node to the analyser only if it's not already connected
+  //     if (!sourceNode.connect(analyserNode)) {
+  //       sourceNode.disconnect();
+  //       sourceNode.connect(analyserNode);
+  //     }
+
+  //     analyserNode.connect(audioContext.destination);
+  //     setAnalyser(analyserNode);
+
+  //     // Start the visualizer when the audio starts playing
+  //     drawVisualizer();
+  //   }
+  // }
+  function setupAnalyser() {
+    if (isIOS) return;
+    // Check if analyser is already set up
+    if (analyser) {
+      return;
+    }
+
+    const audioContext = new AudioContext();
+
+    // Check if the audio player is already connected to a source node
+    if (audioPlayer.current && audioPlayer.current.src) {
+      try {
+        // Try to create a new source node
+        const sourceNode = audioContext.createMediaElementSource(
+          audioPlayer.current
+        );
+        const analyserNode = audioContext.createAnalyser();
+        analyserNode.fftSize = 256;
+
+        // Connect the source node to the analyser
+        sourceNode.connect(analyserNode);
+        analyserNode.connect(audioContext.destination);
+        setAnalyser(analyserNode);
+
+        // Start the visualizer when the audio starts playing
+        drawVisualizer();
+      } catch (error) {
+        // If an error occurs, it means the audio player is already connected
+        console.error("Error creating source node:", error);
+
+        // You can add additional handling here if needed
+      }
+    }
+  }
+
+  function drawVisualizer() {
+    if (isIOS) return;
+    if (!analyser) {
+      console.error("Analyser not set up");
+      return;
+    }
+    const canvas = canvasRef.current;
+    const canvasCtx = canvas.getContext("2d");
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    function draw() {
+      animationRef.current = requestAnimationFrame(draw);
+      analyser.getByteFrequencyData(dataArray);
+
+      // Clear the canvas only once
+      canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+      canvasCtx.fillStyle = "#b8f2e6";
+      canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const barWidth = (canvas.width / bufferLength) * 2.5;
+      let x = 0;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = dataArray[i];
+        const hue = (i / bufferLength) * 360; // Map the frequency index to a color
+
+        canvasCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+        x += barWidth + 1;
+      }
+    }
+
+    draw();
+  }
+
+  // function drawVisualizer() {
+  //   const canvas = canvasRef.current;
+  //   const canvasCtx = canvas.getContext("2d");
+  //   const bufferLength = analyser.frequencyBinCount;
+  //   const dataArray = new Uint8Array(bufferLength);
+
+  //   function draw() {
+  //     animationRef.current = requestAnimationFrame(draw);
+  //     analyser.getByteFrequencyData(dataArray);
+
+  //     // Clear the canvas only once
+  //     canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+  //     canvasCtx.fillStyle = "#b8f2e6";
+  //     canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+  //     const angleIncrement = (2 * Math.PI) / bufferLength;
+  //     const radius = 100;
+
+  //     for (let i = 0; i < bufferLength; i++) {
+  //       const amplitude = dataArray[i] / 2; // Adjust amplitude for better visualization
+  //       const angle = i * angleIncrement;
+  //       const x = canvas.width / 2 + radius * Math.cos(angle) * amplitude;
+  //       const y = canvas.height / 2 + radius * Math.sin(angle) * amplitude;
+
+  //       const hue = (i / bufferLength) * 360; // Map the frequency index to a color
+  //       canvasCtx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+
+  //       canvasCtx.beginPath();
+  //       canvasCtx.arc(x, y, amplitude, 0, 2 * Math.PI);
+  //       canvasCtx.fill();
+  //     }
+  //   }
+
+  //   draw();
+  // }
+
+  // Effect Hooks
+
+  useEffect(() => {
+    if (analyser && visualizerOn) {
+      drawVisualizer();
+    } else {
+      cancelAnimationFrame(animationRef.current);
+    }
+  }, [analyser, visualizerOn]);
+
+  const iosPlayer = (
+    <Div style={{ position: "relative", top: playerPosition.y }}>
+      <CustomPaper elevation={5}>
+        <Stack sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+          <Typography
+            sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
+          >
+            {currentSong?.title || "Track"}
+          </Typography>
+          <Typography
+            sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
+          >
+            {currentSong?.artist || "Kaya-T"}
+          </Typography>
+          <img
+            src={currentSong?.image || KayaTPict}
+            alt="Cover"
+            style={{ width: 140, height: 140, borderRadius: "50%" }}
+          />
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ width: "100%", alignItems: "center", px: 1 }}
+          >
+            <Typography sx={{ color: isDarkMode ? "white" : "black", fontSize: "0.8rem" }}>
+              {formatTime(elapsed)}
+            </Typography>
+            <PSlider
+              size="small"
+              value={elapsed}
+              min={0}
+              max={Number.isFinite(duration) ? duration : 0}
+              onChange={(_, value) => {
+                const next = Number(value) || 0;
+                setElapsed(next);
+                if (audioPlayer.current) {
+                  audioPlayer.current.currentTime = next;
+                }
+              }}
+              sx={{
+                color: "#e53935",
+                "& .MuiSlider-thumb": { width: 12, height: 12, display: "block" },
+              }}
+            />
+            <Typography sx={{ color: isDarkMode ? "white" : "black", fontSize: "0.8rem" }}>
+              {formatTime((Number.isFinite(duration) ? duration : 0) - elapsed)}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <SkipPreviousIcon
+              sx={{ color: isDarkMode ? "white" : "black", "&:active": { color: "#ff4d4d" } }}
+              fontSize="large"
+              onClick={playPreviousSong}
+            />
+            {!isPlaying ? (
+              <PlayArrowIcon
+                sx={{ color: isPlaying ? "#4caf50" : isDarkMode ? "white" : "black", "&:active": { color: "#ff4d4d" } }}
+                fontSize="large"
+                onClick={togglePlay}
+              />
+            ) : (
+              <PauseIcon
+                sx={{ color: isPlaying ? "#4caf50" : isDarkMode ? "white" : "black", "&:active": { color: "#ff4d4d" } }}
+                fontSize="large"
+                onClick={togglePlay}
+              />
+            )}
+            <SkipNextIcon
+              sx={{ color: isDarkMode ? "white" : "black", "&:active": { color: "#ff4d4d" } }}
+              fontSize="large"
+              onClick={playNextSong}
+            />
+          </Stack>
+          <audio
+            key={currentSong?.src}
+            ref={audioPlayer}
+            src={currentSong?.src}
+            preload="metadata"
+            playsInline
+            crossOrigin="anonymous"
+            onTimeUpdate={(e) => setElapsed(e.target.currentTime)}
+            onLoadedMetadata={(e) => setDuration(e.target.duration || 0)}
+            style={{ width: "100%", display: "none" }}
+          />
+        </Stack>
+      </CustomPaper>
+    </Div>
+  );
+
+  const standardPlayer = (
+    <Div style={{ position: "relative", top: playerPosition.y }}>
       {currentSong && (
         <audio
           src={currentSong.src}
           ref={audioPlayer}
-          muted={mute}
+          muted={false}
           preload="metadata"
           playsInline
           crossOrigin="anonymous"
@@ -947,15 +923,16 @@ function MusicPlayer2({ isDarkMode }) {
             <canvas
               style={canvasStyle}
               ref={canvasRef}
-              onMouseEnter={() => {
-                if (isPlaying) startVisualizer();
-              }}
+              onMouseEnter={() => setVisualizerOn(true)}
+              // onMouseLeave={() => setVisualizerOn(false)}
             />
           </div>
         </Stack>
       </CustomPaper>
     </Div>
   );
+
+  return isIOS ? iosPlayer : standardPlayer;
 }
 
-export default MusicPlayer2;
+export default MusicPlayer3;
