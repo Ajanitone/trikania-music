@@ -854,6 +854,7 @@ const handleEnded = useCallback(() => {
     if (!playlist.length) return;
     const audio = audioPlayer.current;
     const normalized = ((target % playlist.length) + playlist.length) % playlist.length;
+    setCurrentSong(playlist[normalized]);
     setIndex(normalized);
     if (isIOS && audio && playlist[normalized]) {
       audio.pause();
