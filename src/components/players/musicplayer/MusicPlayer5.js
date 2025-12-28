@@ -612,7 +612,7 @@ function setupAnalyser() {
     return (
       <Div style={{ position: "relative", top: playerPosition.y }}>
         <CustomPaper elevation={5}>
-          <Stack sx={{ display: "flex", gap: 2 }}>
+          <Stack sx={{ display: "flex", gap: 2, alignItems: "center" }}>
             <Typography
               sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
             >
@@ -623,27 +623,45 @@ function setupAnalyser() {
             >
               {currentSong?.artist || "Kaya-T"}
             </Typography>
-            <Stack alignItems="center">
-              <img
-                src={currentSong?.image || ""}
-                alt="Cover"
-                style={{ width: 120, height: 120, borderRadius: "10px" }}
+            <img
+              src={currentSong?.image || ""}
+              alt="Cover"
+              style={{ width: 140, height: 140, borderRadius: "50%" }}
+            />
+            <Stack direction="row" spacing={2} justifyContent="center">
+              <SkipPreviousIcon
+                sx={{ color: isDarkMode ? "white" : "black" }}
+                fontSize="large"
+                onClick={playPreviousSong}
+              />
+              {!isPlaying ? (
+                <PlayArrowIcon
+                  sx={{ color: isDarkMode ? "white" : "black" }}
+                  fontSize="large"
+                  onClick={togglePlay}
+                />
+              ) : (
+                <PauseIcon
+                  sx={{ color: isDarkMode ? "white" : "black" }}
+                  fontSize="large"
+                  onClick={togglePlay}
+                />
+              )}
+              <SkipNextIcon
+                sx={{ color: isDarkMode ? "white" : "black" }}
+                fontSize="large"
+                onClick={playNextSong}
               />
             </Stack>
             <audio
               key={currentSong?.src}
               ref={audioPlayer}
               src={currentSong?.src}
-              controls
               preload="metadata"
               playsInline
               crossOrigin="anonymous"
-              style={{ width: "100%" }}
+              style={{ width: "100%", display: "none" }}
             />
-            <Stack direction="row" justifyContent="space-between">
-              <button onClick={playPreviousSong}>Prev</button>
-              <button onClick={playNextSong}>Next</button>
-            </Stack>
           </Stack>
         </CustomPaper>
       </Div>
