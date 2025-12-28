@@ -879,17 +879,27 @@ const handleEnded = useCallback(() => {
       audio.src = nextSong.src;
       audio.load();
       audio.currentTime = 0;
-      const playPromise = audio.play();
-      if (playPromise && playPromise.then) {
-        playPromise
-          .then(() => setIsPlaying(true))
-          .catch((err) => {
-            console.error("Play error:", err);
-            setIsPlaying(false);
-          });
-      } else {
-        setIsPlaying(true);
-      }
+
+      const playOnceReady = () => {
+        const playPromise = audio.play();
+        if (playPromise && playPromise.then) {
+          playPromise
+            .then(() => setIsPlaying(true))
+            .catch((err) => {
+              if (err?.name === "AbortError") {
+                console.warn("Play aborted, retrying next click");
+              } else {
+                console.error("Play error:", err);
+              }
+              setIsPlaying(false);
+            });
+        } else {
+          setIsPlaying(true);
+        }
+      };
+
+      audio.removeEventListener("loadedmetadata", playOnceReady);
+      audio.addEventListener("loadedmetadata", playOnceReady, { once: true });
     } else {
       setIsPlaying(true);
     }
