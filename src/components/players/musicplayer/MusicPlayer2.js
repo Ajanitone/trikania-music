@@ -628,10 +628,8 @@ function MusicPlayer3({ isDarkMode }) {
           >
             {currentSong?.title || "Track"}
           </Typography>
-          <Typography
-            sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
-          >
-            {currentSong?.artist || "Kaya-T"}
+          <Typography sx={{ color: "red", textAlign: "center" }}>
+            {currentSong?.artist || "Ajani"}
           </Typography>
           <img
             src={currentSong?.image || SilentPict}

@@ -631,11 +631,9 @@ function setupAnalyser() {
             >
               {currentSong?.title || "Track"}
             </Typography>
-            <Typography
-              sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
-            >
-              {currentSong?.artist || "Kaya-T"}
-            </Typography>
+          <Typography sx={{ color: "red", textAlign: "center" }}>
+            {currentSong?.artist || "Kaya-T"}
+          </Typography>
             <img
               src={currentSong?.image || ""}
               alt="Cover"
