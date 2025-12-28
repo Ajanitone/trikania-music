@@ -195,6 +195,7 @@ function MusicPlayer2({ isDarkMode }) {
 
   useEffect(() => {
     setCurrentSong(playlist[index]);
+    setElapsed(0);
     console.log("[MusicPlayer2] setCurrentSong", {
       index,
       src: playlist[index]?.src,
@@ -591,6 +592,7 @@ function MusicPlayer2({ isDarkMode }) {
               />
             </Stack>
             <audio
+              key={currentSong?.src || index}
               ref={audioPlayer}
               src={currentSong?.src}
               preload="metadata"
