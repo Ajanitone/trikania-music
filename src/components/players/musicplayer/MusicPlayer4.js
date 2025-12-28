@@ -364,50 +364,6 @@ const isIOS = /iPad|iPhone|iPod/.test(
     setIsPlaying((prev) => !prev);
   };
 
-  // iOS: render a minimal native player to avoid Web Audio/visualizer issues
-  if (isIOS) {
-    return (
-      <Div style={{ position: "relative", top: playerPosition.y }}>
-        <CustomPaper elevation={5}>
-          <Stack sx={{ display: "flex", gap: 2 }}>
-            <Typography
-              sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
-            >
-              {currentSong?.title || "Track"}
-            </Typography>
-            <Typography
-              sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
-            >
-              {currentSong?.artist || "Kaya-T"}
-            </Typography>
-            <Stack alignItems="center">
-              <img
-                src={currentSong?.image || LeadMePict}
-                alt="Cover"
-                style={{ width: 120, height: 120, borderRadius: "10px" }}
-              />
-            </Stack>
-            <audio
-              key={currentSong?.src}
-              ref={audioPlayer}
-              src={currentSong?.src}
-              controls
-              preload="metadata"
-              playsInline
-              crossOrigin="anonymous"
-              style={{ width: "100%" }}
-            />
-            <Stack direction="row" justifyContent="space-between">
-              <button onClick={playPreviousSong}>Prev</button>
-              <button onClick={playNextSong}>Next</button>
-            </Stack>
-          </Stack>
-        </CustomPaper>
-      </Div>
-    );
-  }
-
-
 
   function VolumeBtns() {
     return mute ? (
@@ -650,6 +606,49 @@ function setupAnalyser() {
       cancelAnimationFrame(animationRef.current);
     }
   }, [analyser, visualizerOn]);
+
+  // iOS: render a minimal native player to avoid Web Audio/visualizer issues
+  if (isIOS) {
+    return (
+      <Div style={{ position: "relative", top: playerPosition.y }}>
+        <CustomPaper elevation={5}>
+          <Stack sx={{ display: "flex", gap: 2 }}>
+            <Typography
+              sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
+            >
+              {currentSong?.title || "Track"}
+            </Typography>
+            <Typography
+              sx={{ color: isDarkMode ? "white" : "black", textAlign: "center" }}
+            >
+              {currentSong?.artist || "Kaya-T"}
+            </Typography>
+            <Stack alignItems="center">
+              <img
+                src={currentSong?.image || ""}
+                alt="Cover"
+                style={{ width: 120, height: 120, borderRadius: "10px" }}
+              />
+            </Stack>
+            <audio
+              key={currentSong?.src}
+              ref={audioPlayer}
+              src={currentSong?.src}
+              controls
+              preload="metadata"
+              playsInline
+              crossOrigin="anonymous"
+              style={{ width: "100%" }}
+            />
+            <Stack direction="row" justifyContent="space-between">
+              <button onClick={playPreviousSong}>Prev</button>
+              <button onClick={playNextSong}>Next</button>
+            </Stack>
+          </Stack>
+        </CustomPaper>
+      </Div>
+    );
+  }
 
   // JSX
   return (
