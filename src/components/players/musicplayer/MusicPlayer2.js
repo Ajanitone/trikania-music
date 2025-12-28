@@ -708,6 +708,10 @@ const handleEnded = useCallback(() => {
 
   // iOS: render a minimal native player to avoid Web Audio/visualizer issues
   if (isIOS) {
+    const iconColor = isDarkMode ? "white" : "black";
+    const activeColor = "#ff4d4d";
+    const playColor = isPlaying ? "#4caf50" : iconColor;
+
     return (
       <Div style={{ position: "relative", top: playerPosition.y }}>
         <CustomPaper elevation={5}>
@@ -722,36 +726,36 @@ const handleEnded = useCallback(() => {
             >
               {currentSong?.artist || "Ajani"}
             </Typography>
-            <img
-              src={currentSong?.image || SilentPict}
-              alt="Cover"
-              style={{ width: 140, height: 140, borderRadius: "50%" }}
+          <img
+            src={currentSong?.image || SilentPict}
+            alt="Cover"
+            style={{ width: 140, height: 140, borderRadius: "50%" }}
+          />
+          <Stack direction="row" spacing={2} justifyContent="center">
+            <SkipPreviousIcon
+              sx={{ color: iconColor, "&:active": { color: activeColor } }}
+              fontSize="large"
+              onClick={playPreviousSong}
             />
-            <Stack direction="row" spacing={2} justifyContent="center">
-              <SkipPreviousIcon
-                sx={{ color: isDarkMode ? "white" : "black" }}
+            {!isPlaying ? (
+              <PlayArrowIcon
+                sx={{ color: playColor, "&:active": { color: activeColor } }}
                 fontSize="large"
-                onClick={playPreviousSong}
+                onClick={togglePlay}
               />
-              {!isPlaying ? (
-                <PlayArrowIcon
-                  sx={{ color: isDarkMode ? "white" : "black" }}
-                  fontSize="large"
-                  onClick={togglePlay}
-                />
-              ) : (
-                <PauseIcon
-                  sx={{ color: isDarkMode ? "white" : "black" }}
-                  fontSize="large"
-                  onClick={togglePlay}
-                />
-              )}
-              <SkipNextIcon
-                sx={{ color: isDarkMode ? "white" : "black" }}
+            ) : (
+              <PauseIcon
+                sx={{ color: playColor, "&:active": { color: activeColor } }}
                 fontSize="large"
-                onClick={playNextSong}
+                onClick={togglePlay}
               />
-            </Stack>
+            )}
+            <SkipNextIcon
+              sx={{ color: iconColor, "&:active": { color: activeColor } }}
+              fontSize="large"
+              onClick={playNextSong}
+            />
+          </Stack>
             <audio
               key={currentSong?.src}
               ref={audioPlayer}
@@ -846,17 +850,26 @@ const handleEnded = useCallback(() => {
   // };
 
   //  Analyser
-  const playNextSong = () => {
-    const nextIndex = (index + 1) % playlist.length;
-    setIndex(nextIndex);
-    setIsPlaying(true); // say "we WANT to be playing"
+  const playTrackAt = (target) => {
+    if (!playlist.length) return;
+    const audio = audioPlayer.current;
+    const normalized = ((target % playlist.length) + playlist.length) % playlist.length;
+    setIndex(normalized);
+    if (isIOS && audio && playlist[normalized]) {
+      audio.pause();
+      audio.src = playlist[normalized].src;
+      audio.load();
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.error("iOS play error:", err));
+    } else {
+      setIsPlaying(true);
+    }
   };
 
-  const playPreviousSong = () => {
-    const prevIndex = index - 1 < 0 ? playlist.length - 1 : index - 1;
-    setIndex(prevIndex);
-    setIsPlaying(true);
-  };
+  const playNextSong = () => playTrackAt(index + 1);
+  const playPreviousSong = () => playTrackAt(index - 1);
 
   // JSX
   return (

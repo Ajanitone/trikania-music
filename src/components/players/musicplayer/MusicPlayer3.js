@@ -451,17 +451,26 @@ function MusicPlayer3({ isDarkMode }) {
     audio.addEventListener("canplaythrough", onCanPlay);
   };
 
-  const playNextSong = () => {
-    const nextIndex = (index + 1) % playlist.length;
-    setIndex(nextIndex);
-    setIsPlaying(true); // say "we WANT to be playing"
+  const playTrackAt = (target) => {
+    if (!playlist.length) return;
+    const audio = audioPlayer.current;
+    const normalized = ((target % playlist.length) + playlist.length) % playlist.length;
+    setIndex(normalized);
+    if (isIOS && audio && playlist[normalized]) {
+      audio.pause();
+      audio.src = playlist[normalized].src;
+      audio.load();
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => console.error("iOS play error:", err));
+    } else {
+      setIsPlaying(true);
+    }
   };
 
-  const playPreviousSong = () => {
-    const prevIndex = index - 1 < 0 ? playlist.length - 1 : index - 1;
-    setIndex(prevIndex);
-    setIsPlaying(true);
-  };
+  const playNextSong = () => playTrackAt(index + 1);
+  const playPreviousSong = () => playTrackAt(index - 1);
 
   //  Analyser
 
@@ -631,25 +640,25 @@ function MusicPlayer3({ isDarkMode }) {
           />
           <Stack direction="row" spacing={2} justifyContent="center">
             <SkipPreviousIcon
-              sx={{ color: isDarkMode ? "white" : "black" }}
+              sx={{ color: isDarkMode ? "white" : "black", "&:active": { color: "#ff4d4d" } }}
               fontSize="large"
               onClick={playPreviousSong}
             />
             {!isPlaying ? (
               <PlayArrowIcon
-                sx={{ color: isDarkMode ? "white" : "black" }}
+                sx={{ color: isPlaying ? "#4caf50" : isDarkMode ? "white" : "black", "&:active": { color: "#ff4d4d" } }}
                 fontSize="large"
                 onClick={togglePlay}
               />
             ) : (
               <PauseIcon
-                sx={{ color: isDarkMode ? "white" : "black" }}
+                sx={{ color: isPlaying ? "#4caf50" : isDarkMode ? "white" : "black", "&:active": { color: "#ff4d4d" } }}
                 fontSize="large"
                 onClick={togglePlay}
               />
             )}
             <SkipNextIcon
-              sx={{ color: isDarkMode ? "white" : "black" }}
+              sx={{ color: isDarkMode ? "white" : "black", "&:active": { color: "#ff4d4d" } }}
               fontSize="large"
               onClick={playNextSong}
             />
