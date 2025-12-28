@@ -217,9 +217,14 @@ const animationRef = useRef(null);
     return () => clearInterval(scrollInterval);
   }, []);
 
-useEffect(() => {
-  setCurrentSong(playlist[index]);
-}, [index, playlist]);
+  useEffect(() => {
+    setCurrentSong(playlist[index]);
+    console.debug("[MusicPlayer2] setCurrentSong", {
+      index,
+      src: playlist[index]?.src,
+      length: playlist.length,
+    });
+  }, [index, playlist]);
 
 // Load the current track into the audio element whenever the index changes,
 // and auto-play if we were already playing.
@@ -856,6 +861,14 @@ const handleEnded = useCallback(() => {
     const normalized = ((target % len) + len) % len;
     const nextSong = playlist[normalized];
     const audio = audioPlayer.current;
+
+    console.debug("[MusicPlayer2] playTrackAt", {
+      target,
+      normalized,
+      nextSrc: nextSong?.src,
+      length: len,
+      isIOS,
+    });
 
     setIndex(normalized);
     setCurrentSong(nextSong);
