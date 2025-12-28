@@ -201,7 +201,6 @@ function MusicPlayer2({ isDarkMode }) {
   const dataArrayRef = useRef(null);
   const sourceNodeRef = useRef(null);
   const animationRef = useRef(null);
-  const currentIndexRef = useRef(0);
   const isIOS = /iPad|iPhone|iPod/.test(
     typeof navigator !== "undefined" ? navigator.userAgent : ""
   );
@@ -225,7 +224,6 @@ function MusicPlayer2({ isDarkMode }) {
       src: playlist[index]?.src,
       length: playlist.length,
     });
-    currentIndexRef.current = index;
   }, [index, playlist]);
 
 // Load the current track into the audio element whenever the index changes,
@@ -742,7 +740,7 @@ const handleEnded = useCallback(() => {
             <SkipPreviousIcon
               sx={{ color: iconColor, "&:active": { color: activeColor } }}
               fontSize="large"
-              onClick={handleIOSPrev}
+              onClick={playPreviousSong}
             />
             {!isPlaying ? (
               <PlayArrowIcon
@@ -760,7 +758,7 @@ const handleEnded = useCallback(() => {
             <SkipNextIcon
               sx={{ color: iconColor, "&:active": { color: activeColor } }}
               fontSize="large"
-              onClick={handleIOSNext}
+              onClick={playNextSong}
             />
           </Stack>
             <audio
@@ -859,6 +857,7 @@ const handleEnded = useCallback(() => {
   //  Analyser
   const playTrackAt = (target) => {
     if (!playlist.length) return;
+    if (!playlist.length) return;
     const len = playlist.length;
     const normalized = ((target % len) + len) % len;
     const nextSong = playlist[normalized];
@@ -874,7 +873,6 @@ const handleEnded = useCallback(() => {
 
     setIndex(normalized);
     setCurrentSong(nextSong);
-    currentIndexRef.current = normalized;
 
     if (audio && nextSong) {
       audio.pause();
@@ -897,18 +895,8 @@ const handleEnded = useCallback(() => {
     }
   };
 
-  const playNextSong = () => playTrackAt(currentIndexRef.current + 1);
-  const playPreviousSong = () => playTrackAt(currentIndexRef.current - 1);
-
-  const handleIOSPrev = () => {
-    console.log("[MusicPlayer2] IOS prev click", currentIndexRef.current);
-    playPreviousSong();
-  };
-
-  const handleIOSNext = () => {
-    console.log("[MusicPlayer2] IOS next click", currentIndexRef.current);
-    playNextSong();
-  };
+  const playNextSong = () => playTrackAt(index + 1);
+  const playPreviousSong = () => playTrackAt(index - 1);
 
   // JSX
   return (
