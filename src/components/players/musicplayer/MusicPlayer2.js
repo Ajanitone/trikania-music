@@ -850,29 +850,32 @@ const handleEnded = useCallback(() => {
   // };
 
   //  Analyser
-  const playTrackAt = (target) => {
+  const stepTrack = (delta) => {
     if (!playlist.length) return;
-    const audio = audioPlayer.current;
-    const normalized = ((target % playlist.length) + playlist.length) % playlist.length;
-    setCurrentSong(playlist[normalized]);
-    setIndex(normalized);
-    if (isIOS && audio && playlist[normalized]) {
-      audio.pause();
-      audio.src = playlist[normalized].src;
-      audio.load();
-      audio.currentTime = 0;
-      audio
-        .play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => console.error("iOS play error:", err));
-      return;
-    } else {
-      setIsPlaying(true);
-    }
+    setIndex((prev) => {
+      const len = playlist.length;
+      const normalized = ((prev + delta) % len + len) % len;
+      const nextSong = playlist[normalized];
+      setCurrentSong(nextSong);
+      const audio = audioPlayer.current;
+      if (isIOS && audio && nextSong) {
+        audio.pause();
+        audio.src = nextSong.src;
+        audio.load();
+        audio.currentTime = 0;
+        audio
+          .play()
+          .then(() => setIsPlaying(true))
+          .catch((err) => console.error("iOS play error:", err));
+      } else {
+        setIsPlaying(true);
+      }
+      return normalized;
+    });
   };
 
-  const playNextSong = () => playTrackAt(index + 1);
-  const playPreviousSong = () => playTrackAt(index - 1);
+  const playNextSong = () => stepTrack(1);
+  const playPreviousSong = () => stepTrack(-1);
 
   // JSX
   return (
