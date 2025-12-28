@@ -757,7 +757,7 @@ const handleEnded = useCallback(() => {
             />
           </Stack>
             <audio
-              key={currentSong?.src}
+              key={currentSong?.src || index}
               ref={audioPlayer}
               src={currentSong?.src}
               preload="metadata"
