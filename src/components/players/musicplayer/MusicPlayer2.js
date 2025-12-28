@@ -860,10 +860,12 @@ const handleEnded = useCallback(() => {
       audio.pause();
       audio.src = playlist[normalized].src;
       audio.load();
+      audio.currentTime = 0;
       audio
         .play()
         .then(() => setIsPlaying(true))
         .catch((err) => console.error("iOS play error:", err));
+      return;
     } else {
       setIsPlaying(true);
     }
