@@ -699,6 +699,8 @@ function MusicPlayer3({ isDarkMode }) {
             preload="metadata"
             playsInline
             crossOrigin="anonymous"
+            onTimeUpdate={(e) => setElapsed(e.target.currentTime)}
+            onLoadedMetadata={(e) => setDuration(e.target.duration || 0)}
             style={{ width: "100%", display: "none" }}
           />
         </Stack>

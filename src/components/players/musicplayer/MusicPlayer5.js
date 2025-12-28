@@ -695,15 +695,17 @@ function setupAnalyser() {
                 onClick={playNextSong}
               />
             </Stack>
-            <audio
-              key={currentSong?.src}
-              ref={audioPlayer}
-              src={currentSong?.src}
-              preload="metadata"
-              playsInline
-              crossOrigin="anonymous"
-              style={{ width: "100%", display: "none" }}
-            />
+          <audio
+            key={currentSong?.src}
+            ref={audioPlayer}
+            src={currentSong?.src}
+            preload="metadata"
+            playsInline
+            crossOrigin="anonymous"
+            onTimeUpdate={(e) => setElapsed(e.target.currentTime)}
+            onLoadedMetadata={(e) => setDuration(e.target.duration || 0)}
+            style={{ width: "100%", display: "none" }}
+          />
           </Stack>
         </CustomPaper>
       </Div>
