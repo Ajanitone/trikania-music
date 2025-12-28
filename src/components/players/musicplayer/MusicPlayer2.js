@@ -220,7 +220,7 @@ function MusicPlayer2({ isDarkMode }) {
 
   useEffect(() => {
     setCurrentSong(playlist[index]);
-    console.debug("[MusicPlayer2] setCurrentSong", {
+    console.log("[MusicPlayer2] setCurrentSong", {
       index,
       src: playlist[index]?.src,
       length: playlist.length,
@@ -742,7 +742,7 @@ const handleEnded = useCallback(() => {
             <SkipPreviousIcon
               sx={{ color: iconColor, "&:active": { color: activeColor } }}
               fontSize="large"
-              onClick={playPreviousSong}
+              onClick={handleIOSPrev}
             />
             {!isPlaying ? (
               <PlayArrowIcon
@@ -760,7 +760,7 @@ const handleEnded = useCallback(() => {
             <SkipNextIcon
               sx={{ color: iconColor, "&:active": { color: activeColor } }}
               fontSize="large"
-              onClick={playNextSong}
+              onClick={handleIOSNext}
             />
           </Stack>
             <audio
@@ -864,7 +864,7 @@ const handleEnded = useCallback(() => {
     const nextSong = playlist[normalized];
     const audio = audioPlayer.current;
 
-    console.debug("[MusicPlayer2] playTrackAt", {
+    console.log("[MusicPlayer2] playTrackAt", {
       target,
       normalized,
       nextSrc: nextSong?.src,
@@ -899,6 +899,16 @@ const handleEnded = useCallback(() => {
 
   const playNextSong = () => playTrackAt(currentIndexRef.current + 1);
   const playPreviousSong = () => playTrackAt(currentIndexRef.current - 1);
+
+  const handleIOSPrev = () => {
+    console.log("[MusicPlayer2] IOS prev click", currentIndexRef.current);
+    playPreviousSong();
+  };
+
+  const handleIOSNext = () => {
+    console.log("[MusicPlayer2] IOS next click", currentIndexRef.current);
+    playNextSong();
+  };
 
   // JSX
   return (
