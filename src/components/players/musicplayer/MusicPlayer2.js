@@ -737,7 +737,7 @@ function MusicPlayer2({ isDarkMode }) {
                   }
                 }}
                 sx={{
-                  color: iconColor,
+                  color: "#e53935",
                   "& .MuiSlider-thumb": {
                     width: 12,
                     height: 12,

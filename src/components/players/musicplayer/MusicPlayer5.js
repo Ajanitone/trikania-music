@@ -641,6 +641,35 @@ function setupAnalyser() {
               alt="Cover"
               style={{ width: 140, height: 140, borderRadius: "50%" }}
             />
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{ width: "100%", alignItems: "center", px: 1 }}
+            >
+              <Typography sx={{ color: isDarkMode ? "white" : "black", fontSize: "0.8rem" }}>
+                {formatTime(elapsed)}
+              </Typography>
+              <PSlider
+                size="small"
+                value={elapsed}
+                min={0}
+                max={Number.isFinite(duration) ? duration : 0}
+                onChange={(_, value) => {
+                  const next = Number(value) || 0;
+                  setElapsed(next);
+                  if (audioPlayer.current) {
+                    audioPlayer.current.currentTime = next;
+                  }
+                }}
+                sx={{
+                  color: "#e53935",
+                  "& .MuiSlider-thumb": { width: 12, height: 12, display: "block" },
+                }}
+              />
+              <Typography sx={{ color: isDarkMode ? "white" : "black", fontSize: "0.8rem" }}>
+                {formatTime((Number.isFinite(duration) ? duration : 0) - elapsed)}
+              </Typography>
+            </Stack>
             <Stack direction="row" spacing={2} justifyContent="center">
               <SkipPreviousIcon
                 sx={{ color: iconColor, "&:active": { color: activeColor } }}
