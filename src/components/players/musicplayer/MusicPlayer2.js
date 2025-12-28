@@ -634,7 +634,7 @@ function MusicPlayer3({ isDarkMode }) {
             {currentSong?.artist || "Kaya-T"}
           </Typography>
           <img
-            src={currentSong?.image || KayaTPict}
+            src={currentSong?.image || SilentPict}
             alt="Cover"
             style={{ width: 140, height: 140, borderRadius: "50%" }}
           />
