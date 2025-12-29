@@ -203,6 +203,9 @@ function MusicPlayer2({ isDarkMode }) {
   const dataArrayRef = useRef(null);
   const sourceNodeRef = useRef(null);
   const animationRef = useRef(null);
+  const isIOS = /iPad|iPhone|iPod/.test(
+    typeof navigator !== "undefined" ? navigator.userAgent : ""
+  );
 
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { state, dispatchState, search } = useContext(HerbContext);
@@ -814,7 +817,7 @@ function MusicPlayer2({ isDarkMode }) {
           .play()
           .then(() => {
             console.log("Audio play successful");
-            startVisualizer();
+            if (!isIOS) startVisualizer();
           })
           .catch((error) => {
             console.error("Error playing audio:", error);
@@ -825,7 +828,7 @@ function MusicPlayer2({ isDarkMode }) {
             .play()
             .then(() => {
               console.log("Audio play successful (after canplaythrough)");
-              startVisualizer();
+              if (!isIOS) startVisualizer();
             })
             .catch((error) => {
               console.error("Error playing audio:", error);
