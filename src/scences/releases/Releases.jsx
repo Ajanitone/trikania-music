@@ -68,11 +68,13 @@ const Ajaniphotos = ({ isDarkMode }) => {
       <ScrollTop isDarkMode={isDarkMode} />
 
       <Box
-        display="flex"
-        flexDirection={{ xs: "column", md: "row" }}
-        justifyContent="center"
-        alignItems="center"
-        flexWrap={{ xs: "nowrap", md: "wrap" }}
+        display="grid"
+        gridTemplateColumns={{
+          xs: "1fr",
+          md: "repeat(auto-fit, minmax(220px, 1fr))",
+        }}
+        justifyItems="center"
+        alignItems="start"
         gap={4}
       >
         {/* Picture-1 */}
