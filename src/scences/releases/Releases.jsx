@@ -275,7 +275,6 @@ const Ajaniphotos = ({ isDarkMode }) => {
           </Box>
         </Box>
       </Box>
-      </Box>
       {/* Picture-5 */}
 
       {/* Picture-6 */}
