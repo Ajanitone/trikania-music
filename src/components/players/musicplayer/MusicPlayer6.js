@@ -676,6 +676,39 @@ function MusicPlayer2({ isDarkMode }) {
     audio.muted = mute;
     audio.volume = volume / 100;
     setLoadError("");
+
+    // iOS: force a fresh load then play once ready; avoid visualizer/audioContext entirely.
+    if (isIOS) {
+      const playIOS = () => {
+        setIsLoading(true);
+        audio
+          .play()
+          .then(() => {
+            setIsPlaying(true);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.error("iOS play failed", err);
+            setLoadError("Playback blocked or failed. Tap play again.");
+            setIsPlaying(false);
+            setIsLoading(false);
+          });
+      };
+
+      if (audio.paused) {
+        const onCanPlay = () => {
+          audio.removeEventListener("canplaythrough", onCanPlay);
+          playIOS();
+        };
+        audio.addEventListener("canplaythrough", onCanPlay, { once: true });
+        audio.load();
+      } else {
+        audio.pause();
+        setIsPlaying(false);
+      }
+      return;
+    }
+
     const startPlayback = () => {
       setIsLoading(true);
       audio
@@ -918,7 +951,8 @@ function MusicPlayer2({ isDarkMode }) {
           muted={mute}
           preload="auto"
           playsInline
-          crossOrigin="anonymous"
+          controls={isIOS}
+          crossOrigin={isIOS ? undefined : "anonymous"}
         />
       )}
       <CustomPaper elevation={5}>
