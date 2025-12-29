@@ -803,7 +803,17 @@ function MusicPlayer2({ isDarkMode }) {
     const audio = audioPlayer.current;
     if (!audio) return;
 
-    // Ensure audio context is ready/resumed before playing (especially for remote audio).
+    // On iOS skip AudioContext/visualizer entirely
+    if (isIOS) {
+      if (isPlaying) {
+        audio.play().catch((err) => console.error("iOS play error:", err));
+      } else if (!audio.paused) {
+        audio.pause();
+      }
+      return;
+    }
+
+    // Ensure audio context is ready/resumed before playing (desktop)
     if (!audioContextRef.current) {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       audioContextRef.current = new AudioCtx();
@@ -818,7 +828,7 @@ function MusicPlayer2({ isDarkMode }) {
           .play()
           .then(() => {
             console.log("Audio play successful");
-            if (!isIOS) startVisualizer();
+            startVisualizer();
           })
           .catch((error) => {
             console.error("Error playing audio:", error);
@@ -829,7 +839,7 @@ function MusicPlayer2({ isDarkMode }) {
             .play()
             .then(() => {
               console.log("Audio play successful (after canplaythrough)");
-              if (!isIOS) startVisualizer();
+              startVisualizer();
             })
             .catch((error) => {
               console.error("Error playing audio:", error);
@@ -1102,18 +1112,20 @@ function MusicPlayer2({ isDarkMode }) {
           }}
         ></Stack>
 
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "12px",
-          }}
-        >
-          <canvas ref={canvasRef} style={canvasStyle} />
-        </Stack>
+        {!isIOS && (
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "12px",
+            }}
+          >
+            <canvas ref={canvasRef} style={canvasStyle} />
+          </Stack>
+        )}
       </CustomPaper>
     </Div>
   );
