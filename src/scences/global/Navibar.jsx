@@ -116,9 +116,9 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
   const navButtonSx = {
     color: isDarkMode ? "white" : "black",
-    fontSize: "0.9rem",
-    padding: "4px 8px",
-    minWidth: "auto",
+    fontSize: "0.8rem",
+    padding: "3px 6px",
+    minWidth: "0",
     "&:hover": {
       backgroundColor: shades.secondary[500],
       color: shades.primary[100],
