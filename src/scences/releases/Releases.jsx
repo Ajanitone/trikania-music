@@ -67,8 +67,16 @@ const Ajaniphotos = ({ isDarkMode }) => {
     >
       <ScrollTop isDarkMode={isDarkMode} />
 
-      {/* Picture-1 */}
-      <Box margin="50px auto" title="image">
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", md: "row" }}
+        justifyContent="center"
+        alignItems="center"
+        flexWrap={{ xs: "nowrap", md: "wrap" }}
+        gap={4}
+      >
+        {/* Picture-1 */}
+        <Box margin="50px auto" title="image">
         <img
           src={state.products[4]?.musicImage || profilePicture}
           alt="profile"
@@ -115,8 +123,8 @@ const Ajaniphotos = ({ isDarkMode }) => {
         </Box>
       </Box>
 
-      {/* Picture-2 */}
-      <Box margin="50px auto" title="image">
+        {/* Picture-2 */}
+        <Box margin="50px auto" title="image">
         <img
           src={state.products[3]?.musicImage || profilePicture}
           alt="profile"
@@ -162,8 +170,8 @@ const Ajaniphotos = ({ isDarkMode }) => {
           </Button>
         </Box>
       </Box>
-      {/* Picture-3 */}
-      <Box margin="50px auto" title="image">
+        {/* Picture-3 */}
+        <Box margin="50px auto" title="image">
         <img
           src={state.products[2]?.musicImage || profilePicture}
           alt="profile"
@@ -209,8 +217,8 @@ const Ajaniphotos = ({ isDarkMode }) => {
           </Button>
         </Box>
       </Box>
-      {/* Picture-4 */}
-      <Box margin="50px auto" title="image">
+        {/* Picture-4 */}
+        <Box margin="50px auto" title="image">
         <img
           src={state.products[1]?.musicImage || profilePicture}
           alt="profile"
@@ -255,6 +263,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
             Listen It 🎧
           </Button>
         </Box>
+      </Box>
       </Box>
       {/* Picture-5 */}
 
