@@ -100,12 +100,15 @@ const Discography = ({ isDarkMode }) => {
       <ScrollTop isDarkMode={isDarkMode} />
 
       <Box
-        display="flex"
-        flexDirection={{ xs: "column", md: "row" }} // column on mobile/iOS, row on desktop
-        justifyContent="center"
-        alignItems="center"
-        flexWrap={{ xs: "nowrap", md: "wrap" }}
+        display="grid"
+        gridTemplateColumns={{
+          xs: "1fr",
+          md: "repeat(auto-fit, minmax(220px, 1fr))",
+        }}
+        justifyItems="center"
+        alignItems="start"
         gap={4}
+        width="100%"
       >
         {/* Live aus Berlin Peter Fox */}
 
