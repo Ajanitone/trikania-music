@@ -1,10 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import { shades } from "../../../theme";
 import { HerbContext } from "../../../context/Context";
 import { useNavigate } from "react-router-dom";
@@ -111,10 +106,10 @@ const KayaT = ({ isDarkMode }) => {
 
         <Typography
           sx={{
-            "&:hover": { cursor: "pointer", color: shades.secondary[500] },
+            "&:hover": { cursor: "pointer", color: "white" },
             display: isNonMobile ? "block" : "block",
           }}
-          color={!isDarkMode ? shades.primary[500] : undefined}
+          color={!isDarkMode ? shades.primary[500] : "white"}
           title="kaya-t"
           onClick={() => navigate("/kaya")}
         >
@@ -122,20 +117,24 @@ const KayaT = ({ isDarkMode }) => {
         </Typography>
       </Box>
 
-<Box padding="5px" width="100%" margin="50px auto" textAlign="center">
-
-<Typography      sx={{
+      <Box padding="5px" width="100%" margin="50px auto" textAlign="center">
+        <Typography
+          sx={{
             "&:hover": { cursor: "pointer", color: shades.secondary[500] },
-            display: isNonMobile ? "block" : "block",fontWeight:"bold"
+            display: isNonMobile ? "block" : "block",
+            fontWeight: "bold",
           }}
-          color={!isDarkMode ? shades.primary[500] : undefined}>Genres</Typography>
+          color={!isDarkMode ? shades.primary[500] : undefined}
+        >
+          Genres
+        </Typography>
 
-<Typography>Reggae-Soul</Typography>
+        <Typography>Reggae-Soul</Typography>
 
-<Typography>R&B</Typography>
+        <Typography>R&B</Typography>
 
-<Typography>Jazz-Hop</Typography>
-</Box>
+        <Typography>Jazz-Hop</Typography>
+      </Box>
 
       <Box padding="50px" width="100%" margin="50px auto" textAlign="center">
         <Typography
@@ -155,14 +154,14 @@ const KayaT = ({ isDarkMode }) => {
           With it´s album title the album celebrates the singer herself. It was
           produced by reggae original Kirk "Ajani" McDowell, who collaborates/d
           with artists such as Peter Fox, Samy Deluxe, Max Herre, Die
-          Fantastischen Vier and Patrice, among others.<hr></hr> "A good basis for the
-          wonderful vocals of Kaya-T, who, coming from jazz, offers many facets
-          with her voice." (irieites.com).
-      <hr></hr>
+          Fantastischen Vier and Patrice, among others.<hr></hr> "A good basis
+          for the wonderful vocals of Kaya-T, who, coming from jazz, offers many
+          facets with her voice." (irieites.com).
+          <hr></hr>
           <br></br>
-           The album contains eleven partly
-          5-minute long compositions with English lyrics, recorded with an
-          impressively select group of first-class international musicians.<br></br>
+          The album contains eleven partly 5-minute long compositions with
+          English lyrics, recorded with an impressively select group of
+          first-class international musicians.<br></br>
           Stylistically, the German-Cuban artist moves fluidly between the
           genres of Reggae, Soul, R&B and Hip Hop. She herself calls this
           musical mix Reggaesoul. <hr></hr> <br></br>
@@ -170,37 +169,34 @@ const KayaT = ({ isDarkMode }) => {
           pedagogue has been performing on stages since the age of five, she
           attended music schools, sang in choirs and gained her first
           experiences in various bands as a teenager.<br></br>
-          
-           After graduating from high
-          school, she initially studied history of fine arts, quickly changed
-          over to audio engineering and finally finished studying jazz music.
-
+          After graduating from high school, she initially studied history of
+          fine arts, quickly changed over to audio engineering and finally
+          finished studying jazz music.
           <hr></hr> <br></br>
           Since then she has worked in various projects as a gala singer, live
           and studio singer, as a vocal coach (Mark Medlock, DSDS) and as a
           vocal teacher. <br></br>
-          
-           As a background singer she sang live for artists like
-          Cornel Campbell, Torch, Oren Lavie, Mantis, Ajani and Martin Jondo,
-          and in the studio for Ben, Bushido, Anthony Locks, Shocking Murray and
-          many more. <hr></hr> <br></br>
+          As a background singer she sang live for artists like Cornel Campbell,
+          Torch, Oren Lavie, Mantis, Ajani and Martin Jondo, and in the studio
+          for Ben, Bushido, Anthony Locks, Shocking Murray and many more.{" "}
+          <hr></hr> <br></br>
           Under the name Kaya-T, the musician has collaborated with Aldubb &
           Bigfinga ("Mother Earth"), Next Generation Family ("Blue Sky"/Raspect
           Riddim) and Ajani ("My Sunshine", "Ready To Turn"). Kaya-T has been
           tour support for Martin Jondo and opener for Queen Ifrikah and
           Turbulance, among others.<hr></hr> <br></br>
-          "Listening to her album, you quickly understand what it's all about:<br></br>
+          "Listening to her album, you quickly understand what it's all about:
+          <br></br>
           Kaya-T trusts the music and what she's doing. With varied rhythms and
           expressive vocals, she puts together a consistently danceable
           feel-good package that is unobtrusive but intense, authentic and
           infectiously energetic.
-          
-     <hr></hr>       <br></br>
-           Love & Respect - the message is simple and yet
-          universal, in the small lies the great, in the simple the essential.
-          If Kaya-T was a party guest, she would probably sneak through the back
-          door onto the dance floor, only to end up dancing on the table. So get
-          yourself ready!" (Gigi Fakunmoju, My POC Bookshelf)<hr></hr>
+          <hr></hr> <br></br>
+          Love & Respect - the message is simple and yet universal, in the small
+          lies the great, in the simple the essential. If Kaya-T was a party
+          guest, she would probably sneak through the back door onto the dance
+          floor, only to end up dancing on the table. So get yourself ready!"
+          (Gigi Fakunmoju, My POC Bookshelf)<hr></hr>
         </Typography>
       </Box>
       <Box padding="50px" width="100%" margin="50px auto" textAlign="center">
