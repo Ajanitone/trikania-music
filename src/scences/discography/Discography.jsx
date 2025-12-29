@@ -103,7 +103,7 @@ const Discography = ({ isDarkMode }) => {
         display="grid"
         gridTemplateColumns={{
           xs: "1fr",
-          md: "repeat(auto-fit, minmax(220px, 1fr))",
+          md: "repeat(3, minmax(220px, 1fr))",
         }}
         justifyItems="center"
         alignItems="start"
