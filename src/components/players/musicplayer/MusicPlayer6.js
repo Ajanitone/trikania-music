@@ -655,13 +655,15 @@ function MusicPlayer2({ isDarkMode }) {
     const audio = audioPlayer.current;
     if (!audio) return;
 
-    // Ensure audio context is resumed before attempting play (remote audio/Safari).
-    if (!audioContextRef.current) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      audioContextRef.current = new AudioCtx();
-    }
-    if (audioContextRef.current.state === "suspended") {
-      audioContextRef.current.resume();
+    // Desktop: ensure audio context ready for visualizer. iOS: skip audio context.
+    if (!isIOS) {
+      if (!audioContextRef.current) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        audioContextRef.current = new AudioCtx();
+      }
+      if (audioContextRef.current.state === "suspended") {
+        audioContextRef.current.resume();
+      }
     }
 
     audio.muted = mute;
@@ -884,6 +886,8 @@ function MusicPlayer2({ isDarkMode }) {
           src={currentSong.src}
           ref={audioPlayer}
           muted={mute}
+          preload="metadata"
+          playsInline
           crossOrigin="anonymous"
         />
       )}
