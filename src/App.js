@@ -88,6 +88,10 @@ function App() {
               path="/ajani-music/item/:itemId"
               element={<ItemDetails3 isDarkMode={isDarkMode} />}
             />
+            <Route
+              path="/item/:itemId"
+              element={<ItemDetails3 isDarkMode={isDarkMode} />}
+            />
 
             <Route
               path="/kaya-music/item/:itemId"
