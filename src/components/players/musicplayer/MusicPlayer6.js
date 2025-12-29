@@ -677,7 +677,7 @@ function MusicPlayer2({ isDarkMode }) {
     audio.muted = mute;
     audio.volume = volume / 100;
     setLoadError("");
-    if (audio.paused) {
+    const startPlayback = () => {
       setIsLoading(true);
       audio
         .play()
@@ -690,10 +690,20 @@ function MusicPlayer2({ isDarkMode }) {
           setLoadError("Playback blocked or failed. Tap play again.");
           setIsPlaying(false);
           setIsLoading(false);
-        })
-        .finally(() => {
-          setIsLoading(false);
         });
+    };
+
+    if (audio.paused) {
+      if (audio.readyState < 2) {
+        const onCanPlay = () => {
+          audio.removeEventListener("canplaythrough", onCanPlay);
+          startPlayback();
+        };
+        audio.addEventListener("canplaythrough", onCanPlay);
+        audio.load();
+      } else {
+        startPlayback();
+      }
     } else {
       audio.pause();
       setIsPlaying(false);
@@ -897,9 +907,9 @@ function MusicPlayer2({ isDarkMode }) {
           src={currentSong.src}
           ref={audioPlayer}
           muted={mute}
-          preload="metadata"
+          preload="auto"
           playsInline
-          crossOrigin="anonymous"
+          crossOrigin={isIOS ? undefined : "anonymous"}
         />
       )}
       <CustomPaper elevation={5}>
