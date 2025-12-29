@@ -864,6 +864,40 @@ function MusicPlayer2({ isDarkMode }) {
     }
   };
 
+  // Unified track switcher so iOS/desktop both load then play when ready.
+  const playTrackAt = (target) => {
+    const audio = audioPlayer.current;
+    if (!audio || !playlist.length) return;
+
+    const len = playlist.length;
+    const normalized = ((target % len) + len) % len;
+    const track = playlist[normalized];
+
+    setIndex(normalized);
+    setCurrentSong(track);
+    setIsPlaying(true);
+    setIsLoading(true);
+    setElapsed(0);
+
+    const onCanPlay = () => {
+      audio.removeEventListener("canplaythrough", onCanPlay);
+      audio.currentTime = 0;
+      audio
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.error("Play error after track switch", err);
+          setIsPlaying(false);
+          setLoadError("Playback blocked or failed. Tap play again.");
+        })
+        .finally(() => setIsLoading(false));
+    };
+
+    audio.addEventListener("canplaythrough", onCanPlay, { once: true });
+    audio.src = track.src;
+    audio.load();
+  };
+
   useEffect(() => {
     const audio = audioPlayer.current;
     if (!audio) return;
@@ -923,15 +957,11 @@ function MusicPlayer2({ isDarkMode }) {
   }, [isPlaying, startVisualizer, stopVisualizer]);
 
   const playNextSong = () => {
-    const nextIndex = (index + 1) % playlist.length;
-    setIndex(nextIndex);
-    setIsPlaying(true); // say "we WANT to be playing"
+    playTrackAt(index + 1);
   };
 
   const playPreviousSong = () => {
-    const prevIndex = index - 1 < 0 ? playlist.length - 1 : index - 1;
-    setIndex(prevIndex);
-    setIsPlaying(true);
+    playTrackAt(index - 1);
   };
 
   const nextSong =
@@ -951,7 +981,6 @@ function MusicPlayer2({ isDarkMode }) {
           muted={mute}
           preload="auto"
           playsInline
-          controls={isIOS}
           crossOrigin={isIOS ? undefined : "anonymous"}
         />
       )}
