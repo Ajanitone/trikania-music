@@ -1,6 +1,8 @@
 import React from "react";
 import { useTheme } from "@mui/material";
-import { Box, Typography, Button, useMediaQuery } from "@mui/material";
+import { Box, Typography, Button, useMediaQuery, Stack, IconButton } from "@mui/material";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import InstagramIcon from "@mui/icons-material/Instagram";
 import { shades } from "../../theme";
 import { useNavigate } from "react-router-dom";
 
@@ -163,6 +165,33 @@ const Footer = ({ isDarkMode }) => {
           >
             Contact Us
           </Button>
+
+          <Stack
+            direction="row"
+            spacing={1}
+            justifyContent={isNonMobile ? "flex-start" : "center"}
+          >
+            <IconButton
+              component="a"
+              href="https://www.facebook.com/trikaniamusic/"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ color: isDarkMode ? "white" : "black" }}
+              aria-label="TrikaniaMusic on Facebook"
+            >
+              <FacebookIcon />
+            </IconButton>
+            <IconButton
+              component="a"
+              href="https://www.instagram.com/trikaniamusic/?hl=de"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ color: isDarkMode ? "white" : "black" }}
+              aria-label="TrikaniaMusic on Instagram"
+            >
+              <InstagramIcon />
+            </IconButton>
+          </Stack>
 
           <Typography mb="8px">
             <a
