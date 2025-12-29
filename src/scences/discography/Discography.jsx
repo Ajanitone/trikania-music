@@ -101,10 +101,11 @@ const Discography = ({ isDarkMode }) => {
 
       <Box
         display="flex"
-        flexDirection="column" // Ensures horizontal alignment
-        justifyContent="center" // Center items horizontally
-        alignItems="center" // Center items vertically (if needed)
-        flexWrap="wrap" // Optional: Makes items wrap to the next row if the screen is too small
+        flexDirection={{ xs: "column", md: "row" }} // column on mobile/iOS, row on desktop
+        justifyContent="center"
+        alignItems="center"
+        flexWrap={{ xs: "nowrap", md: "wrap" }}
+        gap={4}
       >
         {/* Live aus Berlin Peter Fox */}
 
