@@ -178,32 +178,6 @@ const Footer = ({ isDarkMode }) => {
               14195 Berlin
             </a>
           </Typography>
-
-          <Box
-            sx={{
-              position: "relative",
-              width: "100%",
-              borderRadius: "8px",
-              overflow: "hidden",
-              boxShadow: "0 1px 4px rgba(0,0,0,0.15)",
-              backgroundColor: isDarkMode ? "#0f0f0f" : "#f7f7f7",
-            }}
-          >
-            <Box
-              component="iframe"
-              title="Clayallee 227 map"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2429.3276665125165!2d13.287474076514077!3d52.4520610720628!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a85200a093fe0b%3A0x662f1268a0a52d57!2sClayallee%20227%2C%2014195%20Berlin!5e0!3m2!1sen!2sde!4v1700000000000!5m2!1sen!2sde"
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              sx={{
-                border: 0,
-                width: "100%",
-                height: isNonMobile ? "150px" : "170px",
-                display: "block",
-              }}
-            />
-          </Box>
           <Button
             onClick={sendEmail}
             sx={{
