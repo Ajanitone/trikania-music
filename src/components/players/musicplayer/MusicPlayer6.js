@@ -525,6 +525,7 @@ function MusicPlayer2({ isDarkMode }) {
 
   // --- Audio analyser helpers ---
   const setupAudioGraph = useCallback(() => {
+    if (isIOS) return null; // never build visualizer graph on iOS
     const element = audioPlayer.current;
     if (!element) return null;
 
