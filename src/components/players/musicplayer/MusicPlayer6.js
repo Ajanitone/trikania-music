@@ -257,7 +257,6 @@ function MusicPlayer2({ isDarkMode }) {
     async function fetchBeats(path) {
       try {
         const response = await axios.get(`${apiBase}${path}`);
-        console.log("getData beats response", response.data);
         if (response.data.success) {
           dispatchState({
             type: "loadBeats",
@@ -275,7 +274,7 @@ function MusicPlayer2({ isDarkMode }) {
     fetchBeats("/beats/listBeats").then((ok) => {
       if (!ok) fetchBeats("/beats/listBeat");
     });
-  }, [baseUrl, dispatchState]);
+  }, [baseUrl, dispatchState, state?.beats?.length]);
 
   // Add a state to keep track of the scrolling position
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -919,7 +918,7 @@ function MusicPlayer2({ isDarkMode }) {
           muted={mute}
           preload="auto"
           playsInline
-          crossOrigin={isIOS ? undefined : "anonymous"}
+          crossOrigin="anonymous"
         />
       )}
       <CustomPaper elevation={5}>
