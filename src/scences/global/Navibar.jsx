@@ -114,6 +114,17 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
     }
   };
 
+  const navButtonSx = {
+    color: isDarkMode ? "white" : "black",
+    fontSize: "0.9rem",
+    padding: "4px 8px",
+    minWidth: "auto",
+    "&:hover": {
+      backgroundColor: shades.secondary[500],
+      color: shades.primary[100],
+    },
+  };
+
   return (
     <Box
       display="flex"
@@ -160,13 +171,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         >
           {/* Artist */}
           <Button
-            sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}
+            sx={navButtonSx}
             onClick={() => navigate("/artists")}
             title="Artists"
           >
@@ -175,14 +180,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
           {/* Profile */}
           <Button
-            sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-              display: state.user._id ? "flex" : "none",
-            }}
+            sx={{ ...navButtonSx, display: state.user._id ? "flex" : "none" }}
             onClick={() => navigate("/userprofile")}
             title="Profile"
           >
@@ -191,13 +189,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
           {/* Videos */}
           <Button
-            sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}
+            sx={navButtonSx}
             onClick={() => navigate("/videos")}
             title="Videos"
           >
@@ -206,13 +198,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
           {/* Releases */}
           <Button
-            sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}
+            sx={navButtonSx}
             onClick={() => navigate("/releases")}
             title="Releases"
           >
@@ -235,13 +221,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
             }}
           >
             <Button
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                "&:hover": {
-                  backgroundColor: shades.secondary[500],
-                  color: shades.primary[100],
-                },
-              }}
+              sx={navButtonSx}
               onClick={() => dispatch(setIsCartOpen({}))}
               title="Shop"
             >
@@ -265,13 +245,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
             }}
           >
             <Button
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                "&:hover": {
-                  backgroundColor: shades.secondary[500],
-                  color: shades.primary[100],
-                },
-              }}
+              sx={navButtonSx}
               onClick={() => navigate("/references")}
               title="References"
             >
@@ -295,13 +269,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
             }}
           >
             <Button
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                "&:hover": {
-                  backgroundColor: shades.secondary[500],
-                  color: shades.primary[100],
-                },
-              }}
+              sx={navButtonSx}
               onClick={() => navigate("/discography")}
               title="Discography"
             >
@@ -325,13 +293,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
             }}
           >
             <Button
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                "&:hover": {
-                  backgroundColor: shades.secondary[500],
-                  color: shades.primary[100],
-                },
-              }}
+              sx={navButtonSx}
               onClick={() => navigate("/beats")}
               title="Beats"
             >
@@ -355,13 +317,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
             }}
           >
             <Button
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                "&:hover": {
-                  backgroundColor: shades.secondary[500],
-                  color: shades.primary[100],
-                },
-              }}
+              sx={navButtonSx}
               onClick={() => navigate("/herb-info")}
               title="trikania-herbs"
             >
@@ -371,13 +327,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
           {/* Register */}
           <Button
-            sx={{
-              color: isDarkMode ? "white" : "black",
-              "&:hover": {
-                backgroundColor: shades.secondary[500],
-                color: shades.primary[100],
-              },
-            }}
+            sx={navButtonSx}
             onClick={() => navigate("/register")}
             title="register"
           >
@@ -389,13 +339,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           {state.user._id ? (
             <Button
               title="logout"
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                "&:hover": {
-                  backgroundColor: shades.secondary[500],
-                  color: shades.primary[100],
-                },
-              }}
+              sx={navButtonSx}
               onClick={handleLogOut}
               ref={submitButtonRef}
             >
@@ -404,13 +348,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           ) : (
             <Button
               title="login"
-              sx={{
-                color: isDarkMode ? "white" : "black",
-                "&:hover": {
-                  backgroundColor: shades.secondary[500],
-                  color: shades.primary[100],
-                },
-              }}
+              sx={navButtonSx}
               onClick={() => navigate("/login")}
             >
               Login
@@ -429,26 +367,14 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           {state.user.isAdmin ? (
             <>
               <Button
-                sx={{
-                  color: isDarkMode ? "white" : "black",
-                  "&:hover": {
-                    backgroundColor: shades.secondary[500],
-                    color: shades.primary[100],
-                  },
-                }}
+                sx={navButtonSx}
                 onClick={() => navigate("/settings")}
                 title="admin"
               >
                 Admin
               </Button>
               <Button
-                sx={{
-                  color: isDarkMode ? "white" : "black",
-                  "&:hover": {
-                    backgroundColor: shades.secondary[500],
-                    color: shades.primary[100],
-                  },
-                }}
+                sx={navButtonSx}
                 onClick={() => navigate("/workmail")}
                 title="WorkMail Provisioning"
               >

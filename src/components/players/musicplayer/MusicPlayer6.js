@@ -475,6 +475,12 @@ function MusicPlayer2({ isDarkMode }) {
       setIsLoading(false);
     };
 
+    const handleLoadedMetadata = () => {
+      setDuration(audio.duration);
+      setIsLoaded(true);
+      setIsLoading(false);
+    };
+
     const handleTimeUpdate = () => {
       setElapsed(audio.currentTime);
     };
@@ -494,6 +500,7 @@ function MusicPlayer2({ isDarkMode }) {
 
     audio.addEventListener("canplaythrough", handleCanPlayThrough);
     audio.addEventListener("loadeddata", handleLoadedData);
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("playing", handlePlaying);
     audio.addEventListener("ended", handleAudioEnded);
@@ -502,6 +509,7 @@ function MusicPlayer2({ isDarkMode }) {
     return () => {
       audio.removeEventListener("canplaythrough", handleCanPlayThrough);
       audio.removeEventListener("loadeddata", handleLoadedData);
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
       audio.removeEventListener("timeupdate", handleTimeUpdate);
       audio.removeEventListener("playing", handlePlaying);
       audio.removeEventListener("ended", handleAudioEnded);
@@ -681,6 +689,9 @@ function MusicPlayer2({ isDarkMode }) {
           console.error("Play failed", err);
           setLoadError("Playback blocked or failed. Tap play again.");
           setIsPlaying(false);
+          setIsLoading(false);
+        })
+        .finally(() => {
           setIsLoading(false);
         });
     } else {
