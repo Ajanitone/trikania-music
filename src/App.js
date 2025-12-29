@@ -55,6 +55,7 @@ import Beats from "./scences/beats/Beats";
 import AddBeat from "./scences/beats/AddBeat";
 import EditBeat from "./scences/beats/EditBeat";
 import SearchBeat from "./scences/beats/SearchBeat";
+import AdminBeats from "./scences/beats/AdminBeats";
 import VoiceContact from "./scences/contact/VoiceContact";
 
 const ScrollToTop = () => {
@@ -166,6 +167,10 @@ function App() {
               <Route
                 path="/add-beat"
                 element={<AddBeat isDarkMode={isDarkMode} />}
+              />
+              <Route
+                path="/admin-beats"
+                element={<AdminBeats isDarkMode={isDarkMode} />}
               />
               <Route
                 path="/edit-beat/:id"
