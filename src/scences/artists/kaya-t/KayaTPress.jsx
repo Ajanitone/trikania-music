@@ -7,7 +7,7 @@ import ScrollTop from "../../../components/ScrollTop";
 import { shades } from "../../../theme";
 
 
-import KeysTwo from "../../../assets-2/kaya-press.jpeg";
+import KeysTwo from "../../../assets-2/kaya-press.jpg";
 import Kaya from "../../../artistpictures/kaya.jpg";
 
 const KayaTPress = ({ isDarkMode }) => {
