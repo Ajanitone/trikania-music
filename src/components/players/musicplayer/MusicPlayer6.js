@@ -578,6 +578,7 @@ function MusicPlayer2({ isDarkMode }) {
   }, []);
 
   const startVisualizer = useCallback(() => {
+    if (isIOS) return; // skip visualizer entirely on iOS
     const analyser = setupAudioGraph();
     const canvas = canvasRef.current;
     const dataArray = dataArrayRef.current;
