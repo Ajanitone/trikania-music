@@ -79,191 +79,200 @@ const Ajaniphotos = ({ isDarkMode }) => {
       >
         {/* Picture-1 */}
         <Box margin="50px auto" title="image">
-        <img
-          src={state.products[4]?.musicImage || profilePicture}
-          alt="profile"
-          style={{
-            width: "200px",
-            aspectRatio: "calc(1 + var(--f))",
-            objectFit: "cover",
-            cursor: "pointer",
-            borderRadius: "5%",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.clipPath = "inset(0 0 0 var(--_f)) round var(--r)";
-            e.target.style.setProperty(
-              "--_t",
-              "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
-            );
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.clipPath = "inset(0 var(--_f) 0 0) round var(--r)";
-            e.target.style.setProperty("--_t", "");
-          }}
-        />
-
-        <Box>
-          <Typography fontWeight="bold">
-            {state.products[4]?.artistName || "Ajani"}
-          </Typography>
-          <Typography>{state.products[4]?.name || "Silent Voices"}</Typography>
-
-          <Typography>{state.products[4]?.description || "2020"}</Typography>
-        </Box>
-        <Box>
-          <Button
-            sx={{
-              "&:hover": { cursor: "pointer", color: "lime" },
-              marginTop: "10px",
-              color: isDarkMode ? "black" : "white",
-              backgroundColor: shades.secondary[300],
+          <img
+            src={state.products[4]?.musicImage || profilePicture}
+            alt="profile"
+            style={{
+              width: "200px",
+              aspectRatio: "calc(1 + var(--f))",
+              objectFit: "cover",
+              cursor: "pointer",
+              borderRadius: "5%",
             }}
-            onClick={() => navigate("/ajani-music")}
-          >
-            Listen It 🎧
-          </Button>
+            onMouseEnter={(e) => {
+              e.target.style.clipPath =
+                "inset(0 0 0 var(--_f)) round var(--r)";
+              e.target.style.setProperty(
+                "--_t",
+                "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
+              );
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.clipPath =
+                "inset(0 var(--_f) 0 0) round var(--r)";
+              e.target.style.setProperty("--_t", "");
+            }}
+          />
+
+          <Box>
+            <Typography fontWeight="bold">
+              {state.products[4]?.artistName || "Ajani"}
+            </Typography>
+            <Typography>{state.products[4]?.name || "Silent Voices"}</Typography>
+
+            <Typography>{state.products[4]?.description || "2020"}</Typography>
+          </Box>
+          <Box>
+            <Button
+              sx={{
+                "&:hover": { cursor: "pointer", color: "lime" },
+                marginTop: "10px",
+                color: isDarkMode ? "black" : "white",
+                backgroundColor: shades.secondary[300],
+              }}
+              onClick={() => navigate("/ajani-music")}
+            >
+              Listen It 🎧
+            </Button>
+          </Box>
         </Box>
-      </Box>
 
         {/* Picture-2 */}
         <Box margin="50px auto" title="image">
-        <img
-          src={state.products[3]?.musicImage || profilePicture}
-          alt="profile"
-          style={{
-            width: "200px",
-            aspectRatio: "calc(1 + var(--f))",
-            objectFit: "cover",
-            cursor: "pointer",
-            borderRadius: "5%",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.clipPath = "inset(0 0 0 var(--_f)) round var(--r)";
-            e.target.style.setProperty(
-              "--_t",
-              "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
-            );
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.clipPath = "inset(0 var(--_f) 0 0) round var(--r)";
-            e.target.style.setProperty("--_t", "");
-          }}
-        />
-
-        <Box>
-          <Typography fontWeight="bold">
-            {state.products[3]?.artistName || "Kaya-T"}
-          </Typography>
-          <Typography>{state.products[3]?.name || "Kaya-T"}</Typography>
-
-          <Typography>{state.products[3]?.description || "2022"}</Typography>
-        </Box>
-        <Box>
-          <Button
-            sx={{
-              "&:hover": { cursor: "pointer", color: "lime" },
-              marginTop: "10px",
-              color: isDarkMode ? "black" : "white",
-              backgroundColor: shades.secondary[300],
+          <img
+            src={state.products[3]?.musicImage || profilePicture}
+            alt="profile"
+            style={{
+              width: "200px",
+              aspectRatio: "calc(1 + var(--f))",
+              objectFit: "cover",
+              cursor: "pointer",
+              borderRadius: "5%",
             }}
-            onClick={() => navigate("/kaya-music")}
-          >
-            Listen It 🎧
-          </Button>
+            onMouseEnter={(e) => {
+              e.target.style.clipPath =
+                "inset(0 0 0 var(--_f)) round var(--r)";
+              e.target.style.setProperty(
+                "--_t",
+                "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
+              );
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.clipPath =
+                "inset(0 var(--_f) 0 0) round var(--r)";
+              e.target.style.setProperty("--_t", "");
+            }}
+          />
+
+          <Box>
+            <Typography fontWeight="bold">
+              {state.products[3]?.artistName || "Kaya-T"}
+            </Typography>
+            <Typography>{state.products[3]?.name || "Kaya-T"}</Typography>
+
+            <Typography>{state.products[3]?.description || "2022"}</Typography>
+          </Box>
+          <Box>
+            <Button
+              sx={{
+                "&:hover": { cursor: "pointer", color: "lime" },
+                marginTop: "10px",
+                color: isDarkMode ? "black" : "white",
+                backgroundColor: shades.secondary[300],
+              }}
+              onClick={() => navigate("/kaya-music")}
+            >
+              Listen It 🎧
+            </Button>
+          </Box>
         </Box>
-      </Box>
         {/* Picture-3 */}
         <Box margin="50px auto" title="image">
-        <img
-          src={state.products[2]?.musicImage || profilePicture}
-          alt="profile"
-          style={{
-            width: "200px",
-            aspectRatio: "calc(1 + var(--f))",
-            objectFit: "cover",
-            cursor: "pointer",
-            borderRadius: "5%",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.clipPath = "inset(0 0 0 var(--_f)) round var(--r)";
-            e.target.style.setProperty(
-              "--_t",
-              "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
-            );
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.clipPath = "inset(0 var(--_f) 0 0) round var(--r)";
-            e.target.style.setProperty("--_t", "");
-          }}
-        />
-
-        <Box>
-          <Typography fontWeight="bold">
-            {state.products[2]?.artistName || "Kaya-T"}
-          </Typography>
-          <Typography>{state.products[2]?.name || "Lead Me"}</Typography>
-
-          <Typography>{state.products[2]?.description || "2002"}</Typography>
-        </Box>
-        <Box>
-          <Button
-            sx={{
-              "&:hover": { cursor: "pointer", color: "lime" },
-              marginTop: "10px",
-              color: isDarkMode ? "black" : "white",
-              backgroundColor: shades.secondary[300],
+          <img
+            src={state.products[2]?.musicImage || profilePicture}
+            alt="profile"
+            style={{
+              width: "200px",
+              aspectRatio: "calc(1 + var(--f))",
+              objectFit: "cover",
+              cursor: "pointer",
+              borderRadius: "5%",
             }}
-            onClick={() => navigate("/kaya-music/")}
-          >
-            Listen It 🎧
-          </Button>
+            onMouseEnter={(e) => {
+              e.target.style.clipPath =
+                "inset(0 0 0 var(--_f)) round var(--r)";
+              e.target.style.setProperty(
+                "--_t",
+                "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
+              );
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.clipPath =
+                "inset(0 var(--_f) 0 0) round var(--r)";
+              e.target.style.setProperty("--_t", "");
+            }}
+          />
+
+          <Box>
+            <Typography fontWeight="bold">
+              {state.products[2]?.artistName || "Kaya-T"}
+            </Typography>
+            <Typography>{state.products[2]?.name || "Lead Me"}</Typography>
+
+            <Typography>{state.products[2]?.description || "2002"}</Typography>
+          </Box>
+          <Box>
+            <Button
+              sx={{
+                "&:hover": { cursor: "pointer", color: "lime" },
+                marginTop: "10px",
+                color: isDarkMode ? "black" : "white",
+                backgroundColor: shades.secondary[300],
+              }}
+              onClick={() => navigate("/kaya-music/")}
+            >
+              Listen It 🎧
+            </Button>
+          </Box>
         </Box>
-      </Box>
         {/* Picture-4 */}
         <Box margin="50px auto" title="image">
-        <img
-          src={state.products[1]?.musicImage || profilePicture}
-          alt="profile"
-          style={{
-            width: "200px",
-            aspectRatio: "calc(1 + var(--f))",
-            objectFit: "cover",
-            cursor: "pointer",
-            borderRadius: "5%",
-          }}
-          onMouseEnter={(e) => {
-            e.target.style.clipPath = "inset(0 0 0 var(--_f)) round var(--r)";
-            e.target.style.setProperty(
-              "--_t",
-              "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
-            );
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.clipPath = "inset(0 var(--_f) 0 0) round var(--r)";
-            e.target.style.setProperty("--_t", "");
-          }}
-        />
-
-        <Box>
-          <Typography fontWeight="bold">
-            {state.products[1]?.artistName || "Zo Ataraxie"}
-          </Typography>
-          <Typography>{state.products[1]?.name || "Ooh la la"}</Typography>
-
-          <Typography>{state.products[1]?.description || "2021"}</Typography>
-        </Box>
-        <Box>
-          <Button
-            sx={{
-              "&:hover": { cursor: "pointer", color: "lime" },
-              marginTop: "10px",
-              color: isDarkMode ? "black" : "white",
-              backgroundColor: shades.secondary[300],
+          <img
+            src={state.products[1]?.musicImage || profilePicture}
+            alt="profile"
+            style={{
+              width: "200px",
+              aspectRatio: "calc(1 + var(--f))",
+              objectFit: "cover",
+              cursor: "pointer",
+              borderRadius: "5%",
             }}
-            onClick={() => navigate("/zo-music")}
-          >
-            Listen It 🎧
-          </Button>
+            onMouseEnter={(e) => {
+              e.target.style.clipPath =
+                "inset(0 0 0 var(--_f)) round var(--r)";
+              e.target.style.setProperty(
+                "--_t",
+                "translateX(calc(-1 * var(--_f))) rotateY(calc(-1 * var(--_a)))"
+              );
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.clipPath =
+                "inset(0 var(--_f) 0 0) round var(--r)";
+              e.target.style.setProperty("--_t", "");
+            }}
+          />
+
+          <Box>
+            <Typography fontWeight="bold">
+              {state.products[1]?.artistName || "Zo Ataraxie"}
+            </Typography>
+            <Typography>{state.products[1]?.name || "Ooh la la"}</Typography>
+
+            <Typography>{state.products[1]?.description || "2021"}</Typography>
+          </Box>
+          <Box>
+            <Button
+              sx={{
+                "&:hover": { cursor: "pointer", color: "lime" },
+                marginTop: "10px",
+                color: isDarkMode ? "black" : "white",
+                backgroundColor: shades.secondary[300],
+              }}
+              onClick={() => navigate("/zo-music")}
+            >
+              Listen It 🎧
+            </Button>
+          </Box>
         </Box>
       </Box>
       </Box>
