@@ -20,7 +20,7 @@ const Artists = ({ isDarkMode }) => {
 
   // Define a styled component with custom CSS
 
-  const backgroundColor = isDarkMode ? "#000000" : "rgba(242, 38, 19, 0.4)";
+  const backgroundColor = isDarkMode ? "#000000" : "#bf0603";
 
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");

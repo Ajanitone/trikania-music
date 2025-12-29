@@ -46,7 +46,7 @@ const Newsletter = ({ isDarkMode }) => {
       color: red; /* Set the desired color on hover */
     }
   `;
-  const backgroundColor = isDarkMode ? "#000000" : "rgba(242, 38, 19, 0.4)";
+  const backgroundColor = isDarkMode ? "#000000" : "#bf0603";
 
   const navigate = useNavigate();
   const handleDelete = async (id) => {

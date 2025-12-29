@@ -149,7 +149,7 @@ const LogIn = ({ isDarkMode }) => {
     }
   }, []);
   
-  const backgroundColor = isDarkMode ? "#000000" : "rgba(242, 38, 19, 0.4)";
+  const backgroundColor = isDarkMode ? "#000000" : "#bf0603";
   return (
     <Box>
     <ScrollTop isDarkMode={isDarkMode}/>

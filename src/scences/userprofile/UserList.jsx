@@ -109,7 +109,7 @@ const UserList = ({ isDarkMode }) => {
                 backdropFilter: "blur(30px)",
                 backgroundColor: isDarkMode
                   ? "#000000"
-                  : "rgba(242, 38, 19, 0.4)",
+                  : "#bf0603",
                 borderRadius: "10px",
                 boxShadow: "0 2px 4px rgba(1, 1, 1, 0.1)",
                 border: "none",

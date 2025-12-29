@@ -143,7 +143,7 @@ const Register = ({ isDarkMode }) => {
       sx={{
         background: "hsla(0, 0%, 100%, 0.55)",
         backdropFilter: "blur(30px)",
-        backgroundColor: "rgba(242, 38, 19, 0.4)",
+        backgroundColor: "#bf0603",
         borderRadius: "10px",
         boxShadow: "0 2px 4px rgba(1, 1, 1, 0.1)",
         border: "none",
