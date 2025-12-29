@@ -47,7 +47,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
     <Box
       className={`home ${isDarkMode ? "dark-mode" : ""}`}
       padding="10px"
-      width="75%"
+      width="100%"
       height="100%"
       margin="100px auto"
       textAlign="center"
@@ -76,9 +76,11 @@ const Ajaniphotos = ({ isDarkMode }) => {
         justifyItems="center"
         alignItems="start"
         gap={4}
+        width="100%"
+        px={{ xs: 1, md: 2 }}
       >
         {/* Picture-1 */}
-        <Box margin="50px auto" title="image">
+        <Box margin="0 auto" maxWidth="220px" title="image">
           <img
             src={state.products[4]?.musicImage || profilePicture}
             alt="profile"
@@ -128,7 +130,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
         </Box>
 
         {/* Picture-2 */}
-        <Box margin="50px auto" title="image">
+        <Box margin="0 auto" maxWidth="220px" title="image">
           <img
             src={state.products[3]?.musicImage || profilePicture}
             alt="profile"
@@ -177,7 +179,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
           </Box>
         </Box>
         {/* Picture-3 */}
-        <Box margin="50px auto" title="image">
+        <Box margin="0 auto" maxWidth="220px" title="image">
           <img
             src={state.products[2]?.musicImage || profilePicture}
             alt="profile"
@@ -226,7 +228,7 @@ const Ajaniphotos = ({ isDarkMode }) => {
           </Box>
         </Box>
         {/* Picture-4 */}
-        <Box margin="50px auto" title="image">
+        <Box margin="0 auto" maxWidth="220px" title="image">
           <img
             src={state.products[1]?.musicImage || profilePicture}
             alt="profile"
