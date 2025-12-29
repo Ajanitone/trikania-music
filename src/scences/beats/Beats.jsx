@@ -150,8 +150,11 @@ const Beats = ({ isDarkMode }) => {
     }
   };
 
-  const handleDeleteComment = async (commentId) => {
-    if (!commentId || !state.user?.isAdmin) return;
+  const handleDeleteComment = async (commentId, canDelete) => {
+    if (!commentId || !canDelete) {
+      setCommentError("You can only delete your own comments.");
+      return;
+    }
     const confirmDelete = window.confirm("Delete this comment?");
     if (!confirmDelete) return;
     setDeletingCommentId(commentId);
@@ -335,18 +338,26 @@ const Beats = ({ isDarkMode }) => {
                           : ""}
                       </Typography>
                     </Stack>
-                    {state.user?.isAdmin && (
+                    {(() => {
+                      const isOwner =
+                        c.author?._id === state.user?._id ||
+                        c.author === state.user?._id;
+                      const canDelete = state.user?.isAdmin || isOwner;
+                      return (
+                        canDelete && (
                       <Button
                         size="small"
                         color="error"
                         variant="outlined"
                         sx={{ ml: "auto" }}
-                        onClick={() => handleDeleteComment(c._id)}
+                        onClick={() => handleDeleteComment(c._id, canDelete)}
                         disabled={deletingCommentId === c._id}
                       >
                         {deletingCommentId === c._id ? "Deleting..." : "Delete"}
                       </Button>
-                    )}
+                        )
+                      );
+                    })()}
                   </Stack>
                 </Box>
               ))}
