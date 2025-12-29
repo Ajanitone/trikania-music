@@ -176,7 +176,10 @@ const Footer = ({ isDarkMode }) => {
               href="https://www.facebook.com/trikaniamusic/"
               target="_blank"
               rel="noopener noreferrer"
-              sx={{ color: isDarkMode ? "white" : "black" }}
+              sx={{
+                color: isDarkMode ? "white" : "black",
+                "&:hover": { color: "#39ff14" },
+              }}
               aria-label="TrikaniaMusic on Facebook"
             >
               <FacebookIcon />
@@ -186,7 +189,10 @@ const Footer = ({ isDarkMode }) => {
               href="https://www.instagram.com/trikaniamusic/?hl=de"
               target="_blank"
               rel="noopener noreferrer"
-              sx={{ color: isDarkMode ? "white" : "black" }}
+              sx={{
+                color: isDarkMode ? "white" : "black",
+                "&:hover": { color: "#39ff14" },
+              }}
               aria-label="TrikaniaMusic on Instagram"
             >
               <InstagramIcon />
