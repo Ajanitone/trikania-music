@@ -9,8 +9,12 @@ import {
   InputBase,
   useMediaQuery,
   Popover,
+  Drawer,
+  Divider,
+  List,
+  ListItem,
 } from "@mui/material";
-import { SearchOutlined } from "@mui/icons-material";
+import { SearchOutlined, Menu as MenuIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { shades } from "../../theme";
 import { setIsCartOpen } from "../../state";
@@ -125,6 +129,17 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
     },
   };
 
+  const mobileButtonSx = {
+    ...navButtonSx,
+    width: "100%",
+    justifyContent: "flex-start",
+    padding: "8px 12px",
+  };
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const toggleMobileMenu = () => setMobileOpen((prev) => !prev);
+  const closeMobileMenu = () => setMobileOpen(false);
+
   return (
     <Box
       display="flex"
@@ -143,15 +158,29 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
       }}
       ref={errorPopoverAnchorRef}
     >
-      <Box
-        sx={{
-          "&:hover": { cursor: "pointer", color: shades.secondary[500] },
-          display: isNonMobile ? "block" : "none",
-        }}
-        color={!isDarkMode ? shades.primary[500] : undefined}
-        title="username"
-      >
-        <Typography variant="h7">Hi, {state.user.username}</Typography>
+      <Box display="flex" alignItems="center" flex="1" gap={1} px={1}>
+        {!isNonMobile && (
+          <IconButton
+            onClick={toggleMobileMenu}
+            sx={{
+              color: isDarkMode ? "white" : "black",
+              "&:hover": { color: shades.secondary[500] },
+            }}
+            title="Menu"
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
+        <Box
+          sx={{
+            "&:hover": { cursor: "pointer", color: shades.secondary[500] },
+            display: isNonMobile ? "block" : "none",
+          }}
+          color={!isDarkMode ? shades.primary[500] : undefined}
+          title="username"
+        >
+          <Typography variant="h7">Hi, {state.user.username}</Typography>
+        </Box>
       </Box>
       <Box
         width="80%"
@@ -168,6 +197,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           justifyContent="space-between"
           columnGap={isNonMobile ? "20px" : "10px"}
           zIndex="2"
+          sx={{ display: isNonMobile ? "flex" : "none" }}
         >
           {/* Artist */}
           <Button
@@ -393,6 +423,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
         bgcolor="white"
         borderRadius="5px"
         padding="2px 4px"
+        sx={{ ml: isNonMobile ? 0 : 1 }}
       >
         <InputBase
           placeholder="Search"
@@ -421,6 +452,107 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           <SearchOutlined />
         </IconButton>
       </Box>
+
+      {/* Mobile Drawer */}
+      <Drawer anchor="left" open={mobileOpen} onClose={closeMobileMenu}>
+        <Box sx={{ width: 240, p: 1 }} role="presentation">
+          <List>
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { navigate("/artists"); closeMobileMenu(); }}>
+                Artists
+              </Button>
+            </ListItem>
+            <ListItem disablePadding>
+              <Button
+                sx={{ ...mobileButtonSx, display: state.user._id ? "flex" : "none" }}
+                onClick={() => { navigate("/userprofile"); closeMobileMenu(); }}
+              >
+                Profile
+              </Button>
+            </ListItem>
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { navigate("/videos"); closeMobileMenu(); }}>
+                Videos
+              </Button>
+            </ListItem>
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { navigate("/releases"); closeMobileMenu(); }}>
+                Releases
+              </Button>
+            </ListItem>
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { dispatch(setIsCartOpen({})); closeMobileMenu(); }}>
+                Shop ({cart.length})
+              </Button>
+            </ListItem>
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { navigate("/references"); closeMobileMenu(); }}>
+                References ({wishList?.length || 0})
+              </Button>
+            </ListItem>
+            <Divider sx={{ my: 1 }} />
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { navigate("/discography"); closeMobileMenu(); }}>
+                Discography
+              </Button>
+            </ListItem>
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { navigate("/beats"); closeMobileMenu(); }}>
+                Beats
+              </Button>
+            </ListItem>
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { navigate("/herb-info"); closeMobileMenu(); }}>
+                Trikania-Herbs
+              </Button>
+            </ListItem>
+            <Divider sx={{ my: 1 }} />
+            <ListItem disablePadding>
+              <Button sx={mobileButtonSx} onClick={() => { navigate("/register"); closeMobileMenu(); }}>
+                Register
+              </Button>
+            </ListItem>
+            <ListItem disablePadding>
+              {state.user._id ? (
+                <Button
+                  sx={mobileButtonSx}
+                  onClick={() => {
+                    handleLogOut();
+                    closeMobileMenu();
+                  }}
+                >
+                  Logout
+                </Button>
+              ) : (
+                <Button
+                  sx={mobileButtonSx}
+                  onClick={() => {
+                    navigate("/login");
+                    closeMobileMenu();
+                  }}
+                >
+                  Login
+                </Button>
+              )}
+            </ListItem>
+            {state.user.isAdmin && (
+              <>
+                <Divider sx={{ my: 1 }} />
+                <ListItem disablePadding>
+                  <Button sx={mobileButtonSx} onClick={() => { navigate("/settings"); closeMobileMenu(); }}>
+                    Admin
+                  </Button>
+                </ListItem>
+                <ListItem disablePadding>
+                  <Button sx={mobileButtonSx} onClick={() => { navigate("/workmail"); closeMobileMenu(); }}>
+                    WorkMail
+                  </Button>
+                </ListItem>
+              </>
+            )}
+          </List>
+        </Box>
+      </Drawer>
 
       {/* Pop-over */}
 
