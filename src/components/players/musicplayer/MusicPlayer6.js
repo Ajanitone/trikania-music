@@ -1037,24 +1037,26 @@ function MusicPlayer2({ isDarkMode }) {
             />
           </Stack>
           {/* Volume-Slider */}
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "100%",
-              alignItems: "center",
-            }}
-          >
-            <VolumeBtns />
-            <PSlider
-              min={0}
-              max={100}
-              value={volume}
-              onChange={(e, v) => setVolume(v)}
-            />
-          </Stack>
+          {!isIOS && (
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+                alignItems: "center",
+              }}
+            >
+              <VolumeBtns />
+              <PSlider
+                min={0}
+                max={100}
+                value={volume}
+                onChange={(e, v) => setVolume(v)}
+              />
+            </Stack>
+          )}
           {/* Controls */}
           <Stack
             direction="row"
