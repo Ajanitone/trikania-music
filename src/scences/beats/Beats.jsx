@@ -40,6 +40,7 @@ const Beats = ({ isDarkMode }) => {
   const [loadingComments, setLoadingComments] = useState(false);
   const [postingComment, setPostingComment] = useState(false);
   const [commentError, setCommentError] = useState("");
+  const [deletingCommentId, setDeletingCommentId] = useState("");
 
   const navigate = useNavigate();
   // const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -146,6 +147,27 @@ const Beats = ({ isDarkMode }) => {
       setCommentError("Failed to post comment. Please try again.");
     } finally {
       setPostingComment(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    if (!commentId || !state.user?.isAdmin) return;
+    const confirmDelete = window.confirm("Delete this comment?");
+    if (!confirmDelete) return;
+    setDeletingCommentId(commentId);
+    setCommentError("");
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${apiBase}/comment/deleteComment/${commentId}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        withCredentials: true,
+      });
+      setComments((prev) => prev.filter((c) => c._id !== commentId));
+    } catch (error) {
+      console.error("Failed to delete comment", error);
+      setCommentError("Failed to delete comment.");
+    } finally {
+      setDeletingCommentId("");
     }
   };
 
@@ -313,6 +335,18 @@ const Beats = ({ isDarkMode }) => {
                           : ""}
                       </Typography>
                     </Stack>
+                    {state.user?.isAdmin && (
+                      <Button
+                        size="small"
+                        color="error"
+                        variant="outlined"
+                        sx={{ ml: "auto" }}
+                        onClick={() => handleDeleteComment(c._id)}
+                        disabled={deletingCommentId === c._id}
+                      >
+                        {deletingCommentId === c._id ? "Deleting..." : "Delete"}
+                      </Button>
+                    )}
                   </Stack>
                 </Box>
               ))}
