@@ -1,9 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-import { HerbContext } from "../../context/Context";
-import axios from "axios";
-import { ColorRing } from "react-loader-spinner";
 import {
   Box,
   Typography,
@@ -12,27 +8,20 @@ import {
   Button,
   Popover,
 } from "@mui/material";
+import axios from "axios";
+import { HerbContext } from "../../context/Context";
+import { shades } from "../../theme";
 import Logo from "../../logo/TRI_Logo_Herbs_RedBlack+Face.png";
 import ScrollTop from "../../components/ScrollTop";
-<ColorRing
-  visible={true}
-  height="80"
-  width="80"
-  ariaLabel="blocks-loading"
-  wrapperStyle={{}}
-  wrapperClass="blocks-wrapper"
-  colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
-/>;
 
-const EditProduct = ({isDarkMode}) => {
+const EditBeat = ({ isDarkMode }) => {
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const { state, dispatchState } = useContext(HerbContext);
-  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
   const [errorPopoverOpen, setErrorPopoverOpen] = useState(false);
   const errorPopoverAnchorRef = useRef(null);
   const getAnchorPosition = (anchorEl) => {
@@ -40,100 +29,106 @@ const EditProduct = ({isDarkMode}) => {
     return { top: rect.top, left: rect.left };
   };
 
-  const [fileData, setFiledata] = useState({
-    url: "",
-    file: null,
-  });
+  const [fileData, setFiledata] = useState({ url: "", file: null });
+  const [audioData, setAudioData] = useState({ url: "", file: null });
 
   const [data, setData] = useState({
+    _id: "",
     name: "",
-    price: "",
     description: "",
     category: "",
-    image: fileData.file,
+    beatName: "",
+    genre: "",
+    beatImage: "",
+    beatAudio: "",
   });
 
   useEffect(() => {
+    if (!state.user.isAdmin) navigate("/");
+  }, [navigate, state.user.isAdmin]);
+
+  useEffect(() => {
     async function getData() {
-      const response = await axios.get(
-        baseUrl + "/products/findone?_id=" + id,
-        {
+      try {
+        const response = await axios.get(`${baseUrl}/beats/findbeat?_id=${id}`, {
           withCredentials: true,
+        });
+        if (response.data.success && response.data.beat) {
+          const beat = response.data.beat;
+          setData(beat);
+          if (beat.beatImage) setFiledata((prev) => ({ ...prev, url: beat.beatImage }));
+          if (beat.beatAudio) setAudioData((prev) => ({ ...prev, url: beat.beatAudio }));
         }
-      );
-      console.log("🚀 ~ getData ~ response", response);
-
-      if (response.data.success) {
-        // if (response.data.product.image) {
-        //   response.data.product.image =
-        //     "/images/" + response.data.product.image;
-        // }
-
-        setData(response.data.product);
+      } catch (error) {
+        console.error("Failed to load beat", error);
+        setErrorMessage("Failed to load beat");
+        setErrorPopoverOpen(true);
       }
     }
-
     getData();
-  }, []);
+  }, [baseUrl, id]);
 
-  const handleImageChange = (e, setFiledata) => {
-    setFiledata({
-      url: URL.createObjectURL(e.target.files[0]), // Use e.target instead of e.currentTarget
-      file: e.target.files[0], // Use e.target instead of e.currentTarget
-    });
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setFiledata({ url: URL.createObjectURL(file), file });
   };
+
+  const handleAudioChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAudioData({ url: URL.createObjectURL(file), file });
+  };
+
   const handleChange = (e) => {
-    if (e.target.type === "checkbox") {
-      setData({
-        ...data,
-        [e.target.name]: e.target.checked,
-      });
-    } else {
-      setData({
-        ...data,
-        [e.target.name]: e.target.value,
-      });
-    }
+    const { name, value, type, checked } = e.target;
+    setData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
   };
 
   const handleSave = async () => {
-    console.log("button pressed");
     setLoading(true);
     const formdata = new FormData();
-
+    formdata.set("_id", data._id || id);
     formdata.set("name", data.name);
-    formdata.set("price", data.price);
     formdata.set("description", data.description);
     formdata.set("category", data.category);
-    if (fileData.file) formdata.set("image", fileData.file, "profileImage");
+    formdata.set("beatName", data.beatName);
+    formdata.set("genre", data.genre);
+    if (fileData.file) formdata.set("image", fileData.file, "beatImage");
+    if (audioData.file) formdata.set("audio", audioData.file, "beatAudio");
 
     const config = {
       headers: { "content-type": "multipart/form-data" },
       withCredentials: true,
     };
 
-    const response = await axios.post(
-      baseUrl + "/products/addProduct",
-      formdata,
-      config
-    );
-
-    console.log("handleData response", response);
-
-    if (response.data.success) {
+    try {
+      const response = await axios.post(`${baseUrl}/beats/edit`, formdata, config);
+      if (response.data.success) {
+        const updatedBeat = response.data.beat;
+        const updatedList = (state.beats || []).map((b) =>
+          b._id === updatedBeat._id ? updatedBeat : b
+        );
+        dispatchState({ type: "loadBeats", payload: updatedList });
+        setErrorMessage("Beat updated");
+        setErrorPopoverOpen(true);
+        navigate("/beats");
+      } else {
+        setErrorMessage("Failed to update beat");
+        setErrorPopoverOpen(true);
+      }
+    } catch (error) {
+      console.error("Beat update failed", error);
+      setErrorMessage("Beat update failed");
+      setErrorPopoverOpen(true);
+    } finally {
       setLoading(false);
-      setErrorMessage("Product updated");
-      setErrorPopoverOpen(true); // Open the error Popover
-      dispatchState({
-        type: "addProduct",
-        payload: response.data.product,
-      });
-      navigate("/products");
     }
   };
+
   return (
     <Box>
-     <ScrollTop isDarkMode={isDarkMode}/>
+      <ScrollTop isDarkMode={isDarkMode} />
       <Box
         padding="10px"
         width="80%"
@@ -146,13 +141,11 @@ const EditProduct = ({isDarkMode}) => {
           borderRadius: "10px",
           boxShadow: "0 2px 4px rgba(1, 1, 1, 0.1)",
           border: "none",
-          // backgroundImage: "linear-gradient(to right, #2a9d8f, #f4a261)",
-          position: "relative", // Add position relative
-          overflow: "hidden", // Add overflow hidden
+          position: "relative",
+          overflow: "hidden",
         }}
         ref={errorPopoverAnchorRef}
       >
-        {/* Add gradient border pseudo-element */}
         <Box
           position="absolute"
           top={0}
@@ -176,7 +169,8 @@ const EditProduct = ({isDarkMode}) => {
             style={{ width: "30px", height: "30px", borderRadius: "50%" }}
           />
         </IconButton>
-        <Typography variant="h3">Edit-Product</Typography>
+        <Typography variant="h3">Edit Beat</Typography>
+
         <Box
           p="2px 4px"
           m="15px auto"
@@ -184,7 +178,7 @@ const EditProduct = ({isDarkMode}) => {
           alignItems="center"
           width="75%"
           backgroundColor="#F2F2F2"
-          sx={{ borderRadius: "5px" }} // Add borderRadius style
+          sx={{ borderRadius: "5px" }}
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
@@ -194,9 +188,10 @@ const EditProduct = ({isDarkMode}) => {
             name="name"
             value={data.name}
             onChange={handleChange}
-            title="product-name"
+            title="beat-name"
           />
         </Box>
+
         <Box
           p="2px 4px"
           m="15px auto"
@@ -204,19 +199,20 @@ const EditProduct = ({isDarkMode}) => {
           alignItems="center"
           width="75%"
           backgroundColor="#F2F2F2"
-          sx={{ borderRadius: "5px" }} // Add borderRadius style
+          sx={{ borderRadius: "5px" }}
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
-            placeholder="price"
+            placeholder="beat name"
             id="form1"
             type="text"
-            name="price"
-            value={data.price}
+            name="beatName"
+            value={data.beatName}
             onChange={handleChange}
-            title="price"
+            title="beat-name"
           />
         </Box>
+
         <Box
           p="2px 4px"
           m="15px auto"
@@ -224,27 +220,7 @@ const EditProduct = ({isDarkMode}) => {
           alignItems="center"
           width="75%"
           backgroundColor="#F2F2F2"
-          sx={{ borderRadius: "5px" }} // Add borderRadius style
-        >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="category"
-            id="form1"
-            type="text"
-            name="category"
-            value={data.category}
-            onChange={handleChange}
-            title="category"
-          />
-        </Box>
-        <Box
-          p="2px 4px"
-          m="15px auto"
-          display="flex"
-          alignItems="center"
-          width="75%"
-          backgroundColor="#F2F2F2"
-          sx={{ borderRadius: "5px" }} // Add borderRadius style
+          sx={{ borderRadius: "5px" }}
         >
           <InputBase
             sx={{ ml: 1, flex: 1 }}
@@ -254,77 +230,111 @@ const EditProduct = ({isDarkMode}) => {
             name="description"
             value={data.description}
             onChange={handleChange}
-            title="streets"
+            title="beat-description"
           />
         </Box>
-        <Box
-          p="2px 2px"
-          m="5px auto"
-          display="flex"
-          alignItems="center"
-          width="75%"
-          backgroundColor="#F2F2F2"
-          justifyContent="center"
-          sx={{ borderRadius: "5px" }} // Add borderRadius style
-        >
-          <label htmlFor="fileInput" className="file-input-label">
-            <img
-              src={fileData.url || data.profileImage}
-              alt="Avatar"
-              className="my-5  rounded-circle hover-opacity-75 cursor-pointer"
-              style={{
-                width: "120px",
-                height: "120px",
-                objectFit: "cover",
-                cursor: "pointer",
-                borderRadius: "50%",
-                boxShadow: "0 2px 4px rgba(1, 1, 1, 0.1)",
-                marginTop: "10px",
-              }}
-              title="image"
-            />
-            <InputBase
-              id="fileInput"
-              type="file"
-              className="file-input"
-              onChange={(e) => handleImageChange(e, setFiledata)}
-              title="file"
-            />
-          </label>
-        </Box>
+
         <Box
           p="2px 4px"
           m="15px auto"
           display="flex"
           alignItems="center"
           width="75%"
+          backgroundColor="#F2F2F2"
           sx={{ borderRadius: "5px" }}
-          justifyContent="center"
         >
-          {loading ? (
-            <ColorRing />
-          ) : (
-            <Button
-              className="w-100 mb-4"
-              size="md"
-              onClick={handleSave}
-              sx={{
-                width: "50%",
-                background:
-                  "linear-gradient(to right, rgba(207, 9, 9, 0.2), #f5f3f4)",
-                marginTop: "10px",
-              }}
-            >
-              Add
-            </Button>
-          )}
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="category"
+            id="form1"
+            type="text"
+            name="category"
+            value={data.category}
+            onChange={handleChange}
+            title="beat-category"
+          />
         </Box>
+
+        <Box
+          p="2px 4px"
+          m="15px auto"
+          display="flex"
+          alignItems="center"
+          width="75%"
+          backgroundColor="#F2F2F2"
+          sx={{ borderRadius: "5px" }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="genre"
+            id="form1"
+            type="text"
+            name="genre"
+            value={data.genre}
+            onChange={handleChange}
+            title="beat-genre"
+          />
+        </Box>
+
+        <Box mt="20px">
+          <Typography>Upload Beat Image</Typography>
+        </Box>
+        <Button
+          sx={{ backgroundColor: shades.primary[300], color: "white" }}
+          component="label"
+        >
+          Upload file
+          <input
+            hidden
+            accept="image/*"
+            multiple
+            type="file"
+            onChange={handleImageChange}
+          />
+        </Button>
+        <Box mt="20px">
+          <img
+            src={fileData?.url || data.beatImage || Logo}
+            alt="beat"
+            style={{ width: "100px", borderRadius: "10px" }}
+          />
+        </Box>
+
+        <Box mt="20px">
+          <Typography>Upload Beat Audio</Typography>
+        </Box>
+        <Button
+          sx={{ backgroundColor: shades.primary[300], color: "white" }}
+          component="label"
+        >
+          Upload file
+          <input hidden accept="audio/*" multiple type="file" onChange={handleAudioChange} />
+        </Button>
+        {audioData?.url && (
+          <Box mt="20px">
+            <audio controls src={audioData.url} style={{ width: "100%" }} />
+          </Box>
+        )}
+
+        <Button
+          onClick={handleSave}
+          disabled={loading}
+          sx={{
+            backgroundColor: shades.primary[300],
+            color: "white",
+            marginTop: "10px",
+            "&:hover": { color: "red" },
+          }}
+        >
+          {loading ? "Saving..." : "Save"}
+        </Button>
+      </Box>
+      {errorPopoverOpen && (
         <Popover
           open={errorPopoverOpen}
           anchorEl={errorPopoverAnchorRef.current}
           onClose={() => setErrorPopoverOpen(false)}
           anchorReference="anchorEl"
-          // anchorPosition={{ top: 100, left: 400 }}
           anchorPosition={
             (errorPopoverAnchorRef.current &&
               getAnchorPosition(errorPopoverAnchorRef.current)) || {
@@ -332,16 +342,13 @@ const EditProduct = ({isDarkMode}) => {
               left: 400,
             }
           }
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "center",
-          }}
+          transformOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <div style={{ padding: "20px" }}>{errorMessage}</div>
         </Popover>
-      </Box>
+      )}
     </Box>
   );
 };
 
-export default EditProduct;
+export default EditBeat;
