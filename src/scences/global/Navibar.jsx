@@ -380,27 +380,6 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
 
           {state.user.isAdmin ? (
             <>
-              <Button
-                sx={navButtonSx}
-                onClick={() => navigate("/settings")}
-                title="admin"
-              >
-                Admin
-              </Button>
-              <Button
-                sx={navButtonSx}
-                onClick={() => navigate("/admin-beats")}
-                title="Admin Beats"
-              >
-                Admin Beats
-              </Button>
-              <Button
-                sx={navButtonSx}
-                onClick={() => navigate("/workmail")}
-                title="WorkMail Provisioning"
-              >
-                WorkMail
-              </Button>
             </>
           ) : (
             ""
