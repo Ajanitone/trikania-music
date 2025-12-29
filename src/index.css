@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cinzel&family=Fauna+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
 
 .app {
   margin: auto;
@@ -36,7 +36,7 @@
 body,
 input {
   color: var(--fg);
-  font: 1em/1.5 sans-serif;
+  font: 1em/1.5 "Josefin Sans", sans-serif;
   margin: 0;
   padding: 0;
 }
