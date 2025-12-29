@@ -211,7 +211,6 @@ function MusicPlayer2({ isDarkMode }) {
   const { state, dispatchState, search } = useContext(HerbContext);
   const isDesktop = useMediaQuery("(min-width:1024px)");
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  console.log("beats", state);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const normalizeMediaUrl = (path) => {
@@ -663,7 +662,7 @@ function MusicPlayer2({ isDarkMode }) {
     const audio = audioPlayer.current;
     if (!audio) return;
 
-    // Desktop: ensure audio context ready for visualizer. iOS: skip audio context.
+    // Desktop: ensure audio context ready for visualizer. iOS: skip audio context entirely.
     if (!isIOS) {
       if (!audioContextRef.current) {
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -694,15 +693,25 @@ function MusicPlayer2({ isDarkMode }) {
     };
 
     if (audio.paused) {
-      if (audio.readyState < 2) {
+      if (isIOS) {
+        // iOS: force a fresh load, then play once ready
         const onCanPlay = () => {
           audio.removeEventListener("canplaythrough", onCanPlay);
           startPlayback();
         };
-        audio.addEventListener("canplaythrough", onCanPlay);
+        audio.addEventListener("canplaythrough", onCanPlay, { once: true });
         audio.load();
       } else {
-        startPlayback();
+        if (audio.readyState < 2) {
+          const onCanPlay = () => {
+            audio.removeEventListener("canplaythrough", onCanPlay);
+            startPlayback();
+          };
+          audio.addEventListener("canplaythrough", onCanPlay);
+          audio.load();
+        } else {
+          startPlayback();
+        }
       }
     } else {
       audio.pause();
