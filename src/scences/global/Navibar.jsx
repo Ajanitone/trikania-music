@@ -9,6 +9,8 @@ import {
   InputBase,
   useMediaQuery,
   Popover,
+  Menu,
+  MenuItem,
   Drawer,
   Divider,
   List,
@@ -35,6 +37,7 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
   // ---POPUP----DROPDOWN-----MENUState--
   const [success, setSuccess] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [accountAnchor, setAccountAnchor] = useState(null);
   const open = Boolean(anchorEl);
   const [searchValue, setSearchValue] = useState({ name: "" });
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -139,6 +142,8 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const toggleMobileMenu = () => setMobileOpen((prev) => !prev);
   const closeMobileMenu = () => setMobileOpen(false);
+  const accountMenuOpen = Boolean(accountAnchor);
+  const closeAccountMenu = () => setAccountAnchor(null);
 
   return (
     <Box
@@ -350,40 +355,19 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
               sx={navButtonSx}
               onClick={() => navigate("/herb-info")}
               title="trikania-herbs"
-            >
-              Trikania-Herbs
-            </Button>
+          >
+            Trikania-Herbs
+          </Button>
           </Badge>
 
-          {/* Register */}
+          {/* Account dropdown */}
           <Button
             sx={navButtonSx}
-            onClick={() => navigate("/register")}
-            title="register"
+            onClick={(e) => setAccountAnchor(e.currentTarget)}
+            title="Account"
           >
-            Register
+            Account
           </Button>
-
-          {/* Log-out */}
-
-          {state.user._id ? (
-            <Button
-              title="logout"
-              sx={navButtonSx}
-              onClick={handleLogOut}
-              ref={submitButtonRef}
-            >
-              Logout
-            </Button>
-          ) : (
-            <Button
-              title="login"
-              sx={navButtonSx}
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </Button>
-          )}
 
           {/* Theme-button */}
           <ThemeButton
@@ -459,6 +443,64 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
           <SearchOutlined />
         </IconButton>
       </Box>
+
+      {/* Account Menu */}
+      <Menu
+        anchorEl={accountAnchor}
+        open={accountMenuOpen}
+        onClose={closeAccountMenu}
+        keepMounted
+      >
+        {!state.user._id && (
+          <MenuItem
+            onClick={() => {
+              closeAccountMenu();
+              navigate("/register");
+            }}
+          >
+            Register
+          </MenuItem>
+        )}
+        {state.user._id ? (
+          <MenuItem
+            onClick={() => {
+              closeAccountMenu();
+              handleLogOut();
+            }}
+          >
+            Logout
+          </MenuItem>
+        ) : (
+          <MenuItem
+            onClick={() => {
+              closeAccountMenu();
+              navigate("/login");
+            }}
+          >
+            Login
+          </MenuItem>
+        )}
+        {state.user.isAdmin && (
+          <>
+            <MenuItem
+              onClick={() => {
+                closeAccountMenu();
+                navigate("/settings");
+              }}
+            >
+              Admin
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                closeAccountMenu();
+                navigate("/workmail");
+              }}
+            >
+              WorkMail
+            </MenuItem>
+          </>
+        )}
+      </Menu>
 
       {/* Mobile Drawer */}
       <Drawer anchor="left" open={mobileOpen} onClose={closeMobileMenu}>
