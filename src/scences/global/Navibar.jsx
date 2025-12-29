@@ -477,6 +477,14 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
             >
               WorkMail
             </MenuItem>
+            <MenuItem
+              onClick={() => {
+                closeAccountMenu();
+                navigate("/admin-beats");
+              }}
+            >
+              Admin Beats
+            </MenuItem>
           </>
         )}
       </Menu>
