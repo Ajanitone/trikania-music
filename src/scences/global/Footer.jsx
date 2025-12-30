@@ -3,6 +3,7 @@ import { useTheme } from "@mui/material";
 import { Box, Typography, Button, useMediaQuery, Stack, IconButton } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 import { shades } from "../../theme";
 import { useNavigate } from "react-router-dom";
 
@@ -196,6 +197,19 @@ const Footer = ({ isDarkMode }) => {
               aria-label="TrikaniaMusic on Instagram"
             >
               <InstagramIcon />
+            </IconButton>
+            <IconButton
+              component="a"
+              href="https://www.youtube.com/@trikaniamusic9902"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                color: isDarkMode ? "white" : "black",
+                "&:hover": { color: "#39ff14" },
+              }}
+              aria-label="TrikaniaMusic on YouTube"
+            >
+              <YouTubeIcon />
             </IconButton>
           </Stack>
 
